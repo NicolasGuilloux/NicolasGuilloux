@@ -25,11 +25,11 @@ I'm a french Fullstack Web developper at [RichCongress](https://www.richcongress
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 🗣 Commented on [#4](https://github.com/NicolasGuilloux/shadow-nix/issues/4) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-2. ❌ Closed PR [#4](https://github.com/NicolasGuilloux/shadow-nix/pull/4) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-3. 🎉 Merged PR [#11](https://github.com/NicolasGuilloux/shadow-nix/pull/11) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-4. 🗣 Commented on [#80](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/80) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
-5. 🗣 Commented on [#81](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/81) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+1. 🗣 Commented on [#30050](https://github.com/home-assistant/core/issues/30050) in [home-assistant/core](https://github.com/home-assistant/core)
+2. 🗣 Commented on [#4](https://github.com/NicolasGuilloux/shadow-nix/issues/4) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+3. ❌ Closed PR [#4](https://github.com/NicolasGuilloux/shadow-nix/pull/4) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+4. 🎉 Merged PR [#11](https://github.com/NicolasGuilloux/shadow-nix/pull/11) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+5. 🗣 Commented on [#80](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/80) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
 <!--END_SECTION:activity-->
 
 </details>
