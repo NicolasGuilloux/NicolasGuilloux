@@ -25,11 +25,11 @@ I'm a french Fullstack Web developper at [RichCongress](https://www.richcongress
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 🗣 Commented on [#80](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/80) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
-2. 🗣 Commented on [#30050](https://github.com/home-assistant/core/issues/30050) in [home-assistant/core](https://github.com/home-assistant/core)
-3. 🗣 Commented on [#4](https://github.com/NicolasGuilloux/shadow-nix/issues/4) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-4. ❌ Closed PR [#4](https://github.com/NicolasGuilloux/shadow-nix/pull/4) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-5. 🎉 Merged PR [#11](https://github.com/NicolasGuilloux/shadow-nix/pull/11) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+1. ❗️ Opened issue [#11](https://github.com/Mic92/envfs/issues/11) in [Mic92/envfs](https://github.com/Mic92/envfs)
+2. 🗣 Commented on [#80](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/80) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+3. 🗣 Commented on [#30050](https://github.com/home-assistant/core/issues/30050) in [home-assistant/core](https://github.com/home-assistant/core)
+4. 🗣 Commented on [#4](https://github.com/NicolasGuilloux/shadow-nix/issues/4) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+5. ❌ Closed PR [#4](https://github.com/NicolasGuilloux/shadow-nix/pull/4) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
 <!--END_SECTION:activity-->
 
 </details>
