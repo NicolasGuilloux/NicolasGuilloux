@@ -25,11 +25,11 @@ I'm a french Fullstack Web developper at [RichCongress](https://www.richcongress
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 🗣 Commented on [#76](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/76) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
-2. ❗️ Closed issue [#75](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/75) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
-3. 🗣 Commented on [#75](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/75) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
-4. ❗️ Closed issue [#73](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/73) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
-5. 🗣 Commented on [#73](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/73) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+1. ❗️ Closed issue [#82](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/82) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+2. 🗣 Commented on [#82](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/82) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+3. 🗣 Commented on [#76](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/76) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+4. ❗️ Closed issue [#75](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/75) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+5. 🗣 Commented on [#75](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/75) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
 <!--END_SECTION:activity-->
 
 </details>
