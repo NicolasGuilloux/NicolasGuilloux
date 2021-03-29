@@ -25,11 +25,11 @@ I'm a french Fullstack Web developper at [RichCongress](https://www.richcongress
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. ❗️ Closed issue [#82](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/82) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
-2. 🗣 Commented on [#82](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/82) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
-3. 🗣 Commented on [#76](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/76) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
-4. ❗️ Closed issue [#75](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/75) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
-5. 🗣 Commented on [#75](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/75) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+1. ❗️ Opened issue [#117916](https://github.com/NixOS/nixpkgs/issues/117916) in [NixOS/nixpkgs](https://github.com/NixOS/nixpkgs)
+2. ❗️ Closed issue [#82](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/82) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+3. 🗣 Commented on [#82](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/82) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+4. 🗣 Commented on [#76](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/76) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+5. ❗️ Closed issue [#75](https://github.com/NicolasGuilloux/blade-shadow-beta/issues/75) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
 <!--END_SECTION:activity-->
 
 </details>
