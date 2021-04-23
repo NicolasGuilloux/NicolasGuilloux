@@ -26,10 +26,10 @@ I'm a french Fullstack Web developper at [RichCongress](https://www.richcongress
 
 <!--START_SECTION:activity-->
 1. 🗣 Commented on [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-2. 🎉 Merged PR [#11](https://github.com/rich-id/unit-bundle/pull/11) in [rich-id/unit-bundle](https://github.com/rich-id/unit-bundle)
-3. 🗣 Commented on [#99233](https://github.com/NixOS/nixpkgs/issues/99233) in [NixOS/nixpkgs](https://github.com/NixOS/nixpkgs)
-4. 🗣 Commented on [#99232](https://github.com/NixOS/nixpkgs/issues/99232) in [NixOS/nixpkgs](https://github.com/NixOS/nixpkgs)
-5. ❗️ Opened issue [#117916](https://github.com/NixOS/nixpkgs/issues/117916) in [NixOS/nixpkgs](https://github.com/NixOS/nixpkgs)
+2. 🗣 Commented on [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+3. 🎉 Merged PR [#11](https://github.com/rich-id/unit-bundle/pull/11) in [rich-id/unit-bundle](https://github.com/rich-id/unit-bundle)
+4. 🗣 Commented on [#99233](https://github.com/NixOS/nixpkgs/issues/99233) in [NixOS/nixpkgs](https://github.com/NixOS/nixpkgs)
+5. 🗣 Commented on [#99232](https://github.com/NixOS/nixpkgs/issues/99232) in [NixOS/nixpkgs](https://github.com/NixOS/nixpkgs)
 <!--END_SECTION:activity-->
 
 </details>
