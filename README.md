@@ -25,11 +25,11 @@ I'm a french Fullstack Web developper at [RichCongress](https://www.richcongress
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 💪 Opened PR [#14](https://github.com/NicolasGuilloux/shadow-nix/pull/14) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-2. 🗣 Commented on [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-3. 🗣 Commented on [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+1. ❗️ Closed issue [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+2. 🎉 Merged PR [#14](https://github.com/NicolasGuilloux/shadow-nix/pull/14) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+3. 💪 Opened PR [#14](https://github.com/NicolasGuilloux/shadow-nix/pull/14) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
 4. 🗣 Commented on [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-5. 🎉 Merged PR [#11](https://github.com/rich-id/unit-bundle/pull/11) in [rich-id/unit-bundle](https://github.com/rich-id/unit-bundle)
+5. 🗣 Commented on [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
 <!--END_SECTION:activity-->
 
 </details>
