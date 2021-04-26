@@ -1,6 +1,7 @@
 ### Hi folks, I'm Nicolas - aka Nover
 
-I'm a french Fullstack Web developper at [RichCongress](https://www.richcongress.com).
+I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I mainly work on NixOS with Elm and Symfony for the work, and I love making various side projects on my own.
+
 
 ### Connect with me:
 
@@ -8,12 +9,13 @@ I'm a french Fullstack Web developper at [RichCongress](https://www.richcongress
 [<img align="left" alt="NicolasGuilloux | Gitlab" width="22px" src="https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo.svg" />][gitlab]
 [<img align="left" alt="NicolasGuilloux | LinkedIn" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" />][linkedin]
 
-<br />
+<span />
 
 ### Languages and Tools:
 
-<img align="left" alt="Elm" width="26px" src="https://raw.githubusercontent.com/github/explore/master/topics/elm/elm.png" />
-<img align="left" alt="PHP" width="26px" src="https://raw.githubusercontent.com/github/explore/master/topics/php/php.png" />
+<img align="left" alt="NixOS"   width="26px" src="https://symbols.getvecta.com/stencil_89/59_nixos-linux-icon.f23716bf93.svg" />
+<img align="left" alt="Elm"     width="26px" src="https://raw.githubusercontent.com/github/explore/master/topics/elm/elm.png" />
+<img align="left" alt="PHP"     width="26px" src="https://raw.githubusercontent.com/github/explore/master/topics/php/php.png" />
 <img align="left" alt="Symfony" width="26px" src="https://raw.githubusercontent.com/github/explore/master/topics/symfony/symfony.png" />
 
 <br />
