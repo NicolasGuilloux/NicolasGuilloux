@@ -13,10 +13,10 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
 
 ### Languages and Tools:
 
-<img align="left" alt="NixOS"   width="26px" src="https://symbols.getvecta.com/stencil_89/59_nixos-linux-icon.f23716bf93.svg" />
-<img align="left" alt="Elm"     width="26px" src="https://raw.githubusercontent.com/github/explore/master/topics/elm/elm.png" />
-<img align="left" alt="PHP"     width="26px" src="https://raw.githubusercontent.com/github/explore/master/topics/php/php.png" />
-<img align="left" alt="Symfony" width="26px" src="https://raw.githubusercontent.com/github/explore/master/topics/symfony/symfony.png" />
+[<img align="left" alt="NixOS"   width="26px" src="https://symbols.getvecta.com/stencil_89/59_nixos-linux-icon.f23716bf93.svg" />][nixos]
+[<img align="left" alt="Elm"     width="26px" src="https://raw.githubusercontent.com/github/explore/master/topics/elm/elm.png" />][elm]
+[<img align="left" alt="PHP"     width="26px" src="https://raw.githubusercontent.com/github/explore/master/topics/php/php.png" />][php]
+[<img align="left" alt="Symfony" width="26px" src="https://raw.githubusercontent.com/github/explore/master/topics/symfony/symfony.png" />][symfony]
 
 <br />
 <br />
@@ -27,11 +27,6 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 🗣 Commented on [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-2. 🎉 Merged PR [#15](https://github.com/NicolasGuilloux/shadow-nix/pull/15) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-3. 💪 Opened PR [#15](https://github.com/NicolasGuilloux/shadow-nix/pull/15) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-4. 🗣 Commented on [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-5. ❗️ Closed issue [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
 <!--END_SECTION:activity-->
 
 </details>
@@ -45,3 +40,7 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
 [website]: https://nicolasguilloux.eu
 [gitlab]: https://gitlab.com/NicolasGuilloux
 [linkedin]: https://www.linkedin.com/in/nicolas-guilloux/
+[nixos]: https://nixos.org
+[elm]: https://elm-lang.org
+[php]: https://www.php.net
+[symfony]: https://symfony.com
