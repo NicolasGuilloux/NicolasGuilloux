@@ -27,11 +27,11 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 🗣 Commented on [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-2. 🎉 Merged PR [#15](https://github.com/NicolasGuilloux/shadow-nix/pull/15) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-3. 💪 Opened PR [#15](https://github.com/NicolasGuilloux/shadow-nix/pull/15) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-4. 🗣 Commented on [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-5. ❗️ Closed issue [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+1. 🗣 Commented on [#29](https://github.com/Jerrkawz/HAGearS3/issues/29) in [Jerrkawz/HAGearS3](https://github.com/Jerrkawz/HAGearS3)
+2. 🗣 Commented on [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+3. 🎉 Merged PR [#15](https://github.com/NicolasGuilloux/shadow-nix/pull/15) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+4. 💪 Opened PR [#15](https://github.com/NicolasGuilloux/shadow-nix/pull/15) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+5. 🗣 Commented on [#13](https://github.com/NicolasGuilloux/shadow-nix/issues/13) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
 <!--END_SECTION:activity-->
 
 </details>
