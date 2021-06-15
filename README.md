@@ -27,11 +27,11 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 💪 Opened PR [#2](https://github.com/rich-id/cookies-regulation/pull/2) in [rich-id/cookies-regulation](https://github.com/rich-id/cookies-regulation)
-2. ❌ Closed PR [#1](https://github.com/rich-id/cookies-regulation/pull/1) in [rich-id/cookies-regulation](https://github.com/rich-id/cookies-regulation)
-3. 💪 Opened PR [#1](https://github.com/rich-id/cookies-regulation/pull/1) in [rich-id/cookies-regulation](https://github.com/rich-id/cookies-regulation)
-4. 🎉 Merged PR [#17](https://github.com/NicolasGuilloux/shadow-nix/pull/17) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-5. 💪 Opened PR [#17](https://github.com/NicolasGuilloux/shadow-nix/pull/17) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+1. 🎉 Merged PR [#2](https://github.com/rich-id/cookies-regulation/pull/2) in [rich-id/cookies-regulation](https://github.com/rich-id/cookies-regulation)
+2. 💪 Opened PR [#2](https://github.com/rich-id/cookies-regulation/pull/2) in [rich-id/cookies-regulation](https://github.com/rich-id/cookies-regulation)
+3. ❌ Closed PR [#1](https://github.com/rich-id/cookies-regulation/pull/1) in [rich-id/cookies-regulation](https://github.com/rich-id/cookies-regulation)
+4. 💪 Opened PR [#1](https://github.com/rich-id/cookies-regulation/pull/1) in [rich-id/cookies-regulation](https://github.com/rich-id/cookies-regulation)
+5. 🎉 Merged PR [#17](https://github.com/NicolasGuilloux/shadow-nix/pull/17) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
 <!--END_SECTION:activity-->
 
 </details>
