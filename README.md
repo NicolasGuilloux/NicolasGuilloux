@@ -27,11 +27,11 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 🎉 Merged PR [#1](https://github.com/rich-id/static-analysis/pull/1) in [rich-id/static-analysis](https://github.com/rich-id/static-analysis)
-2. 🎉 Merged PR [#1](https://github.com/rich-id/excel-generator-bundle/pull/1) in [rich-id/excel-generator-bundle](https://github.com/rich-id/excel-generator-bundle)
-3. 🎉 Merged PR [#2](https://github.com/rich-id/cookies-regulation/pull/2) in [rich-id/cookies-regulation](https://github.com/rich-id/cookies-regulation)
-4. 💪 Opened PR [#2](https://github.com/rich-id/cookies-regulation/pull/2) in [rich-id/cookies-regulation](https://github.com/rich-id/cookies-regulation)
-5. ❌ Closed PR [#1](https://github.com/rich-id/cookies-regulation/pull/1) in [rich-id/cookies-regulation](https://github.com/rich-id/cookies-regulation)
+1. 🎉 Merged PR [#19](https://github.com/NicolasGuilloux/shadow-nix/pull/19) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+2. 💪 Opened PR [#19](https://github.com/NicolasGuilloux/shadow-nix/pull/19) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+3. ❌ Closed PR [#18](https://github.com/NicolasGuilloux/shadow-nix/pull/18) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+4. 💪 Opened PR [#18](https://github.com/NicolasGuilloux/shadow-nix/pull/18) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+5. 🎉 Merged PR [#1](https://github.com/rich-id/static-analysis/pull/1) in [rich-id/static-analysis](https://github.com/rich-id/static-analysis)
 <!--END_SECTION:activity-->
 
 </details>
