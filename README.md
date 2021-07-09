@@ -27,11 +27,11 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 💪 Opened PR [#1](https://github.com/rich-id/recurrent-fixtures-test-bundle/pull/1) in [rich-id/recurrent-fixtures-test-bundle](https://github.com/rich-id/recurrent-fixtures-test-bundle)
-2. 💪 Opened PR [#1](https://github.com/rich-id/test-framework/pull/1) in [rich-id/test-framework](https://github.com/rich-id/test-framework)
-3. 💪 Opened PR [#1](https://github.com/rich-id/maintenance-bundle/pull/1) in [rich-id/maintenance-bundle](https://github.com/rich-id/maintenance-bundle)
-4. 🎉 Merged PR [#19](https://github.com/NicolasGuilloux/shadow-nix/pull/19) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
-5. 💪 Opened PR [#19](https://github.com/NicolasGuilloux/shadow-nix/pull/19) in [NicolasGuilloux/shadow-nix](https://github.com/NicolasGuilloux/shadow-nix)
+1. 🎉 Merged PR [#2](https://github.com/rich-id/recurrent-fixtures-test-bundle/pull/2) in [rich-id/recurrent-fixtures-test-bundle](https://github.com/rich-id/recurrent-fixtures-test-bundle)
+2. 💪 Opened PR [#2](https://github.com/rich-id/recurrent-fixtures-test-bundle/pull/2) in [rich-id/recurrent-fixtures-test-bundle](https://github.com/rich-id/recurrent-fixtures-test-bundle)
+3. 💪 Opened PR [#1](https://github.com/rich-id/recurrent-fixtures-test-bundle/pull/1) in [rich-id/recurrent-fixtures-test-bundle](https://github.com/rich-id/recurrent-fixtures-test-bundle)
+4. 💪 Opened PR [#1](https://github.com/rich-id/test-framework/pull/1) in [rich-id/test-framework](https://github.com/rich-id/test-framework)
+5. 💪 Opened PR [#1](https://github.com/rich-id/maintenance-bundle/pull/1) in [rich-id/maintenance-bundle](https://github.com/rich-id/maintenance-bundle)
 <!--END_SECTION:activity-->
 
 </details>
