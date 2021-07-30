@@ -27,11 +27,11 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 🎉 Merged PR [#1](https://github.com/rich-id/bundle-template/pull/1) in [rich-id/bundle-template](https://github.com/rich-id/bundle-template)
-2. 💪 Opened PR [#3](https://github.com/rich-id/terms-module/pull/3) in [rich-id/terms-module](https://github.com/rich-id/terms-module)
-3. 💪 Opened PR [#3](https://github.com/rich-id/normalizer-extension-bundle/pull/3) in [rich-id/normalizer-extension-bundle](https://github.com/rich-id/normalizer-extension-bundle)
-4. 🎉 Merged PR [#2](https://github.com/rich-id/terms-module/pull/2) in [rich-id/terms-module](https://github.com/rich-id/terms-module)
-5. 💪 Opened PR [#2](https://github.com/rich-id/terms-module/pull/2) in [rich-id/terms-module](https://github.com/rich-id/terms-module)
+1. 💪 Opened PR [#1](https://github.com/rich-id/cookies-regulation-bundle/pull/1) in [rich-id/cookies-regulation-bundle](https://github.com/rich-id/cookies-regulation-bundle)
+2. 🎉 Merged PR [#1](https://github.com/rich-id/bundle-template/pull/1) in [rich-id/bundle-template](https://github.com/rich-id/bundle-template)
+3. 💪 Opened PR [#3](https://github.com/rich-id/terms-module/pull/3) in [rich-id/terms-module](https://github.com/rich-id/terms-module)
+4. 💪 Opened PR [#3](https://github.com/rich-id/normalizer-extension-bundle/pull/3) in [rich-id/normalizer-extension-bundle](https://github.com/rich-id/normalizer-extension-bundle)
+5. 🎉 Merged PR [#2](https://github.com/rich-id/terms-module/pull/2) in [rich-id/terms-module](https://github.com/rich-id/terms-module)
 <!--END_SECTION:activity-->
 
 </details>
