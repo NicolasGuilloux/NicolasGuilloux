@@ -27,11 +27,11 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 💪 Opened PR [#2](https://github.com/rich-id/bundle-template/pull/2) in [rich-id/bundle-template](https://github.com/rich-id/bundle-template)
-2. 💪 Opened PR [#3](https://github.com/rich-id/recurrent-fixtures-test-bundle/pull/3) in [rich-id/recurrent-fixtures-test-bundle](https://github.com/rich-id/recurrent-fixtures-test-bundle)
-3. 💪 Opened PR [#1](https://github.com/rich-id/cookies-regulation-bundle/pull/1) in [rich-id/cookies-regulation-bundle](https://github.com/rich-id/cookies-regulation-bundle)
-4. 🎉 Merged PR [#1](https://github.com/rich-id/bundle-template/pull/1) in [rich-id/bundle-template](https://github.com/rich-id/bundle-template)
-5. 💪 Opened PR [#3](https://github.com/rich-id/terms-module/pull/3) in [rich-id/terms-module](https://github.com/rich-id/terms-module)
+1. 💪 Opened PR [#3](https://github.com/rich-id/cookies-regulation-bundle/pull/3) in [rich-id/cookies-regulation-bundle](https://github.com/rich-id/cookies-regulation-bundle)
+2. ❌ Closed PR [#2](https://github.com/rich-id/cookies-regulation-bundle/pull/2) in [rich-id/cookies-regulation-bundle](https://github.com/rich-id/cookies-regulation-bundle)
+3. 💪 Opened PR [#2](https://github.com/rich-id/cookies-regulation-bundle/pull/2) in [rich-id/cookies-regulation-bundle](https://github.com/rich-id/cookies-regulation-bundle)
+4. 💪 Opened PR [#2](https://github.com/rich-id/bundle-template/pull/2) in [rich-id/bundle-template](https://github.com/rich-id/bundle-template)
+5. 💪 Opened PR [#3](https://github.com/rich-id/recurrent-fixtures-test-bundle/pull/3) in [rich-id/recurrent-fixtures-test-bundle](https://github.com/rich-id/recurrent-fixtures-test-bundle)
 <!--END_SECTION:activity-->
 
 </details>
