@@ -27,11 +27,11 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 💪 Opened PR [#5](https://github.com/rich-id/cookies-regulation/pull/5) in [rich-id/cookies-regulation](https://github.com/rich-id/cookies-regulation)
-2. 🎉 Merged PR [#3](https://github.com/rich-id/bundle-template/pull/3) in [rich-id/bundle-template](https://github.com/rich-id/bundle-template)
-3. 💪 Opened PR [#3](https://github.com/rich-id/bundle-template/pull/3) in [rich-id/bundle-template](https://github.com/rich-id/bundle-template)
-4. ❌ Closed PR [#1](https://github.com/rich-id/bundle-toolbox/pull/1) in [rich-id/bundle-toolbox](https://github.com/rich-id/bundle-toolbox)
-5. 💪 Opened PR [#2](https://github.com/rich-id/bundle-toolbox/pull/2) in [rich-id/bundle-toolbox](https://github.com/rich-id/bundle-toolbox)
+1. 💪 Opened PR [#3](https://github.com/rich-id/bundle-toolbox/pull/3) in [rich-id/bundle-toolbox](https://github.com/rich-id/bundle-toolbox)
+2. 💪 Opened PR [#5](https://github.com/rich-id/cookies-regulation/pull/5) in [rich-id/cookies-regulation](https://github.com/rich-id/cookies-regulation)
+3. 🎉 Merged PR [#3](https://github.com/rich-id/bundle-template/pull/3) in [rich-id/bundle-template](https://github.com/rich-id/bundle-template)
+4. 💪 Opened PR [#3](https://github.com/rich-id/bundle-template/pull/3) in [rich-id/bundle-template](https://github.com/rich-id/bundle-template)
+5. ❌ Closed PR [#1](https://github.com/rich-id/bundle-toolbox/pull/1) in [rich-id/bundle-toolbox](https://github.com/rich-id/bundle-toolbox)
 <!--END_SECTION:activity-->
 
 </details>
