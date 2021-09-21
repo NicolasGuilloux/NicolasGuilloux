@@ -27,11 +27,11 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 🎉 Merged PR [#2](https://github.com/rich-id/web-test-bundle/pull/2) in [rich-id/web-test-bundle](https://github.com/rich-id/web-test-bundle)
-2. 💪 Opened PR [#2](https://github.com/rich-id/web-test-bundle/pull/2) in [rich-id/web-test-bundle](https://github.com/rich-id/web-test-bundle)
-3. 🎉 Merged PR [#1](https://github.com/rich-id/web-test-bundle/pull/1) in [rich-id/web-test-bundle](https://github.com/rich-id/web-test-bundle)
-4. 💪 Opened PR [#1](https://github.com/rich-id/web-test-bundle/pull/1) in [rich-id/web-test-bundle](https://github.com/rich-id/web-test-bundle)
-5. 💪 Opened PR [#6](https://github.com/rich-id/recurrent-fixtures-test-bundle/pull/6) in [rich-id/recurrent-fixtures-test-bundle](https://github.com/rich-id/recurrent-fixtures-test-bundle)
+1. 🎉 Merged PR [#5](https://github.com/rich-id/bundle-toolbox/pull/5) in [rich-id/bundle-toolbox](https://github.com/rich-id/bundle-toolbox)
+2. 💪 Opened PR [#5](https://github.com/rich-id/bundle-toolbox/pull/5) in [rich-id/bundle-toolbox](https://github.com/rich-id/bundle-toolbox)
+3. 🎉 Merged PR [#2](https://github.com/rich-id/web-test-bundle/pull/2) in [rich-id/web-test-bundle](https://github.com/rich-id/web-test-bundle)
+4. 💪 Opened PR [#2](https://github.com/rich-id/web-test-bundle/pull/2) in [rich-id/web-test-bundle](https://github.com/rich-id/web-test-bundle)
+5. 🎉 Merged PR [#1](https://github.com/rich-id/web-test-bundle/pull/1) in [rich-id/web-test-bundle](https://github.com/rich-id/web-test-bundle)
 <!--END_SECTION:activity-->
 
 </details>
