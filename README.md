@@ -27,11 +27,11 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. ❗️ Opened issue [#143247](https://github.com/NixOS/nixpkgs/issues/143247) in [NixOS/nixpkgs](https://github.com/NixOS/nixpkgs)
-2. 🗣 Commented on [#8](https://github.com/rich-id/recurrent-fixtures-test-bundle/issues/8) in [rich-id/recurrent-fixtures-test-bundle](https://github.com/rich-id/recurrent-fixtures-test-bundle)
-3. 💪 Opened PR [#2](https://github.com/rich-id/test-framework/pull/2) in [rich-id/test-framework](https://github.com/rich-id/test-framework)
-4. 💪 Opened PR [#7](https://github.com/rich-id/recurrent-fixtures-test-bundle/pull/7) in [rich-id/recurrent-fixtures-test-bundle](https://github.com/rich-id/recurrent-fixtures-test-bundle)
-5. 🎉 Merged PR [#5](https://github.com/rich-id/bundle-toolbox/pull/5) in [rich-id/bundle-toolbox](https://github.com/rich-id/bundle-toolbox)
+1. ❌ Closed PR [#61](https://github.com/NicolasGuilloux/blade-shadow-beta/pull/61) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+2. ❗️ Opened issue [#143247](https://github.com/NixOS/nixpkgs/issues/143247) in [NixOS/nixpkgs](https://github.com/NixOS/nixpkgs)
+3. 🗣 Commented on [#8](https://github.com/rich-id/recurrent-fixtures-test-bundle/issues/8) in [rich-id/recurrent-fixtures-test-bundle](https://github.com/rich-id/recurrent-fixtures-test-bundle)
+4. 💪 Opened PR [#2](https://github.com/rich-id/test-framework/pull/2) in [rich-id/test-framework](https://github.com/rich-id/test-framework)
+5. 💪 Opened PR [#7](https://github.com/rich-id/recurrent-fixtures-test-bundle/pull/7) in [rich-id/recurrent-fixtures-test-bundle](https://github.com/rich-id/recurrent-fixtures-test-bundle)
 <!--END_SECTION:activity-->
 
 </details>
