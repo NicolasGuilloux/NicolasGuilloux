@@ -27,11 +27,11 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 💪 Opened PR [#5](https://github.com/rich-id/test-tools/pull/5) in [rich-id/test-tools](https://github.com/rich-id/test-tools)
-2. ❌ Closed PR [#4](https://github.com/rich-id/test-tools/pull/4) in [rich-id/test-tools](https://github.com/rich-id/test-tools)
-3. ❌ Closed PR [#3](https://github.com/rich-id/test-tools/pull/3) in [rich-id/test-tools](https://github.com/rich-id/test-tools)
-4. ❗️ Opened issue [#150](https://github.com/pcloudcom/console-client/issues/150) in [pcloudcom/console-client](https://github.com/pcloudcom/console-client)
-5. ❌ Closed PR [#61](https://github.com/NicolasGuilloux/blade-shadow-beta/pull/61) in [NicolasGuilloux/blade-shadow-beta](https://github.com/NicolasGuilloux/blade-shadow-beta)
+1. 🎉 Merged PR [#2](https://github.com/rich-id/autoconfigure-bundle/pull/2) in [rich-id/autoconfigure-bundle](https://github.com/rich-id/autoconfigure-bundle)
+2. 💪 Opened PR [#2](https://github.com/rich-id/autoconfigure-bundle/pull/2) in [rich-id/autoconfigure-bundle](https://github.com/rich-id/autoconfigure-bundle)
+3. 💪 Opened PR [#5](https://github.com/rich-id/test-tools/pull/5) in [rich-id/test-tools](https://github.com/rich-id/test-tools)
+4. ❌ Closed PR [#4](https://github.com/rich-id/test-tools/pull/4) in [rich-id/test-tools](https://github.com/rich-id/test-tools)
+5. ❌ Closed PR [#3](https://github.com/rich-id/test-tools/pull/3) in [rich-id/test-tools](https://github.com/rich-id/test-tools)
 <!--END_SECTION:activity-->
 
 </details>
