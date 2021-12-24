@@ -27,11 +27,11 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
   <summary>:zap: Recent GitHub Activity</summary>
 
 <!--START_SECTION:activity-->
-1. 🎉 Merged PR [#2](https://github.com/rich-id/autoconfigure-bundle/pull/2) in [rich-id/autoconfigure-bundle](https://github.com/rich-id/autoconfigure-bundle)
-2. 💪 Opened PR [#2](https://github.com/rich-id/autoconfigure-bundle/pull/2) in [rich-id/autoconfigure-bundle](https://github.com/rich-id/autoconfigure-bundle)
-3. 💪 Opened PR [#5](https://github.com/rich-id/test-tools/pull/5) in [rich-id/test-tools](https://github.com/rich-id/test-tools)
-4. ❌ Closed PR [#4](https://github.com/rich-id/test-tools/pull/4) in [rich-id/test-tools](https://github.com/rich-id/test-tools)
-5. ❌ Closed PR [#3](https://github.com/rich-id/test-tools/pull/3) in [rich-id/test-tools](https://github.com/rich-id/test-tools)
+1. 💪 Opened PR [#3](https://github.com/rich-id/autoconfigure-bundle/pull/3) in [rich-id/autoconfigure-bundle](https://github.com/rich-id/autoconfigure-bundle)
+2. 🎉 Merged PR [#2](https://github.com/rich-id/autoconfigure-bundle/pull/2) in [rich-id/autoconfigure-bundle](https://github.com/rich-id/autoconfigure-bundle)
+3. 💪 Opened PR [#2](https://github.com/rich-id/autoconfigure-bundle/pull/2) in [rich-id/autoconfigure-bundle](https://github.com/rich-id/autoconfigure-bundle)
+4. 💪 Opened PR [#5](https://github.com/rich-id/test-tools/pull/5) in [rich-id/test-tools](https://github.com/rich-id/test-tools)
+5. ❌ Closed PR [#4](https://github.com/rich-id/test-tools/pull/4) in [rich-id/test-tools](https://github.com/rich-id/test-tools)
 <!--END_SECTION:activity-->
 
 </details>
