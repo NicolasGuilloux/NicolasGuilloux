@@ -1,12 +1,13 @@
 ### Hi folks, I'm Nicolas - aka Nover
 
-I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I mainly work on NixOS with Elm and Symfony for the work, and I love making various side projects on my own.
+I'm a french Fullstack Web developper as freelance. I mainly work on NixOS with Symfony for the work, and I love making various side projects on my own.
 
 
 ### Connect with me:
 
-[<img align="left" alt="NicolasGuilloux.eu" width="22px" src="https://raw.githubusercontent.com/iconic/open-iconic/master/svg/globe.svg" />][website]
+[<img align="left" alt="NicolasGuilloux.eu" width="22px" src="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" />][website]
 [<img align="left" alt="NicolasGuilloux | Gitlab" width="22px" src="https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo.svg" />][gitlab]
+[<img align="left" alt="NicolasGuilloux | Malt" width="22px" src="https://d29md5j3ph8xfz.cloudfront.net/100_percent/upload/Brand/4054/logo_brew_sansFond.png" />][malt]
 [<img align="left" alt="NicolasGuilloux | LinkedIn" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" />][linkedin]
 
 <span />
@@ -44,6 +45,7 @@ I'm a french Fullstack Web developper at [Rich ID](https://www.rich-id.fr). I ma
 
 [website]: https://nicolasguilloux.eu
 [gitlab]: https://gitlab.com/NicolasGuilloux
+[malt]: https://www.malt.fr/profile/nicolasguilloux
 [linkedin]: https://www.linkedin.com/in/nicolas-guilloux/
 [nixos]: https://nixos.org
 [elm]: https://elm-lang.org
