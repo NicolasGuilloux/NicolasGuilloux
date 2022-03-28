@@ -5,7 +5,7 @@ I'm a french Fullstack Web developper as freelance. I mainly work on NixOS with 
 
 ### Connect with me:
 
-[<img align="left" alt="NicolasGuilloux.eu" width="22px" src="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" />][website]
+[<img align="left" alt="NicolasGuilloux.eu" width="22px" src="https://cdn.shopify.com/app-store/listing_images/bee796601471f13a41ab86040b252ea0/icon/CMXvlsP0lu8CEAE=.png" />][website]
 [<img align="left" alt="NicolasGuilloux | Gitlab" width="22px" src="https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo.svg" />][gitlab]
 [<img align="left" alt="NicolasGuilloux | Malt" width="22px" src="https://d29md5j3ph8xfz.cloudfront.net/100_percent/upload/Brand/4054/logo_brew_sansFond.png" />][malt]
 [<img align="left" alt="NicolasGuilloux | LinkedIn" width="22px" src="https://cdn-icons-png.flaticon.com/512/174/174857.png" />][linkedin]
