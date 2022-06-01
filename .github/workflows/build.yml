@@ -3,7 +3,7 @@ name: 'Build Curriculum vitæ'
 on:
   pull_request:
     branches:
-      - 'cv/*'
+      - 'cv/**'
 
 jobs:
   build_curriculum_vitae:
