@@ -1,0 +1,52 @@
+{{ $icon_size := "32px" }}
+
+{{ with .email }}
+<a href="mailto:{{ . }}" target="_blank" title="Email">
+    {{ partial "helper/icon" "email" }}
+</a>
+{{ end }}
+
+{{ with .github }}
+<a href="{{ . }}" target="_blank" title="Github">
+    {{ partial "helper/icon" "github" }}
+</a>
+{{ end }}
+
+{{ with .gitlab }}
+<a href="{{ . }}" target="_blank" title="Gitlab">
+    {{ partial "helper/icon" "gitlab" }}
+</a>
+{{ end }}
+
+{{ with .malt }}
+<a href="{{ . }}" target="_blank" title="Malt">
+    {{ partial "helper/icon" "malt" }}
+</a>
+{{ end }}
+
+{{ with .linkedin }}
+<a href="{{ . }}" target="_blank" title="LinkedIn">
+    {{ partial "helper/icon" "linkedin" }}
+</a>
+{{ end }}
+
+{{ with .cv }}
+<a href="{{ . }}" target="_blank" title="CV">
+    {{ partial "helper/icon" "file" }}
+</a>
+{{ end }}
+
+<!-- Forced to put style in here because the compiler fails to compile my custom SCSS only on CI -->
+<style>
+    #main-menu li.social svg {
+        margin: auto;
+    }
+
+    #main-menu li.social a {
+        margin-left: 1em;
+    }
+
+    #main-menu li.social a:first-child {
+        margin-left: 0;
+    }
+</style>

@@ -1,0 +1,26 @@
+---
+title: Reverse Proxy sur NixOS
+description: Un petit tour de mon implémentation d'un Reverse Proxy sur mon NixOS
+date: 2022-05-11
+slug: reverse-proxy-nixos
+image: cover.svg
+categories:
+ - Tutoriels
+ - Notes
+tags:
+ - reverse-proxy
+ - traefik
+ - nixos
+ - docker
+---
+
+
+J'ai jonglé entre 3 proxies récemment afin de pouvoir facilement rediriger des requêtes vers les services appropriés, que ce soit en utilisant Docker ou en utilisant des services exposant des ports.
+
+== Les softwares
+
+J'ai expérimenté les 3 proxies suivants, dans l'ordre chronologique. Je vais passer en revue pourquoi je les ai utilisés, et pourquoi je les ai aussi abandonnés.
+
+=== Nginx
+
+C'est le premier proxy que j'ai utilisé, car c'est le serveur web que j'utilisais et qui permettait de facilement mettre en place cette fonctionnalité.

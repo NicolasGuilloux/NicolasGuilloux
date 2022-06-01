@@ -1,0 +1,22 @@
+---
+title: Cafetière à Induction Domotisée
+description: Un projet de 2ème année à l'ENSEA
+date: 2017-06-25
+slug: cid
+image: photo.jpg
+categories:
+ - Projets
+tags:
+ - cafetière
+ - induction
+---
+
+La Cafetière à Induction Domotisée, aka CID, est une cafetière avec plus d'un atout dans sa poche.
+
+Le but de ce projet était de faire du café rapidement, silencieusement avec la même qualité que les cafetières à dosette. En bref, combler les lacunes de ces dernières en ajoutant une partie domotique.
+
+Le projet a été commencé par mes soins, puis poursuivi dans le cadre des projets de deuxième année de l'ENSEA avec https://www.linkedin.com/in/loirevalentin/[Valentin Loire^]. Nous poursuivons jusqu'à ce jour le développement.
+
+> https://nicolasguilloux.github.io/cid/[Voir sa page de présentation^]
+
+{{< youtube DSbic6T9NO8 >}}

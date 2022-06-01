@@ -1,0 +1,12 @@
+# IDE
+.idea
+.vscode
+
+# Latex
+build
+
+# Hugo
+resources
+public
+.cache
+.hugo_build.lock

@@ -1,0 +1,116 @@
+---
+title: Le Bridge Signal pour Matrix
+description: L'installation de Matrix sur NixOS avec ses Bridges
+date: 2021-04-08
+slug: mautrix-signal
+image: cover.svg
+categories:
+ - Tutoriels
+ - Notes
+tags:
+ - matrix
+ - messaging
+ - bridges
+ - nixos
+ - docker
+---
+
+
+Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d'aller lire le tutoriel précédent :
+link:../matrix[Matrix sur NixOS]
+
+
+== Telegram Messenger
+
+https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/signal.nix[image:https://img.shields.io/badge/Gitlab-Mautrix Signal-orange[Gitlab]^]
+
+Le bridge Signal supporte les conversations de groupe et les messages directs. Toutefois, toute conversation chiffrée ne sera pas supportée. +
+La petite particularité sur ce bridge est que Signal ne dispose pas d'une API. Ainsi, il va falloir utiliser une image Docker qui va simuler un accès Web à Signal.
+
+Voici la configuration que je préconise :
+
+[source]
+----
+{ config, lib, ... }:
+
+let
+  bridgeFolder = "/var/lib/mautrix-signal";
+
+  toListIfExists = path:
+    if (lib.pathExists path) then
+      [ path ]
+    else
+      [];
+in {
+  # Signal daemon
+  virtualisation.oci-containers.containers.signald = {
+    image = "docker.io/finn/signald";
+    volumes = [ "${bridgeFolder}/signald:/signald" ];
+    extraOptions = [ "--network=host" ];
+  };
+
+  # Signal bridge
+  virtualisation.oci-containers.containers.mautrix-signal = {
+    image = "dock.mau.dev/tulir/mautrix-signal";
+    extraOptions = [ "--network=host" ];
+    dependsOn = [ "signald" ];
+    volumes = [
+      "${bridgeFolder}/data:/data"
+      "${bridgeFolder}/signald:/signald"
+    ];
+  };
+
+  # Add configuration to Matrix server
+  services.matrix-synapse.app_service_config_files = toListIfExists "${bridgeFolder}/data/registration.yaml";
+}
+
+----
+
+Si on résume, toutes les données sont stockées dans `/var/lib/mautrix-signal`. On ajoute les image Docker qui permet de lancer le bridge.
+
+L'image `signald` est le daemon pour pouvoir simuler une interface Web auprès de notre application Signal. C'est nécessaire pour pouvoir récupérer les messages en toute sécurité vu que Signal ne dispose pas d'API. +
+C'est aussi pour celà qu'on doit partager le volume où sont stockées toutes les informations (comme les avatars) entre le daemon et le bridge.
+
+On va dès maintenant configurer ce dernier en éditant **en tant que root** le fichier `/var/lib/mautrix-signal/data/config.yaml`... Enfin faite votre `nixos-rebuild switch` pour lancer le bridge.
+
+On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :
+
+[source]
+----
+homeserver:
+    address: http://localhost:8008
+    domain: server_name
+    verify_ssl: false
+
+signal:
+     socket_path: /signald/signald.sock
+     outgoing_attachment_dir: /signald/attachments
+     avatar_dir: /signald/avatars
+     data_dir: /signald/data
+
+bridge:
+    permissions:
+        "*": user
+        "@pseudo:server_name": admin
+----
+
+* `homeserver.address` : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local
+* `homeserver.domain` : C'est le `server_name`, vous devez maintenance savoir ce que c'est :)
+* `homeserver.verify_ssl` : Comme on est dans une boucle locale, par besoin de vérifier le SSL
+* `signal.socket-path` : Socket pour dialoguer avec le daemon
+* `signal.outgoing_attachment_dir` : Répertoire du daemon où sont mis les pièces jointes
+* `signal.avatar_dir` : Répertoire du daemon où sont mis les avatars
+* `signal.data_dir` : Répertoire du daemon où sont mis les autres données utiles aux bridges
+* `bridge.permissions` :  Ce sont les permissions. Pour ma part, j'ai mis `"*": user` pour que tous les utilisateurs puissent utiliser le bridge, et enfin `"@pseudo:server_name": admin` pour que votre utilisateur puisse l'administrer
+
+Une fois ça fait, pensez à redémarrer votre image docker `docker restart mautrix-signal` et faites ensuite un petit  `nixos-rebuild switch`. Normalement, `matrix-synapse` se redémarrera car le fichier `registration.yaml` existera.
+
+Vous pouvez maintenant constater que vous pouvez parler au bot dans votre client Matrix en ouvrant une conversation avec `@signalbot:server_name`. +
+Celui-ci devrait accepter votre invitation. Vous pouvez alors lui demander de l'aide comme il le propose.
+
+A partir d'ici vous avez plusieurs choix, car vous pouvez :
+
+* Créer un compte de zéro en utilisant la commande `register +33xxxxxxxxx`. Si vous n'avez pas signal sur votre téléphone, cela permettra de tout recevoir sur Matrix directement.
+* Lier votre compte déjà existant, relié à votre téléphone, et forward tous les messages à Matrix en tapant `link` et en scannant le QR Code.
+
+Une fois connecté, attendez un peu et vous allez recevoir plein d'invitations :) Bien joué, tout devrait fonctionner !

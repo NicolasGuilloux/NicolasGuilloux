@@ -1,0 +1,185 @@
+---
+title: Matrix sur NixOS
+description: L'installation de Matrix sur NixOS avec ses Bridges
+date: 2021-03-26
+slug: matrix
+image: matrix.svg
+categories:
+ - Tutoriels
+ - Notes
+tags:
+ - matrix
+ - messaging
+ - bridges
+ - nixos
+ - docker
+---
+
+Comme beaucoup de personnes, j'ai beaucoup de messageries qui ont su évoluer (ou pas) dans le temps. Et chacunes de ces messageries apportent ses avantages et ses inconvénients, et la plupart des gens ne veulent pas toutes les avoir. Et j'en fais partie !
+
+Aussi, j'ai toujours reluqué https://matrix.org[Matrix^] de loin. Les seules fois où j'avais abordé ce standard, j'ai été très déçu à cause de la lenteur de celui-ci et aussi le fait que ce soit extrêmement intimidant au niveau sécurité.
+
+[[beeper,.center]]
+image:beeper.png[role=center]
+
+Finalement, j'ai décidé de me lancer en entendant parler de https://www.beeper.com[Beeper^] qui permettait de centraliser plein de protocoles au même endroit. J'ai été déçu de voir que c'était très payant pour une utilisation domestique. Et j'ai remarqué par mon don incroyable de lecture de la seule et unique page disponible que Beeper était une application basée sur Matrix et la notion de bridges. Donc, en théorie, on peut faire la même chose sans payer.
+
+:toc:
+
+== Qu'est-ce que Matrix
+
+Matrix est un standard OpenSource pour construire une messagerie sécurisée en temps réel et décentralisée. Beaucoup de buzz words, on va expliquer tout ça.
+
+C'est un **standard**, ce qui veut dire que Matrix n'est pas un logiciel mais simplement une liste de fonctionnalités à implémenter afin de supporter le protocole. C'est un peu comme si on parlait d'un mixeur, qui est la fonctionnalité, ce qui ne l'empêche pas d'avoir un nom donné par la marque ou par les utilisateurs. Le mixeur de mes parents s'appelle Bob. +
+Une **messagerie sécurisée en temps réel**, c'est assez simple à comprendre. +
+Pour le côté **décentralisé**, ça veut dire que un seul et unique serveur n'est pas souverain du réseau. Ainsi, installer un serveur chez vous permettra d'avoir accès au service sur votre réseau. Matrix implémente aussi un système pour faire dialoguer les serveurs entre eux, comme ça votre serveur ne reste pas dans son coin et pourra dialoguer avec le monde extérieur.
+
+On a parlé plus haut des bridges, et ça c'est une des fonctionnalités de Matrix. Le principe est qu'on peut ajouter un genre de plugin qui joue le rôle d'interface avec quelque chose d'autre. Ouais c'est un peu abstrait, mais concrètement un bridge peut se charger en temps réel de relayer les messages d'une autre messagerie par exemple.
+
+
+== Installation du serveur
+
+J'ai rassemblé tous mes efforts pour que tout fonctionne dans un dossier de mon installation NixOS. Il peut varier dans le temps, j'actualiserais le tutoriel et les liens vers ma configuration en fonction des updates.
+
+
+=== Le serveur Synapse
+
+https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/server.nix[image:https://img.shields.io/badge/Gitlab-Synapse-orange[Gitlab]^]
+
+Tout commence d'abord par installer https://matrix.org/docs/projects/server/synapse[Synapse] qui est un serveur Matrix. Matrix étant un standard, Synapse est une implémentation de celui-ci. Si vous êtes déjà perdu, relisez le point précédent ;)
+
+Ici, NixOS nous a bien facilité la tache vu qu'une configuration est disponible, donc on peut aller très vite.
+
+[source]
+----
+services.matrix-synapse = {
+  enable = true;
+  server_name = "matrix.nicolasguilloux.eu";
+  registration_shared_secret = "UnSecretTemporaire";
+  # enable_registration = true;
+
+  listeners = [
+    {
+      port = 8008;
+      bind_address = "::1";
+      type = "http";
+      tls = false;
+      x_forwarded = true;
+      resources = [
+        {
+          names = [ "client" "federation" ];
+          compress = false;
+        }
+      ];
+    }
+  ];
+};
+
+# For the registration of a user
+services.matrix-synapse.registration_shared_secret = "UnSecretTemporaire";
+environment.systemPackages = [ pkgs.matrix-synapse ];
+----
+
+Il faut s'assurer que l'option `server_name` correspond bien à l'adresse finale du serveur. C'est important pour faire dialoguer le monde extérieur avec notre instance. Si jamais vous vous lancez dans l'installation et que cette adresse est fausse, il faudra tout recommencer.
+
+Ici, on n'utilise qu'un seul port : le `8008`. C'est celui conseillé dans la documentation. Vous remarquerez qu'il n'y a pas de SSL, c'est parce que mon serveur sera exposé à travers un Reverse Proxy géré par Nginx. On va voir ça après.
+
+L'option `registration_shared_secret` est là uniquement pour enregistrer votre utilisateur administrateur. Il faudra bien penser à l'enlever, car elle permet de créer des utilisateurs un peu comme on veut en utilisant le dit mot de passe.
+
+Et enfin, pas besoin d'importer le paquet de Synapse dans les ceux de système hormis pour l'inscription d'un nouvel utilisateur via un terminal.
+
+
+=== La base de données
+
+https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/database.nix[image:https://img.shields.io/badge/Gitlab-BDD-orange[Gitlab]^]
+
+Il faudra aussi configurer une base de données PostgreSQL pour le serveur.
+
+[source]
+----
+# Manually configure PostgreSQL
+# ref: https://www.foxypossibilities.com/2018/02/04/running-matrix-synapse-on-nixos/
+services.postgresql.enable = true;
+services.postgresql.initialScript = pkgs.writeText "synapse-init.sql" ''
+  CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD '${config.secrets.matrix.database}';
+  CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
+    TEMPLATE template0
+    LC_COLLATE = "C"
+    LC_CTYPE = "C";
+'';
+----
+
+Ici, mon mot de passe est défini bien au chaud dans la config. Pensez à mettre votre mot de passe. Vous pouvez aussi faire cette étape à la mano en allant tater `sudo -u postgres psql`.
+
+
+=== Création de notre admin
+
+Avant d'exposer sur Internet, on va déjà créer notre utilisateur admin puis désactiver la possibilité de s'enregistrer en utilisant les lignes de commandes. Comme ça, on ferme une porte !
+
+Ici, rappelez vous la `registration_shared_secret` mis plus haut et simplement tapez la commande suivante
+
+[source]
+____
+register_new_matrix_user --shared-secret "UnSecretTemporaire" http://localhost:8008
+____
+
+On suit donc tout ce qu'il nous dit comme il faut en prenant soin de mettre votre utilisateur Admin.
+
+
+=== Le Reverse Proxy
+
+https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/nginx.nix[image:https://img.shields.io/badge/Gitlab-Nginx-orange[Gitlab]^]
+
+On va maintenant configurer notre Reverse Proxy pour qu'il puisse être accessible du monde extérieur. C'est important aussi pour pouvoir dialoguer avec les autres serveurs.
+
+[source]
+----
+let
+  listenPort = port: ssl: {
+    addr = "0.0.0.0";
+    port = port;
+    ssl = ssl;
+  };
+in
+{
+  # Open port
+  networking.firewall.allowedTCPPorts = [ 8448 ];
+
+  # Reverse proxy
+  services.nginx.virtualHosts."matrix.nicolasguilloux.eu" = {
+    enableACME = true;
+    forceSSL = true;
+
+    listen = [
+      (listenPort 80 false)
+      (listenPort 443 true)
+      (listenPort 8448 true)
+    ];
+
+    locations."/_matrix" = {
+      proxyPass = "http://[::1]:8008";
+    };
+  };
+}
+----
+
+Ici, on voit que nous redirigeons tout vers notre serveur Synpase. On peut aussi voir qu'on utilise le port 8448. Il est important car c'est ce port qui est utilisé par la fédération des serveurs Matrix. Ainsi, un serveur lambda ira questionner notre serveur via ce port uniquement.
+
+Une fois tout installé, vous pouvez d'ailleurs https://federationtester.matrix.org[tester votre serveur^] pour voir s'il est bien accessible par la fédération.
+
+Si vous avez tout bien fait, normalement vous devez pouvoir vous connecter sur https://app.element.io/#/login[Element.io], modifier le serveur d'accueil (le fameux `server_name`) et vous connecter. +
+Vous remarquerez alors que votre pseudo est `pseudo:server_name`. Par exemple, pour ma part, c'est `nover:matrix.nicolasguilloux.eu`.
+
+
+== Les Bridges
+
+Une fois votre serveur fonctionnel, vous pouvez jouir de toutes les fonctionnalités de Matrix de base. Vous pouvez donc rejoindre des salons et discuter avec des personnes mêmes si elles ne sont pas sur votre serveur grâce à la magie de la fédération.
+
+On va maintenant pouvoir ajouter des bridges qui vont être les interfaces entre un autre protocole et celui de Matrix. En plus simple : ça va permettre d'envoyer des messages en utilisant Matrix vers des destinataires comme Signal ou encore Messenger.
+
+Ici, je ne vais passer en revue que les bridges que j'ai implémenté sur mon serveur. On notera que la plupart ont été conçu par la même personne et donc ont le préfix `mautrix`. On peut donc constater qu'ils se configurent quasiment de la même manière. +
+Je vais aussi essayer de trier l'ordre des bridges ci-dessous en fonction de leur difficulté à installer. Ca permettra de monter progressivement en difficulté.
+
+link:../mautrix-facebook[image:https://img.shields.io/badge/mautrix-facebook-blue[]]
+link:../mautrix-telegram[image:https://img.shields.io/badge/mautrix-telegram-blue[]]
+

@@ -1,0 +1,34 @@
+<div id="disqus-container" class="disqus-container">
+    <h2 id="disqus-title" class="article-title">
+        Commentaires
+    </h2>
+
+    <div id="disqus-container-dropdown">
+        {{ template "_internal/disqus.html" . }}
+    </div>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+<script>
+    document.getElementById('disqus-title').addEventListener('click', (e) => {
+        document.getElementById('disqus-container').classList.toggle('extended');
+    })
+</script>

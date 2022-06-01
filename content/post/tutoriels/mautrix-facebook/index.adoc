@@ -1,0 +1,100 @@
+---
+title: Le Bridge Facebook pour Matrix
+description: L'installation de Matrix sur NixOS avec ses Bridges
+date: 2021-03-29
+slug: mautrix-facebook
+image: cover.svg
+categories:
+ - Tutoriels
+ - Notes
+tags:
+ - matrix
+ - messaging
+ - bridges
+ - nixos
+ - docker
+---
+
+Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d'aller lire le tutoriel précédent :
+link:../matrix[Matrix sur NixOS]
+
+
+== Facebook Messenger
+
+https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/facebook.nix[image:https://img.shields.io/badge/Gitlab-Mautrix Facebook-orange[Gitlab]^]
+
+Bon, qu'on se le dise, j'aimerai bien partir de Facebook mais beaucoup de personnes ne veulent pas par simplicité. Même si ça m'embête pour des raisons évidentes, je dois rester dessus car j'ai vraiment des personnes que j'aime beaucoup qui refusent de passer sur d'autres plateformes. +
+C'est d'ailleurs un intérêt de ce bridge : je vais désinstaller toutes les applications Facebook, ma seule interaction sera via Matrix.
+
+Dans un premier temps, on va préparer notre base de données afin d'y stocker les données utilent au bridge. Pour le moment, celui-ci ne supporte que PostgreSQL. Ca tombe bien, on a déjà une BDD disponible via le serveur Synapse. Aussi, on va pouvoir facilement créer un user et une base.
+
+[source]
+----
+sudo -u postgres psql
+CREATE ROLE "mautrixfacebook" WITH LOGIN PASSWORD 'VotreMotDePasseUnique';
+CREATE DATABASE "mautrixfacebook" WITH OWNER "mautrixfacebook" TEMPLATE template0 LC_COLLATE = "C" LC_CTYPE = "C";
+\q
+----
+
+Une fois fait, on va pouvoir préparer notre module qui va démarrer l'image docker du bridge. On va aussi câbler ce bridge à notre instance Matrix.
+
+[source]
+----
+{ config, lib, ... }:
+
+let
+  bridgeFolder = "/var/lib/mautrix-facebook";
+
+  toListIfExists = path:
+    if (lib.pathExists path) then
+      [ path ]
+    else
+      [];
+in {
+  # Facebook bridge
+  virtualisation.oci-containers.containers.mautrix-facebook = {
+    image = "dock.mau.dev/tulir/mautrix-facebook";
+    extraOptions = [ "--network=host" ];
+    volumes = [ "${bridgeFolder}/data:/data" ];
+  };
+
+  # Add configuration to Matrix server
+  services.matrix-synapse.app_service_config_files = toListIfExists "${bridgeFolder}/data/registration.yaml";
+}
+----
+
+Si on résume, toutes les données sont stockées dans `/var/lib/mautrix-facebook`. On ajoute l'image docker qui permet de lancer le bridge. +
+La partie où on relie notre bridge à notre serveur est commentée pour le moment car le fichier en question sera généré par le bridge, et donc n'existe pas avant d'avoir bien parametré le bridge.
+
+On va dès maintenant le configurer en éditant **en tant que root** le fichier `/var/lib/mautrix-facebook/data/config.yaml`... Enfin faite votre `nixos-rebuild switch` pour lancer le bridge.
+
+On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :
+
+[source]
+----
+homeserver:
+    address: http://localhost:8008
+    domain: server_name
+    verify_ssl: false
+
+appservice:
+    database: postgres://mautrixfacebook:VotreMotDePasseUnique@127.0.0.1/mautrixfacebook
+
+bridge:
+    permissions:
+        "*": user
+        "@pseudo:server_name": admin
+----
+
+* `homeserver.address` : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local
+* `homeserver.domain` : C'est le `server_name`, vous devez maintenance savoir ce que c'est :)
+* `homeserver.verify_ssl` : Comme on est dans une boucle locale, par besoin de vérifier le SSL
+* `appservice.database` : Lien vers *votre base de données. Pensez à changer le mot de passe pour celui que vous avez utilisé au dessus.
+* `bridge.permissions` :  Ce sont les permissions. Pour ma part, j'ai mis `"*": user` pour que tous les utilisateurs puissent utiliser le bridge, et enfin `"@pseudo:server_name": admin` pour que votre utilisateur puisse l'administrer
+
+Une fois ça fait, pensez à redémarrer votre image docker `docker restart mautrix-facebook` et faites ensuite un petit  `nixos-rebuild switch`. Normalement, `matrix-synapse` se redémarrera car le fichier `registration.yaml` existera.
+
+Vous pouvez maintenant constater que vous pouvez parler au bot dans votre client Matrix en ouvrant une conversation avec `@facebookbot:server_name`. +
+Celui-ci devrait accepter votre invitation. Vous pouvez alors lui demander de l'aide comme il le propose. Pour lier votre compte, faites `login <email>` avec l'email de votre compte Facebook bien entendu ! Suivez ce qu'il vous dit, il va vous demander votre mot de passe et potentiellement votre code de double authentification.
+
+Une fois connecté, attendez un peu et vous allez recevoir plein d'invitations :) Bien joué, tout devrait fonctionner !

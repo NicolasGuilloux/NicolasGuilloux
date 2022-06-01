@@ -1,0 +1,23 @@
+---
+title: Lola
+description: Un addon pour Chromium et Firefox pour changer la page des nouveaux onglets
+date: 2018-03-18
+slug: lola
+image: screenshot.jpg
+categories:
+ - Projets
+tags:
+ - extension
+ - webbrowser
+ - start-page
+
+---
+
+Lola est une extension firefox qui permet de styliser votre nouvel onglet. C'est ma première approche vers les extensions des navigateurs.
+
+Elle est fortement inspirée de l'extension "Momentum" mais ajoute des fonctionnalités qui me plaisent :
+ * La météo
+ * Les raccourcis en bas à gauche sous forme d'icones
+ * Des notifications en bas à droite
+
+https://github.com/NicolasGuilloux/Lola[Extension Firefox^] - https://github.com/NicolasGuilloux/Lola[Github^]
