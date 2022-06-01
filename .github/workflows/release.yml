@@ -3,7 +3,7 @@ name: 'Release Curriculum vitæ'
 on:
   push:
     tags:
-      - 'cv/*'
+      - 'cv/**'
 
 jobs:
   release_curriculum_vitae:
