@@ -1,17 +1,20 @@
-name: 'Curriculum vitæ'
+name: 'Build Curriculum vitæ'
 on:
   pull_request:
   push:
 jobs:
-  curriculum_vitae:
+  build_curriculum_vitae:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2.4.0
     - uses: cachix/install-nix-action@v16
       with:
         nix_path: nixpkgs=channel:nixos-unstable
-    - run: nix-shell --run "make"
-    - name: Archive code coverage results
+
+    - name: Building the CV
+      run: nix-shell --run "make"
+
+    - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
         name: CurriculumVitae
