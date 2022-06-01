@@ -5,10 +5,12 @@ on:
     branches:    
       - 'curriculum-vitae'
       - 'cv/**'
+      - 'cv_**'
   push:
     branches:    
       - 'curriculum-vitae'
       - 'cv/**'
+      - 'cv_**'
 
 jobs:
   build_curriculum_vitae:

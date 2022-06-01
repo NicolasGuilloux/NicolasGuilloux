@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'cv/**'
+      - 'cv_**'
 
 jobs:
   release_curriculum_vitae:
