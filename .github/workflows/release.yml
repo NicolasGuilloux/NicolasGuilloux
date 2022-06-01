@@ -1,0 +1,24 @@
+name: 'Release Curriculum vitæ'
+
+on:
+  push:
+    tags:
+      - 'cv/**'
+
+jobs:
+  release_curriculum_vitae:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - uses: cachix/install-nix-action@v16
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+
+    - name: Building the CV
+      run: nix-shell --run "make"
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          build/NicolasGuilloux_CV.pdf
