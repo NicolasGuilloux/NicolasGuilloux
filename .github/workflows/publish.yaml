@@ -2,12 +2,11 @@ name: 'Publish Website'
 
 on:
   push:
-    tags:    
-      - 'website/**'
-      - 'website_**'
+    branches:    
+      - 'website'
 
 jobs:
-  build_website:
+  publish_website:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,7 +19,7 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Building the Website
-        run: nix-shell --run "make"
+        run: nix-shell --run "make build"
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v3

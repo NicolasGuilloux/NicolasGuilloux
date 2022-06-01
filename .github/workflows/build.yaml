@@ -3,12 +3,10 @@ name: 'Build Website'
 on:
   pull_request:
     branches:    
-      - 'website'
       - 'website/**'
       - 'website_**'
   push:
     branches:    
-      - 'website'
       - 'website/**'
       - 'website_**'
 
@@ -26,4 +24,4 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Building the Website
-        run: nix-shell --run "make"
+        run: nix-shell --run "make build"
