@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>speaker on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/speaker/</link><description>Recent content in speaker on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Wed, 01 Jan 2014 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/speaker/rss.xml" rel="self" type="application/rss+xml"/><item><title>Douglas</title><link>https://nicolasguilloux.eu/articles/douglas/</link><pubDate>Wed, 01 Jan 2014 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/douglas/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/douglas/cover.png" alt="Featured image of post Douglas" />&lt;p>Douglas est une enceinte Bluetooth Low-Cost. Une batterie pour portable recyclée, à peu près 15€ de l&amp;rsquo;huile de coude et vous voilà avec un objet essentiel pour toute sortie entre amis.
+Pourquoi l&amp;rsquo;ourson ? Parce que c&amp;rsquo;est mignon, ça protège bien le matériel qu&amp;rsquo;il y a dedans et que c&amp;rsquo;est original.&lt;/p>
+&lt;p>Douglas est fonctionnel, mais toujours en développement. En effet, je souhaite y apporter quelques fonctionnalités comme la visualisation de la charge de la batterie, le réveil de l&amp;rsquo;enceinte sans besoin de bouton physique (hormis pour l&amp;rsquo;appairage).&lt;/p>
+&lt;h1 id="version-1">Version 1&lt;/h1>
+&lt;p>Douglas a surtout pour principe de ne pas couter cher en achetant le minimum possible. Ainsi, seuls les objets ayant un lien dans la liste suivante ont été acheté, le reste étant de la récupération.&lt;/p>
+&lt;ul>
+&lt;li>Une batterie Li-Ion&lt;/li>
+&lt;li>Un amplificateur symétrique&lt;/li>
+&lt;li>Deux haut-parleurs 3W&lt;/li>
+&lt;li>Un circuit de charge pour batterie Li-Ion&lt;/li>
+&lt;li>Un module Bluetooth A2DP (le BK800L)&lt;/li>
+&lt;li>Des résistances de 10kΩ, de des boutons poussoirs&lt;/li>
+&lt;li>Des fils, de l&amp;rsquo;étain et un fer à souder&lt;/li>
+&lt;li>Une plaquette pour souder&lt;/li>
+&lt;/ul>
+&lt;p>On en a en tout pour une 15aine d&amp;rsquo;euros, on s&amp;rsquo;en sort donc pas trop mal. Il reste maintenant à souder tous les composants ensembles afin que tout fonctionne correctement.&lt;/p>
+&lt;p>Les choses sérieuses arrivent et il faudra être bien concentré pour la suite des évènements. En effet, le module Bluetooth est un enfer à souder pour peu qu&amp;rsquo;on n&amp;rsquo;ai ni fil à wrapper, ni un fer à souder digne de ce nom&amp;hellip; J&amp;rsquo;ai donc fait au possible.
+J&amp;rsquo;ai dénudé un fil multibrin pour découper des brins de longueur 3cm. J&amp;rsquo;ai ensuite soudé chaque brin sur les cosses du module. C&amp;rsquo;est fastidieux et ça a tendance à déconner. Le meilleur aurait de faire un PCB, mais quand on a pas le matériel, on se débrouille quand même !&lt;/p>
+&lt;p>Je n&amp;rsquo;ai pas utilisé toutes les pins mais seulement les suivantes : 1, 2, 4, 5, 6, 7, 12, 16, 17, 25, 26, 29, 32.&lt;/p>
+&lt;p>J&amp;rsquo;ai préféré relier toutes les masses (GND sur le schéma) à la masse pour éviter au maximum les interférences. Je ne sais pas si c&amp;rsquo;est utile, mais ça me rassure. De plus, je n&amp;rsquo;ai choisi que les pins qui m&amp;rsquo;intéressaient à savoir les boutons, le son et l&amp;rsquo;alimentation. On peut très bien utiliser les pins Rx/Tx pour renommer le module Bluetooth par exemple (et remplacer cet affreux nom &amp;ldquo;BK8000L&amp;rdquo;).&lt;/p>
+&lt;p>Place maintenant au montage sur la carte. On prend une petite carte qui acceptera tous les composants.
+On colle dans un premier temps la batterie sur le circuit. Ensuite, on soude un à un les composants comme le stipule le schéma suivant :&lt;/p>
+&lt;p>&lt;img src="https://nicolasguilloux.eu/articles/douglas/schema.png"
+width="947"
+height="536"
+srcset="https://nicolasguilloux.eu/articles/douglas/schema_hudedf8d59ca883a4390b4d9a69f859e5e_173385_480x0_resize_box_3.png 480w, https://nicolasguilloux.eu/articles/douglas/schema_hudedf8d59ca883a4390b4d9a69f859e5e_173385_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Schema"
+class="gallery-image"
+data-flex-grow="176"
+data-flex-basis="424px"
+>&lt;/p>
+&lt;p>Assurez vous que les soudures soient bien faites afin de ne pas avoir de mauvaises surprises. De plus, prenez garde au soudage du module Bluetooth qui est extrêmement fastidieux compte tenu des petits espaces disponibles, d&amp;rsquo;où l&amp;rsquo;utilité des fils à wrapper.&lt;/p>
+&lt;p>Cela donne le résultat suivant. Vous avez théoriquement 4 fils non-reliés qui sont dédiés aux speakers. J&amp;rsquo;ai mis un fil supplémentaire qui est un câble USB directement soudé aux bornes du circuit de charge. J&amp;rsquo;ai donc un port femelle micro-USB ou un câble USB mâle sortant pour recharger facilement.&lt;/p>
+&lt;p>&lt;img src="https://nicolasguilloux.eu/articles/douglas/montage.jpg"
+width="1152"
+height="955"
+srcset="https://nicolasguilloux.eu/articles/douglas/montage_hu86b862263dc8a5c880bef30b8ea0599e_260275_480x0_resize_q75_box.jpg 480w, https://nicolasguilloux.eu/articles/douglas/montage_hu86b862263dc8a5c880bef30b8ea0599e_260275_1024x0_resize_q75_box.jpg 1024w"
+loading="lazy"
+alt="Montage"
+class="gallery-image"
+data-flex-grow="120"
+data-flex-basis="289px"
+>&lt;/p>
+&lt;p>Pour les enceintes, il a fallu faire 2 caisses de résonnance adaptée aux haut-parleurs et aux dimensions de mon ourson. J&amp;rsquo;ai pris des tubes en carton trouvés par-ci par-là. A vous d&amp;rsquo;adapter comme vous le voulez ou pouvez afin d&amp;rsquo;avoir une bonne caisse de résonnance. Il n&amp;rsquo;y a pas de règle particulière si ce n&amp;rsquo;est que de bien fixer les HP pour éviter toute fuite d&amp;rsquo;air ou vibration.&lt;/p>
+&lt;p>&lt;img src="https://nicolasguilloux.eu/articles/douglas/speaker.jpg"
+width="849"
+height="1045"
+srcset="https://nicolasguilloux.eu/articles/douglas/speaker_hu704a7857007f13a26bf776070e1a4b58_133177_480x0_resize_q75_box.jpg 480w, https://nicolasguilloux.eu/articles/douglas/speaker_hu704a7857007f13a26bf776070e1a4b58_133177_1024x0_resize_q75_box.jpg 1024w"
+loading="lazy"
+alt="Speakers"
+class="gallery-image"
+data-flex-grow="81"
+data-flex-basis="194px"
+>&lt;/p>
+&lt;h1 id="pour-une-prochaine-version">Pour une prochaine version&lt;/h1>
+&lt;p>Douglas v1 souffrait de quelques petits problèmes ergonomiques.&lt;/p>
+&lt;ul>
+&lt;li>Quand quelqu&amp;rsquo;un le serrait dans ses bras (ce qui arrivait souvent), cela pouvait appuyer sur le bouton situé au niveau du ventre. Un appui long redémarre le module ce qui est frustrant lorsque de la musique est en route.&lt;/li>
+&lt;li>Les boutons pour changer de chanson n&amp;rsquo;étaient quasiment jamais utilisés.&lt;/li>
+&lt;li>Les boutons volumes seraient souhaitables mais pourraient ne pas être utilisés.&lt;/li>
+&lt;li>Changer le volume sur le module s&amp;rsquo;effectue localement. Hors on pourrait souhaiter qu&amp;rsquo;un changement de volume sur Douglas se transmette au Smartphone afin que le volume s&amp;rsquo;actualise sur ce dernier.&lt;/li>
+&lt;li>Le circuit de charge n&amp;rsquo;est pas facile d&amp;rsquo;accès.&lt;/li>
+&lt;li>La carte en elle même n&amp;rsquo;est pas prévue pour une longue durée de vie, vu les soudures.&lt;/li>
+&lt;/ul>
+&lt;p>Ce sont des petits problèmes qui n&amp;rsquo;en sont pas. Je pinaille, mais c&amp;rsquo;est suffisant pour se lancer dans une version 2 qui pourrait résoudre certains de ces problèmes !&lt;/p>
+&lt;p>De plus, j&amp;rsquo;aimerai bien passer pour la version 2 sur du 5W afin d&amp;rsquo;avoir plus de puissance.&lt;/p>
+&lt;p>Autre chose qui m&amp;rsquo;embête, c&amp;rsquo;est le nom du module Bluetooth. En effet, il diffuse le nom &amp;ldquo;BK8000L&amp;rdquo;. Ce serait super chouette de pouvoir le modifier en Douglas par exemple.&lt;/p>
+&lt;p>Un petit plus serait aussi de pouvoir rediriger le son vers une sortie jack. J&amp;rsquo;ai pensé à ça quand il y a une petite sono sans bluetooth, et qu&amp;rsquo;on souhaite quand même profiter du sans fil sans installation bancale.&lt;/p>
+&lt;p>De la même manière, pouvoir brancher un câble Jack dans Douglas pour bénificier de ses haut-parleurs pourrait être sympathique. Dans le module ci-dessus du moins, les ports Aux_L et Aux_R (20 et 19) ne sont malheureusement pas déportés. Si nous voulons les utiliser, il faudra souder deux fils sur la carte ce qui peut s&amp;rsquo;avérer laborieux et dangereux pour la carte.&lt;/p>
+&lt;p>&lt;img src="https://nicolasguilloux.eu/articles/douglas/aux_module.png"
+width="700"
+height="542"
+srcset="https://nicolasguilloux.eu/articles/douglas/aux_module_huc7dc6da2c914796a17e11d4a73bf87d0_568546_480x0_resize_box_3.png 480w, https://nicolasguilloux.eu/articles/douglas/aux_module_huc7dc6da2c914796a17e11d4a73bf87d0_568546_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Aux module"
+class="gallery-image"
+data-flex-grow="129"
+data-flex-basis="309px"
+>&lt;/p>
+&lt;p>Enfin, je souhaiterai oublier les petites batteries Li-Ion si possible. En effet, dans une des enceintes que j&amp;rsquo;avais conçu, l&amp;rsquo;une d&amp;rsquo;elle avait gonflé et comme elles ne sont pas protégées, je ne suis pas rassurer.&lt;/p>
+&lt;p>Je préfère utiliser des batteries externes car elles sont généralement protégées par un boitier, et ont une bien plus grande capacité.&lt;/p></description></item></channel></rss>

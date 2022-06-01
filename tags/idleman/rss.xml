@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>idleman on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/idleman/</link><description>Recent content in idleman on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Thu, 24 Oct 2013 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/idleman/rss.xml" rel="self" type="application/rss+xml"/><item><title>Yana</title><link>https://nicolasguilloux.eu/articles/yana/</link><pubDate>Thu, 24 Oct 2013 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/yana/</guid><description>&lt;img src="https://raw.github.com/Etsuni/YANA/master/presentation.png" alt="Featured image of post Yana" />&lt;p>YANA est une interface domotique développée par &lt;a class="link" href="https://github.com/ldleman" target="_blank" rel="noopener"
+>Idleman&lt;/a>.
+L&amp;rsquo;application Android permettait de dicter des ordres afin de déclencher les actions côté serveur. Elle servait donc d&amp;rsquo;interface portable pour controller l&amp;rsquo;installation.&lt;/p>
+&lt;p>A cause de mes études, j&amp;rsquo;ai dû mettre de côté le développement de l&amp;rsquo;application pour au final l&amp;rsquo;abandonner. En effet, le serveur a beaucoup évolué sans que je puisse poursuivre les mises à jour. Une autre personne a continué le développement et est donc en charge par la suite de maintenir.&lt;/p>
+&lt;p>Je remercie :&lt;/p>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://github.com/ldleman" target="_blank" rel="noopener"
+>Valentin Carruesco&lt;/a> pour le développement de YANA serveur.&lt;/li>
+&lt;li>Alexandre Roland pour la reprise du développement de YANA Android.&lt;/li>
+&lt;/ul></description></item></channel></rss>

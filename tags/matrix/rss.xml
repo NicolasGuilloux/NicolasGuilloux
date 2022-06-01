@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>matrix on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/matrix/</link><description>Recent content in matrix on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Thu, 08 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/matrix/rss.xml" rel="self" type="application/rss+xml"/><item><title>Le Bridge Signal pour Matrix</title><link>https://nicolasguilloux.eu/articles/mautrix-signal/</link><pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mautrix-signal/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mautrix-signal/cover.svg" alt="Featured image of post Le Bridge Signal pour Matrix" />&lt;div class="paragraph">
+&lt;p>Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d’aller lire le tutoriel précédent :
+&lt;a href="../matrix">Matrix sur NixOS&lt;/a>&lt;/p>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_telegram_messenger">Telegram Messenger&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/signal.nix" target="_blank" rel="noopener">&lt;span class="image">&lt;img src="https://img.shields.io/badge/Gitlab-Mautrix%20Signal-orange" alt="Gitlab"/>&lt;/span>&lt;/a>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le bridge Signal supporte les conversations de groupe et les messages directs. Toutefois, toute conversation chiffrée ne sera pas supportée.&lt;br/>
+La petite particularité sur ce bridge est que Signal ne dispose pas d’une API. Ainsi, il va falloir utiliser une image Docker qui va simuler un accès Web à Signal.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Voici la configuration que je préconise :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>{ config, lib, ... }:
+let
+bridgeFolder = &amp;#34;/var/lib/mautrix-signal&amp;#34;;
+toListIfExists = path:
+if (lib.pathExists path) then
+[ path ]
+else
+[];
+in {
+# Signal daemon
+virtualisation.oci-containers.containers.signald = {
+image = &amp;#34;docker.io/finn/signald&amp;#34;;
+volumes = [ &amp;#34;${bridgeFolder}/signald:/signald&amp;#34; ];
+extraOptions = [ &amp;#34;--network=host&amp;#34; ];
+};
+# Signal bridge
+virtualisation.oci-containers.containers.mautrix-signal = {
+image = &amp;#34;dock.mau.dev/tulir/mautrix-signal&amp;#34;;
+extraOptions = [ &amp;#34;--network=host&amp;#34; ];
+dependsOn = [ &amp;#34;signald&amp;#34; ];
+volumes = [
+&amp;#34;${bridgeFolder}/data:/data&amp;#34;
+&amp;#34;${bridgeFolder}/signald:/signald&amp;#34;
+];
+};
+# Add configuration to Matrix server
+services.matrix-synapse.app_service_config_files = toListIfExists &amp;#34;${bridgeFolder}/data/registration.yaml&amp;#34;;
+}&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Si on résume, toutes les données sont stockées dans &lt;code>/var/lib/mautrix-signal&lt;/code>. On ajoute les image Docker qui permet de lancer le bridge.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>L’image &lt;code>signald&lt;/code> est le daemon pour pouvoir simuler une interface Web auprès de notre application Signal. C’est nécessaire pour pouvoir récupérer les messages en toute sécurité vu que Signal ne dispose pas d’API.&lt;br/>
+C’est aussi pour celà qu’on doit partager le volume où sont stockées toutes les informations (comme les avatars) entre le daemon et le bridge.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On va dès maintenant configurer ce dernier en éditant &lt;strong>en tant que root&lt;/strong> le fichier &lt;code>/var/lib/mautrix-signal/data/config.yaml&lt;/code>…​ Enfin faite votre &lt;code>nixos-rebuild switch&lt;/code> pour lancer le bridge.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>homeserver:
+address: http://localhost:8008
+domain: server_name
+verify_ssl: false
+signal:
+socket_path: /signald/signald.sock
+outgoing_attachment_dir: /signald/attachments
+avatar_dir: /signald/avatars
+data_dir: /signald/data
+bridge:
+permissions:
+&amp;#34;*&amp;#34;: user
+&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>homeserver.address&lt;/code> : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>homeserver.domain&lt;/code> : C’est le &lt;code>server_name&lt;/code>, vous devez maintenance savoir ce que c’est :)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>homeserver.verify_ssl&lt;/code> : Comme on est dans une boucle locale, par besoin de vérifier le SSL&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>signal.socket-path&lt;/code> : Socket pour dialoguer avec le daemon&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>signal.outgoing_attachment_dir&lt;/code> : Répertoire du daemon où sont mis les pièces jointes&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>signal.avatar_dir&lt;/code> : Répertoire du daemon où sont mis les avatars&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>signal.data_dir&lt;/code> : Répertoire du daemon où sont mis les autres données utiles aux bridges&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>bridge.permissions&lt;/code> : Ce sont les permissions. Pour ma part, j’ai mis &lt;code>&amp;#34;*&amp;#34;: user&lt;/code> pour que tous les utilisateurs puissent utiliser le bridge, et enfin &lt;code>&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code> pour que votre utilisateur puisse l’administrer&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une fois ça fait, pensez à redémarrer votre image docker &lt;code>docker restart mautrix-signal&lt;/code> et faites ensuite un petit &lt;code>nixos-rebuild switch&lt;/code>. Normalement, &lt;code>matrix-synapse&lt;/code> se redémarrera car le fichier &lt;code>registration.yaml&lt;/code> existera.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Vous pouvez maintenant constater que vous pouvez parler au bot dans votre client Matrix en ouvrant une conversation avec &lt;code>@signalbot:server_name&lt;/code>.&lt;br/>
+Celui-ci devrait accepter votre invitation. Vous pouvez alors lui demander de l’aide comme il le propose.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>A partir d’ici vous avez plusieurs choix, car vous pouvez :&lt;/p>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>Créer un compte de zéro en utilisant la commande &lt;code>register +33xxxxxxxxx&lt;/code>. Si vous n’avez pas signal sur votre téléphone, cela permettra de tout recevoir sur Matrix directement.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Lier votre compte déjà existant, relié à votre téléphone, et forward tous les messages à Matrix en tapant &lt;code>link&lt;/code> et en scannant le QR Code.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une fois connecté, attendez un peu et vous allez recevoir plein d’invitations :) Bien joué, tout devrait fonctionner !&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div></description></item><item><title>Le Bridge Telegram pour Matrix</title><link>https://nicolasguilloux.eu/articles/mautrix-telegram/</link><pubDate>Mon, 05 Apr 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mautrix-telegram/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mautrix-telegram/cover.svg" alt="Featured image of post Le Bridge Telegram pour Matrix" />&lt;div class="paragraph">
+&lt;p>Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d’aller lire le tutoriel précédent :
+&lt;a href="../matrix">Matrix sur NixOS&lt;/a>&lt;/p>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_telegram_messenger">Telegram Messenger&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/telegram.nix" target="_blank" rel="noopener">&lt;span class="image">&lt;img src="https://img.shields.io/badge/Gitlab-Mautrix%20Telegram-orange" alt="Gitlab"/>&lt;/span>&lt;/a>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le bridge de Telegram supporte quasiment toutes les fonctionnalités. La configuration est quasiment la même que pour
+&lt;a href="../mautrix-facebook">Mautrix Facebook&lt;/a>
+hormis un léger changement au niveau de la configuration d’une API.&lt;br/>
+Je n’ai volontairement pas suivi la configuration proposé par NixOS car je n’ai jamais réussi à la faire fonctionner, et je souhaite avoir une installation cohérente. Comme NixOS ne propose pas de module pour Mautrix Facebook, Mautrix Telegram et Mautrix Signal, je préfère les configurer de la même manière.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Voici la configuration que je préconise :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>{ config, lib, ... }:
+let
+bridgeFolder = &amp;#34;/var/lib/mautrix-telegram&amp;#34;;
+toListIfExists = path:
+if (lib.pathExists path) then
+[ path ]
+else
+[];
+in {
+# Telegram bridge
+virtualisation.oci-containers.containers.mautrix-telegram = {
+image = &amp;#34;dock.mau.dev/tulir/mautrix-telegram&amp;#34;;
+extraOptions = [ &amp;#34;--network=host&amp;#34; ];
+volumes = [ &amp;#34;${bridgeFolder}/data:/data&amp;#34; ];
+};
+# Add configuration to Matrix server
+services.matrix-synapse.app_service_config_files = toListIfExists &amp;#34;${bridgeFolder}/data/registration.yaml&amp;#34;;
+}&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Si on résume, toutes les données sont stockées dans &lt;code>/var/lib/mautrix-telegram&lt;/code>. On ajoute l’image docker qui permet de lancer le bridge.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On va dès maintenant le configurer en éditant &lt;strong>en tant que root&lt;/strong> le fichier &lt;code>/var/lib/mautrix-telegram/data/config.yaml&lt;/code>…​ Enfin faite votre &lt;code>nixos-rebuild switch&lt;/code> pour lancer le bridge.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Dans un premier temps, il faut faire une application sur le site de Telegram pour récupérer un ID et un hash qui serviront au bridge pour interagir avec l’API. Pour ce faire, allez sur cette &lt;a href="https://core.telegram.org/api/obtaining_api_id#obtaining" target="_blank" rel="noopener">page d’aide de Telegram&lt;/a> et suivez les instructions pour récupérer le &lt;code>api_id&lt;/code> et le &lt;code>api_hash&lt;/code>.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>homeserver:
+address: http://localhost:8008
+domain: server_name
+verify_ssl: false
+telegram:
+api_id: #ApiId#
+api_hash: #ApiHash#
+bridge:
+permissions:
+&amp;#34;*&amp;#34;: user
+&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>homeserver.address&lt;/code> : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>homeserver.domain&lt;/code> : C’est le &lt;code>server_name&lt;/code>, vous devez maintenance savoir ce que c’est :)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>homeserver.verify_ssl&lt;/code> : Comme on est dans une boucle locale, par besoin de vérifier le SSL&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>telegram.api_id&lt;/code> : ID fourni par Telegram sur le site&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>telegram.api_hash&lt;/code> : Hash fourni par Telegram sur le site&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>bridge.permissions&lt;/code> : Ce sont les permissions. Pour ma part, j’ai mis &lt;code>&amp;#34;*&amp;#34;: user&lt;/code> pour que tous les utilisateurs puissent utiliser le bridge, et enfin &lt;code>&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code> pour que votre utilisateur puisse l’administrer&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une fois ça fait, pensez à redémarrer votre image docker &lt;code>docker restart mautrix-telegram&lt;/code> et faites ensuite un petit &lt;code>nixos-rebuild switch&lt;/code>. Normalement, &lt;code>matrix-synapse&lt;/code> se redémarrera car le fichier &lt;code>registration.yaml&lt;/code> existera.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Vous pouvez maintenant constater que vous pouvez parler au bot dans votre client Matrix en ouvrant une conversation avec &lt;code>@telegrambot:server_name&lt;/code>.&lt;br/>
+Celui-ci devrait accepter votre invitation. Vous pouvez alors lui demander de l’aide comme il le propose. Pour lier votre compte, faites &lt;code>!tg login&lt;/code> et suivez les instructions.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une fois connecté, attendez un peu et vous allez recevoir plein d’invitations :) Bien joué, tout devrait fonctionner !&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div></description></item><item><title>Le Bridge Facebook pour Matrix</title><link>https://nicolasguilloux.eu/articles/mautrix-facebook/</link><pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mautrix-facebook/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mautrix-facebook/cover.svg" alt="Featured image of post Le Bridge Facebook pour Matrix" />&lt;div class="paragraph">
+&lt;p>Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d’aller lire le tutoriel précédent :
+&lt;a href="../matrix">Matrix sur NixOS&lt;/a>&lt;/p>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_facebook_messenger">Facebook Messenger&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/facebook.nix" target="_blank" rel="noopener">&lt;span class="image">&lt;img src="https://img.shields.io/badge/Gitlab-Mautrix%20Facebook-orange" alt="Gitlab"/>&lt;/span>&lt;/a>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Bon, qu’on se le dise, j’aimerai bien partir de Facebook mais beaucoup de personnes ne veulent pas par simplicité. Même si ça m’embête pour des raisons évidentes, je dois rester dessus car j’ai vraiment des personnes que j’aime beaucoup qui refusent de passer sur d’autres plateformes.&lt;br/>
+C’est d’ailleurs un intérêt de ce bridge : je vais désinstaller toutes les applications Facebook, ma seule interaction sera via Matrix.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Dans un premier temps, on va préparer notre base de données afin d’y stocker les données utilent au bridge. Pour le moment, celui-ci ne supporte que PostgreSQL. Ca tombe bien, on a déjà une BDD disponible via le serveur Synapse. Aussi, on va pouvoir facilement créer un user et une base.&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>sudo -u postgres psql
+CREATE ROLE &amp;#34;mautrixfacebook&amp;#34; WITH LOGIN PASSWORD &amp;#39;VotreMotDePasseUnique&amp;#39;;
+CREATE DATABASE &amp;#34;mautrixfacebook&amp;#34; WITH OWNER &amp;#34;mautrixfacebook&amp;#34; TEMPLATE template0 LC_COLLATE = &amp;#34;C&amp;#34; LC_CTYPE = &amp;#34;C&amp;#34;;
+\q&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une fois fait, on va pouvoir préparer notre module qui va démarrer l’image docker du bridge. On va aussi câbler ce bridge à notre instance Matrix.&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>{ config, lib, ... }:
+let
+bridgeFolder = &amp;#34;/var/lib/mautrix-facebook&amp;#34;;
+toListIfExists = path:
+if (lib.pathExists path) then
+[ path ]
+else
+[];
+in {
+# Facebook bridge
+virtualisation.oci-containers.containers.mautrix-facebook = {
+image = &amp;#34;dock.mau.dev/tulir/mautrix-facebook&amp;#34;;
+extraOptions = [ &amp;#34;--network=host&amp;#34; ];
+volumes = [ &amp;#34;${bridgeFolder}/data:/data&amp;#34; ];
+};
+# Add configuration to Matrix server
+services.matrix-synapse.app_service_config_files = toListIfExists &amp;#34;${bridgeFolder}/data/registration.yaml&amp;#34;;
+}&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Si on résume, toutes les données sont stockées dans &lt;code>/var/lib/mautrix-facebook&lt;/code>. On ajoute l’image docker qui permet de lancer le bridge.&lt;br/>
+La partie où on relie notre bridge à notre serveur est commentée pour le moment car le fichier en question sera généré par le bridge, et donc n’existe pas avant d’avoir bien parametré le bridge.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On va dès maintenant le configurer en éditant &lt;strong>en tant que root&lt;/strong> le fichier &lt;code>/var/lib/mautrix-facebook/data/config.yaml&lt;/code>…​ Enfin faite votre &lt;code>nixos-rebuild switch&lt;/code> pour lancer le bridge.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>homeserver:
+address: http://localhost:8008
+domain: server_name
+verify_ssl: false
+appservice:
+database: postgres://mautrixfacebook:VotreMotDePasseUnique@127.0.0.1/mautrixfacebook
+bridge:
+permissions:
+&amp;#34;*&amp;#34;: user
+&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>homeserver.address&lt;/code> : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>homeserver.domain&lt;/code> : C’est le &lt;code>server_name&lt;/code>, vous devez maintenance savoir ce que c’est :)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>homeserver.verify_ssl&lt;/code> : Comme on est dans une boucle locale, par besoin de vérifier le SSL&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>appservice.database&lt;/code> : Lien vers *votre base de données. Pensez à changer le mot de passe pour celui que vous avez utilisé au dessus.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>bridge.permissions&lt;/code> : Ce sont les permissions. Pour ma part, j’ai mis &lt;code>&amp;#34;*&amp;#34;: user&lt;/code> pour que tous les utilisateurs puissent utiliser le bridge, et enfin &lt;code>&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code> pour que votre utilisateur puisse l’administrer&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une fois ça fait, pensez à redémarrer votre image docker &lt;code>docker restart mautrix-facebook&lt;/code> et faites ensuite un petit &lt;code>nixos-rebuild switch&lt;/code>. Normalement, &lt;code>matrix-synapse&lt;/code> se redémarrera car le fichier &lt;code>registration.yaml&lt;/code> existera.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Vous pouvez maintenant constater que vous pouvez parler au bot dans votre client Matrix en ouvrant une conversation avec &lt;code>@facebookbot:server_name&lt;/code>.&lt;br/>
+Celui-ci devrait accepter votre invitation. Vous pouvez alors lui demander de l’aide comme il le propose. Pour lier votre compte, faites &lt;code>login &amp;lt;email&amp;gt;&lt;/code> avec l’email de votre compte Facebook bien entendu ! Suivez ce qu’il vous dit, il va vous demander votre mot de passe et potentiellement votre code de double authentification.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une fois connecté, attendez un peu et vous allez recevoir plein d’invitations :) Bien joué, tout devrait fonctionner !&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div></description></item><item><title>Matrix sur NixOS</title><link>https://nicolasguilloux.eu/articles/matrix/</link><pubDate>Fri, 26 Mar 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/matrix/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/matrix/matrix.svg" alt="Featured image of post Matrix sur NixOS" />&lt;div class="paragraph">
+&lt;p>Comme beaucoup de personnes, j’ai beaucoup de messageries qui ont su évoluer (ou pas) dans le temps. Et chacunes de ces messageries apportent ses avantages et ses inconvénients, et la plupart des gens ne veulent pas toutes les avoir. Et j’en fais partie !&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Aussi, j’ai toujours reluqué &lt;a href="https://matrix.org" target="_blank" rel="noopener">Matrix&lt;/a> de loin. Les seules fois où j’avais abordé ce standard, j’ai été très déçu à cause de la lenteur de celui-ci et aussi le fait que ce soit extrêmement intimidant au niveau sécurité.&lt;/p>
+&lt;/div>
+&lt;div id="beeper" class="paragraph">
+&lt;p>&lt;span class="image center">&lt;img src="beeper.png" alt="beeper"/>&lt;/span>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Finalement, j’ai décidé de me lancer en entendant parler de &lt;a href="https://www.beeper.com" target="_blank" rel="noopener">Beeper&lt;/a> qui permettait de centraliser plein de protocoles au même endroit. J’ai été déçu de voir que c’était très payant pour une utilisation domestique. Et j’ai remarqué par mon don incroyable de lecture de la seule et unique page disponible que Beeper était une application basée sur Matrix et la notion de bridges. Donc, en théorie, on peut faire la même chose sans payer.&lt;/p>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_quest_ce_que_matrix">Qu’est-ce que Matrix&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>Matrix est un standard OpenSource pour construire une messagerie sécurisée en temps réel et décentralisée. Beaucoup de buzz words, on va expliquer tout ça.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>C’est un &lt;strong>standard&lt;/strong>, ce qui veut dire que Matrix n’est pas un logiciel mais simplement une liste de fonctionnalités à implémenter afin de supporter le protocole. C’est un peu comme si on parlait d’un mixeur, qui est la fonctionnalité, ce qui ne l’empêche pas d’avoir un nom donné par la marque ou par les utilisateurs. Le mixeur de mes parents s’appelle Bob.&lt;br/>
+Une &lt;strong>messagerie sécurisée en temps réel&lt;/strong>, c’est assez simple à comprendre.&lt;br/>
+Pour le côté &lt;strong>décentralisé&lt;/strong>, ça veut dire que un seul et unique serveur n’est pas souverain du réseau. Ainsi, installer un serveur chez vous permettra d’avoir accès au service sur votre réseau. Matrix implémente aussi un système pour faire dialoguer les serveurs entre eux, comme ça votre serveur ne reste pas dans son coin et pourra dialoguer avec le monde extérieur.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On a parlé plus haut des bridges, et ça c’est une des fonctionnalités de Matrix. Le principe est qu’on peut ajouter un genre de plugin qui joue le rôle d’interface avec quelque chose d’autre. Ouais c’est un peu abstrait, mais concrètement un bridge peut se charger en temps réel de relayer les messages d’une autre messagerie par exemple.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_installation_du_serveur">Installation du serveur&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>J’ai rassemblé tous mes efforts pour que tout fonctionne dans un dossier de mon installation NixOS. Il peut varier dans le temps, j’actualiserais le tutoriel et les liens vers ma configuration en fonction des updates.&lt;/p>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_le_serveur_synapse">Le serveur Synapse&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/server.nix" target="_blank" rel="noopener">&lt;span class="image">&lt;img src="https://img.shields.io/badge/Gitlab-Synapse-orange" alt="Gitlab"/>&lt;/span>&lt;/a>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Tout commence d’abord par installer &lt;a href="https://matrix.org/docs/projects/server/synapse">Synapse&lt;/a> qui est un serveur Matrix. Matrix étant un standard, Synapse est une implémentation de celui-ci. Si vous êtes déjà perdu, relisez le point précédent ;)&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ici, NixOS nous a bien facilité la tache vu qu’une configuration est disponible, donc on peut aller très vite.&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>services.matrix-synapse = {
+enable = true;
+server_name = &amp;#34;matrix.nicolasguilloux.eu&amp;#34;;
+registration_shared_secret = &amp;#34;UnSecretTemporaire&amp;#34;;
+# enable_registration = true;
+listeners = [
+{
+port = 8008;
+bind_address = &amp;#34;::1&amp;#34;;
+type = &amp;#34;http&amp;#34;;
+tls = false;
+x_forwarded = true;
+resources = [
+{
+names = [ &amp;#34;client&amp;#34; &amp;#34;federation&amp;#34; ];
+compress = false;
+}
+];
+}
+];
+};
+# For the registration of a user
+services.matrix-synapse.registration_shared_secret = &amp;#34;UnSecretTemporaire&amp;#34;;
+environment.systemPackages = [ pkgs.matrix-synapse ];&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Il faut s’assurer que l’option &lt;code>server_name&lt;/code> correspond bien à l’adresse finale du serveur. C’est important pour faire dialoguer le monde extérieur avec notre instance. Si jamais vous vous lancez dans l’installation et que cette adresse est fausse, il faudra tout recommencer.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ici, on n’utilise qu’un seul port : le &lt;code>8008&lt;/code>. C’est celui conseillé dans la documentation. Vous remarquerez qu’il n’y a pas de SSL, c’est parce que mon serveur sera exposé à travers un Reverse Proxy géré par Nginx. On va voir ça après.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>L’option &lt;code>registration_shared_secret&lt;/code> est là uniquement pour enregistrer votre utilisateur administrateur. Il faudra bien penser à l’enlever, car elle permet de créer des utilisateurs un peu comme on veut en utilisant le dit mot de passe.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Et enfin, pas besoin d’importer le paquet de Synapse dans les ceux de système hormis pour l’inscription d’un nouvel utilisateur via un terminal.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_la_base_de_données">La base de données&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/database.nix" target="_blank" rel="noopener">&lt;span class="image">&lt;img src="https://img.shields.io/badge/Gitlab-BDD-orange" alt="Gitlab"/>&lt;/span>&lt;/a>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Il faudra aussi configurer une base de données PostgreSQL pour le serveur.&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code># Manually configure PostgreSQL
+# ref: https://www.foxypossibilities.com/2018/02/04/running-matrix-synapse-on-nixos/
+services.postgresql.enable = true;
+services.postgresql.initialScript = pkgs.writeText &amp;#34;synapse-init.sql&amp;#34; &amp;#39;&amp;#39;
+CREATE ROLE &amp;#34;matrix-synapse&amp;#34; WITH LOGIN PASSWORD &amp;#39;${config.secrets.matrix.database}&amp;#39;;
+CREATE DATABASE &amp;#34;matrix-synapse&amp;#34; WITH OWNER &amp;#34;matrix-synapse&amp;#34;
+TEMPLATE template0
+LC_COLLATE = &amp;#34;C&amp;#34;
+LC_CTYPE = &amp;#34;C&amp;#34;;
+&amp;#39;&amp;#39;;&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ici, mon mot de passe est défini bien au chaud dans la config. Pensez à mettre votre mot de passe. Vous pouvez aussi faire cette étape à la mano en allant tater &lt;code>sudo -u postgres psql&lt;/code>.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_création_de_notre_admin">Création de notre admin&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>Avant d’exposer sur Internet, on va déjà créer notre utilisateur admin puis désactiver la possibilité de s’enregistrer en utilisant les lignes de commandes. Comme ça, on ferme une porte !&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ici, rappelez vous la &lt;code>registration_shared_secret&lt;/code> mis plus haut et simplement tapez la commande suivante&lt;/p>
+&lt;/div>
+&lt;div class="quoteblock">
+&lt;blockquote>
+&lt;div class="paragraph">
+&lt;p>register_new_matrix_user --shared-secret &amp;#34;UnSecretTemporaire&amp;#34; &lt;a href="http://localhost:8008" class="bare">http://localhost:8008&lt;/a>&lt;/p>
+&lt;/div>
+&lt;/blockquote>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On suit donc tout ce qu’il nous dit comme il faut en prenant soin de mettre votre utilisateur Admin.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_le_reverse_proxy">Le Reverse Proxy&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/nginx.nix" target="_blank" rel="noopener">&lt;span class="image">&lt;img src="https://img.shields.io/badge/Gitlab-Nginx-orange" alt="Gitlab"/>&lt;/span>&lt;/a>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On va maintenant configurer notre Reverse Proxy pour qu’il puisse être accessible du monde extérieur. C’est important aussi pour pouvoir dialoguer avec les autres serveurs.&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>let
+listenPort = port: ssl: {
+addr = &amp;#34;0.0.0.0&amp;#34;;
+port = port;
+ssl = ssl;
+};
+in
+{
+# Open port
+networking.firewall.allowedTCPPorts = [ 8448 ];
+# Reverse proxy
+services.nginx.virtualHosts.&amp;#34;matrix.nicolasguilloux.eu&amp;#34; = {
+enableACME = true;
+forceSSL = true;
+listen = [
+(listenPort 80 false)
+(listenPort 443 true)
+(listenPort 8448 true)
+];
+locations.&amp;#34;/_matrix&amp;#34; = {
+proxyPass = &amp;#34;http://[::1]:8008&amp;#34;;
+};
+};
+}&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ici, on voit que nous redirigeons tout vers notre serveur Synpase. On peut aussi voir qu’on utilise le port 8448. Il est important car c’est ce port qui est utilisé par la fédération des serveurs Matrix. Ainsi, un serveur lambda ira questionner notre serveur via ce port uniquement.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une fois tout installé, vous pouvez d’ailleurs &lt;a href="https://federationtester.matrix.org" target="_blank" rel="noopener">tester votre serveur&lt;/a> pour voir s’il est bien accessible par la fédération.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Si vous avez tout bien fait, normalement vous devez pouvoir vous connecter sur &lt;a href="https://app.element.io/#/login">Element.io&lt;/a>, modifier le serveur d’accueil (le fameux &lt;code>server_name&lt;/code>) et vous connecter.&lt;br/>
+Vous remarquerez alors que votre pseudo est &lt;code>pseudo:server_name&lt;/code>. Par exemple, pour ma part, c’est &lt;code>nover:matrix.nicolasguilloux.eu&lt;/code>.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_les_bridges">Les Bridges&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>Une fois votre serveur fonctionnel, vous pouvez jouir de toutes les fonctionnalités de Matrix de base. Vous pouvez donc rejoindre des salons et discuter avec des personnes mêmes si elles ne sont pas sur votre serveur grâce à la magie de la fédération.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On va maintenant pouvoir ajouter des bridges qui vont être les interfaces entre un autre protocole et celui de Matrix. En plus simple : ça va permettre d’envoyer des messages en utilisant Matrix vers des destinataires comme Signal ou encore Messenger.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ici, je ne vais passer en revue que les bridges que j’ai implémenté sur mon serveur. On notera que la plupart ont été conçu par la même personne et donc ont le préfix &lt;code>mautrix&lt;/code>. On peut donc constater qu’ils se configurent quasiment de la même manière.&lt;br/>
+Je vais aussi essayer de trier l’ordre des bridges ci-dessous en fonction de leur difficulté à installer. Ca permettra de monter progressivement en difficulté.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;a href="../mautrix-facebook">&lt;span class="image">&lt;img src="https://img.shields.io/badge/mautrix-facebook-blue" alt="mautrix facebook blue"/>&lt;/span>&lt;/a>
+&lt;a href="../mautrix-telegram">&lt;span class="image">&lt;img src="https://img.shields.io/badge/mautrix-telegram-blue" alt="mautrix telegram blue"/>&lt;/span>&lt;/a>&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>webbrowser on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/webbrowser/</link><description>Recent content in webbrowser on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Sun, 18 Mar 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/webbrowser/rss.xml" rel="self" type="application/rss+xml"/><item><title>Lola</title><link>https://nicolasguilloux.eu/articles/lola/</link><pubDate>Sun, 18 Mar 2018 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/lola/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/lola/screenshot.jpg" alt="Featured image of post Lola" />&lt;div class="paragraph">
+&lt;p>Lola est une extension firefox qui permet de styliser votre nouvel onglet. C’est ma première approche vers les extensions des navigateurs.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Elle est fortement inspirée de l’extension &amp;#34;Momentum&amp;#34; mais ajoute des fonctionnalités qui me plaisent :
+* La météo
+* Les raccourcis en bas à gauche sous forme d’icones
+* Des notifications en bas à droite&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;a href="https://github.com/NicolasGuilloux/Lola" target="_blank" rel="noopener">Extension Firefox&lt;/a> - &lt;a href="https://github.com/NicolasGuilloux/Lola" target="_blank" rel="noopener">Github&lt;/a>&lt;/p>
+&lt;/div></description></item></channel></rss>

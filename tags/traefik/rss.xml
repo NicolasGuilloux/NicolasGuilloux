@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>traefik on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/traefik/</link><description>Recent content in traefik on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Wed, 11 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/traefik/rss.xml" rel="self" type="application/rss+xml"/><item><title>Reverse Proxy sur NixOS</title><link>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</link><pubDate>Wed, 11 May 2022 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</guid><description>&lt;img src="https://nicolasguilloux.eu/cover.svg" alt="Featured image of post Reverse Proxy sur NixOS" />&lt;div class="paragraph">
+&lt;p>J’ai jonglé entre 3 proxies récemment afin de pouvoir facilement rediriger des requêtes vers les services appropriés, que ce soit en utilisant Docker ou en utilisant des services exposant des ports.&lt;/p>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_les_softwares">Les softwares&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>J’ai expérimenté les 3 proxies suivants, dans l’ordre chronologique. Je vais passer en revue pourquoi je les ai utilisés, et pourquoi je les ai aussi abandonnés.&lt;/p>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_nginx">Nginx&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>C’est le premier proxy que j’ai utilisé, car c’est le serveur web que j’utilisais et qui permettait de facilement mettre en place cette fonctionnalité.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

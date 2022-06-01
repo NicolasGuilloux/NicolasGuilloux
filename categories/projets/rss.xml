@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Projets on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/categories/projets/</link><description>Recent content in Projets on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Wed, 10 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/categories/projets/rss.xml" rel="self" type="application/rss+xml"/><item><title>Mirint V2</title><link>https://nicolasguilloux.eu/articles/mirint-v2/</link><pubDate>Wed, 10 Mar 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mirint-v2/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mirint-v2/screen.jpg" alt="Featured image of post Mirint V2" />&lt;div class="paragraph">
+&lt;p>J’ai décidé de revoir mon &lt;a href="https://nicolasguilloux.eu/articles/mirint-v1">miroir intelligent&lt;/a> pour plusieurs raisons :&lt;/p>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>J’ai domotisé ma maison, et avoir un affichage des différents capteurs serait vraiment un plus&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>La page web affichée était fait à la main, alors que des solutions bien plus jolies existent comme &lt;a href="https://magicmirror.builders/" target="_blank" rel="noopener">MagicMirror&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Le miroir était beaucoup trop épais, il sortait du mur d’une 10aine de centimètres&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Il était moche&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Il était beaucoup trop lourd, impossible de l’installer sur un mur sans mettre 1 ou 2 chevilles&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>L’écran mettait trop de temps à s’allumer, c’est dommage pour quelque chose qui doit donner des informations de manière spontanée de prendre 10 secondes les afficher&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Autre chose qui en découle, mais on pouvait laisser l’écran allumer, mais il consommait beaucoup trop&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour toutes ces raisons, j’ai décidé de le démonter pour en faire une nouvelle version.&lt;/p>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_matériel">Matériel&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="sect2">
+&lt;h3 id="_ecran">Ecran&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>Je ne garderais par l’écran car c’est la principale raison pour laquelle le miroir n’était pas satisfaisant. Comme c’est une ancienne télévision, tout était prévu pour avoir de l’espace derrière l’écran et que celle-ci soit posée sur un meuble. On peut le voir notamment avec les ports HDMI qui sont à la perpendiculaire de la dalle, son épaisseur et son poids.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="screen_display.jpg" alt="Ecran"/>&lt;/span>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>J’ai réussi à récupérer un écran LCD d’un ordinateur portable et j’ai commandé une carte d’aquisition pour le modèle de l’écran de ~13€ qui fera l’interface entre la sortie HDMI du Rapsberry Pi et la dalle LCD. Le principal intérêt de récupérer un écran comme celui-ci est qu’il a été prévu pour ne pas consommer car étant à l’origine dans un appareil mobile, que son poids et son épaisseur est vraiment faible et que cela permet de déporter la dite carte où on peut pour économiser encore une fois de l’espace et réduire l’épaisseur du miroir.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>L’autre intérêt est le temps pour s’allumer. Il est quasi immédiat, c’est ainsi que sont utilisés les écrans d’ordinateurs portables. Vous verrez rarement un ordinateur mettre 10 secondes à s’allumer lorsque vous le sortez de veille, ou alors c’est votre OS qui prend son temps et non l’écran.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Et enfin la sécurité : je suis toujours plus à l’aise quand je ne travaille pas avec des tensions mortelles. Aussi, l’écran LCD et sa carte sont alimentés en 12V, ce qui permettra de sortir l’alimentation hors du miroir. Il faudra néanmoins prévoir un abaisseur de tension pour alimenter le Raspberry Pi en 5V.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_raspberry_pi">Raspberry Pi&lt;/h3>
+&lt;div class="quoteblock">
+&lt;blockquote>
+&lt;div class="paragraph">
+&lt;p>Parlons du Raspberry Pi. Il s’avère que je pensais avoir un Raspberry Pi 2, mais en fait c’est le premier modèle. Il est donc extrêmement lent, il n’a clairement pas les reins pour produire un affichage rapide qui pourrait avoir des animations fluides. Aussi, il faudra que je change ce composant, il n’est pas approprié. Pour le moment, j’ai rien d’autre sous la main, et donc je l’utilise comme navigateur avec MagicMirror hébergé à un autre endroit. Dans la suite, je ferais comme si MagicMirror était hébergé sur le Raspberry Pi&lt;/p>
+&lt;/div>
+&lt;/blockquote>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le Raspberry Pi va héberger le logiciel qui va nous permettre de facilement intégrer différents modules pour avoir l’affichage le plus complet possible : &lt;a href="https://magicmirror.builders/" target="_blank" rel="noopener">MagicMirror&lt;/a>. C’est un logiciel spécialement conçu ce qu’on veut faire. Vous pouvez rajouter des plugins pour avoir toute sorte d’information sur l’écran. Comme tout côté logiciel a été fait, on ne va pas beaucoup aborder la configuration de MagicMirror hormis le fait d’avoir une installation fonctionnelle.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div></description></item><item><title>Lola</title><link>https://nicolasguilloux.eu/articles/lola/</link><pubDate>Sun, 18 Mar 2018 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/lola/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/lola/screenshot.jpg" alt="Featured image of post Lola" />&lt;div class="paragraph">
+&lt;p>Lola est une extension firefox qui permet de styliser votre nouvel onglet. C’est ma première approche vers les extensions des navigateurs.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Elle est fortement inspirée de l’extension &amp;#34;Momentum&amp;#34; mais ajoute des fonctionnalités qui me plaisent :
+* La météo
+* Les raccourcis en bas à gauche sous forme d’icones
+* Des notifications en bas à droite&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;a href="https://github.com/NicolasGuilloux/Lola" target="_blank" rel="noopener">Extension Firefox&lt;/a> - &lt;a href="https://github.com/NicolasGuilloux/Lola" target="_blank" rel="noopener">Github&lt;/a>&lt;/p>
+&lt;/div></description></item><item><title>Mirint</title><link>https://nicolasguilloux.eu/articles/mirint-v1/</link><pubDate>Mon, 10 Jul 2017 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mirint-v1/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mirint-v1/cover.jpg" alt="Featured image of post Mirint" />&lt;div class="paragraph">
+&lt;p>Le miroir intelligent est une petite interface qui devrait, le matin et le soir (ou à vrai dire, à chaque fois que vous allez dans la salle de bain), vous donner des informations pertinentes.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le but est de se dispenser de vérifier son Smartphone en affichant les choses à faire dans la journée, la météo et quelques news. Et dans un soucis d’ergonomie, pas besoin d’un bouton pour l’activer : un capteur de proximité se chargera de le réveiller quand vous le regardez.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour l’instant, le projet n’en est qu’à un stade de prototype non fini. Il n’est toutefois pas abandonné.
+Après l’achèvement des premières fonctionnalités, le travail suivant sera d’implémenter une reconnaissance vocale.&lt;/p>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_matériel">Matériel&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>Mirint regroupe différents appareils &amp;#34;recyclés&amp;#34; : ils ne servaient plus, donc je me suis servi.&lt;/p>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>Ecran de télévision LCD&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Raspberry Pi 2 et son alimentation&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Câble HDMI&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Un coffret&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Un film miroir sans teint&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Une plaque de plexiglas&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Du fil et de quoi souder&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>La première étape a été de dépioter le téléviseur. Afin que le miroir soit le plus fin possible, il faut enlever toute la partie protection plastique pour ne garder que la dalle et les circuits du téléviseur qui se divisent souvent en deux parties : un circuit d’alimentation où on relit l’appareil au secteur et un circuit d’entrées/sorties où vous branchez HDMI etc.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Il est important de &lt;strong>ne pas toucher le circuit d’alimentation&lt;/strong> quand le système est sous tension ! Il y a risque d’électrisation voire électrocution !&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="tele_dessus.jpg" alt="Vue de dessus"/>&lt;/span>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le Raspberry Pi est relié donc en HDMI au téléviseur. On pourrait auto-alimenter le RPi grâce au port USB du téléviseur, mais il sera tributaire de sa puissance. De plus, si le téléviseur est éteint, il y a de grandes chances que sur la plus part des téléviseur, le port USB soit désactivé. On opte donc pour une alimentation séparée.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le coffret a été raboté afin de pouvoir placer le téléviseur sur ses rebords et donc avoir la dalle sur le même plan horizontal que les bords du coffret. Il faudra aussi faire en sorte que ces mêmes bords ainsi que ceux du téléviseur soient noirs (peinture ou scotch noir).&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="tele_dos.jpg" alt="Dos de la télé"/>&lt;/span>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>La plaque de plexiglas a été découpée avec les dimensions extérieures du coffret afin qu’elle couvre toute la surface.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le film miroir a été collé sur la surface qui sera vers l’intérieur du coffret afin d’éviter toute dégradation et rentrée de lumière. Pour le mettre en place :&lt;/p>
+&lt;/div>
+&lt;div class="olist arabic">
+&lt;ol class="arabic">
+&lt;li>
+&lt;p>Bien laver le plexiglas,&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Mettre de l’eau savoneuse sur la surface à coller,&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Enlever le film protecteur du revêtement miroir,&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Placer le film progressivement sur la surface en raclant avec une carte afin de chasser les bulles d’air&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Une fois placé et bien seché, couper l’excédent de film&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour ma part, j’ai percé puis fraisé le plexiglas pour le visser sur le coffret.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Par ailleurs, on veut pouvoir allumer le téléviseur sans appuyer physiquement sur le bouton &amp;#34;Allumer&amp;#34; car ça contraint à démonter le miroir à chaque fois. Ainsi, on regarde la tension appliquée aux bornes de ce bouton poussoir. Généralement, il y a 4 pattes donc pour peut vérifier avec deux bornes en diagonale.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="btn_power.jpg" alt="Boutons"/>&lt;/span>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une fois trouvé (pour ma part 3,3V), on soude deux fils : un qui ira à la masse du Raspberry Pi et l’autre à un de ses nombreux GPIO, j’ai choisi le n°7. Pour voir la partie logicielle, rendez vous un peu plus bas au paragraphe &amp;#34;Contrôle du téléviseur&amp;#34;.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_logiciel">Logiciel&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>&lt;strong>La partie logicielle est obsolète, puisque maintenant il y a &lt;a href="https://magicmirror.builders/" target="_blank" rel="noopener">MagicMirror&lt;/a> qui propose de faire tout ce que j’ai pu proposer.&lt;/strong>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Dans un premier temps, veillez à bien configurer votre téléviseur pour s’allumer lorsque qu’on le branche et de choisir la source HDMI par défaut. Vous pouvez aussi configurer la profondeur du noir : plus il sera profond plus le rendu sera de qualité.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>De plus, vous pouvez configurer le téléviseur pour ne pas s’éteindre. Une amélioration sera à prévoir pour économiser de l’énergie.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Venons au Raspberry qui sera le cerveau de notre miroir. J’ai choisi de faire l’affichage en HTML sur un serveur Web qui sera pour ma part plus facile à maintenir. Toutefois, avant parler du coeur du projet, il faut configurer notre Raspberry. Je me suis basé sur l’OS Raspbian Jessie Lite. Je pars du principe que les périphériques branchés fonctionnent correctement (comme la carte WiFi de votre RPi).&lt;/p>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_connexion_au_wifi">Connexion au Wifi&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>Commençons par chercher le SSID de votre réseau (son petit nom en fait) en scannant ce que le RPi reçoit : &lt;code>sudo iwlist wlan0 scan&lt;/code>. Cherchez le SSID de votre réseau et notez le dans un coin de votre tête.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On va maintenant modifier les paramètres des réseaux WiFi &lt;code>sudo nano /etc/wpa_supplicant/wpa_supplicant.conf&lt;/code> puis rentrez les informations comme suit à la fin du fichier (ou dans le champ correspondant s’il existe déjà la variable) :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>network={
+ssid=&amp;#34;votre SSID&amp;#34;
+psk=&amp;#34;votre mot de passe&amp;#34;
+}&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>ATTENTION : Votre mot de passe est stocké en clair.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ensuite, on valide nos changements en effectuant ce petit bout de code : &lt;code>sudo wpa_cli reconfigure&lt;/code>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On aura besoin d’une interface graphique et de mettre à jour le bousin. On installe donc un serveur X et on met à jour le système (et un petit brin de ménage au cas ou) avec la ligne suivante :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>sudo apt-get update
+sudo apt-get --no-install-recommends install xserver-xorg xserver-xorg-video-fbdev xinit pciutils xinput xfonts-100dpi xfonts-75dpi xfonts-scalable x11-xserver-utils unclutter
+sudo apt-get dist-upgrade
+sudo apt-get autoremove&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_paramétrage_du_raspberry_pi">Paramétrage du Raspberry Pi&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>On va maintenant aller dans les configurations de base du RPi : &lt;code>sudo raspi-config&lt;/code>. Cela vous amènera sur l’interface &amp;#34;graphique&amp;#34; suivante :&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="raspi-config.jpg" alt="Raspi config"/>&lt;/span>]&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On configure comme ça nous plait en changeant le mot de passe et les options de localisation. On choisit ensuite le menu Interfacing Option pour activer le SSH afin de piloter le miroir à distance.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Enfin, on appuie 2 fois sur Tab pour sélectionner &amp;#34;Finish&amp;#34; et on accepte de redémarrer notre Raspberry Pi.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_rotation_de_lécran">Rotation de l’écran&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>Une rotation de l’écran peut être souhaitable suivant le sens de votre miroir. Il nous faut alors modifier un fichier en suivant cette commande : &lt;code>sudo nano /boot/config.txt&lt;/code> et on y ajoute la ligne &lt;code>display_rotate = 1&lt;/code>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Voici les différentes options :&lt;/p>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>0 : Orientation normale&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>1 : 90 degrés&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>2 : 180 degrés&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>3 : 270 degrés&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_configuration_de_linterface_graphique">Configuration de l’interface graphique&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>D’abord, on ajoute un nouvel utilisateur pour se connecter avec lors des connexions SSH. On lance la commande &lt;code>sudo adduser NouvelUtilisateur&lt;/code>. On répond gentillement à tout ce qu’il nous demande.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On souhaite maintenant charger juste un navigateur. Il faut donc choisir votre navigateur préféré, j’ai choisi Chromium. Pour l’installer : &lt;code>sudo apt-get install chromium-browser&lt;/code>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ensuite, pour lancer le navigateur en plein écran sur GitHub, il faut suivre la commande suivante :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>startx /usr/bin/chromium-browser https://github.com/ --window-size=1080,1920 --start-fullscreen --kiosk --incognito -- -nocursor&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Il faut prendre garde à l’orientation de l’écran et sa résolution. Pour ma part, je l’avais mis format portrait en full HD.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour l’ajouter au démarrage, édite un fichier par la commande &lt;code>nano ~/.bashrc&lt;/code> sous l’utilisateur &amp;#34;pi&amp;#34; et ajoute la commande.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Il faudra maintenant arrêter l’écran de veille en éditant le fichier lightdm.conf par la commande suivant &lt;code>sudo nano /etc/lightdm/lightdm.conf&lt;/code> et on ajoute &lt;code>xserver-command=X -s 0 dpms&lt;/code>.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_pilotage_à_distance">Pilotage à distance&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>Notre miroir n’a ni clavier, ni souris. Et rien n’est moins pratique que de contrôler le miroir par la pensée. On va donc se servir du protocole VNC qui va nous servir à piloter l’interface graphique à distance, comme avec le SSH (ils peuvent d’ailleurs être liés). Pour cela, on installe x11vnc : &lt;code>sudo apt-get install x11vnc&lt;/code>. Ensuite, on peut lancer 1 session avec &lt;code>x11vnc -auth guess&lt;/code> une fois startx lancé par SSH.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_contrôle_du_téléviseur">Contrôle du téléviseur&lt;/h3>
+&lt;div class="paragraph float-right">
+&lt;p>&lt;span class="image">&lt;img src="gpio.png" alt="GPIO"/>&lt;/span>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Cela découle directement du soudage du bouton. Dans un premier, on installe WiringPi en suivant les instructions de ce &lt;a href="http://wiringpi.com/download-and-install/">lien&lt;/a>. Cela nous permettra d’utiliser facilement les GPIO ! Pour plus d’informations, je vous laisse checker le &lt;a href="http://blog.idleman.fr/raspberry-pi-06-utiliser-le-gpio-et-interagir-avec-le-monde-reel/">blog d’Idleman&lt;/a>.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une fois installé, on peut commencer les festivités. On paramètre d’abord le GPIO pour être en mode &amp;#34;out&amp;#34; : &lt;code>gpio mode 7 out&lt;/code>. Comme je l’ai dis précedemment, j’ai choisi le GPIO 7 (en suivant le schéma joint). On peut ensuite piloter le port en utilisant &lt;code>gpio write 7 bit&lt;/code> en remplaçant &amp;#34;bit&amp;#34; par 1 pour du 3,3V ou 0 pour du 0V.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On peut voir que le bouton réagit par front descendant en s’amusant à changer ces valeurs (donc pour simuler le bouton appuyé, on place le GPIO à 0).&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ainsi, pour simuler l’appui du bouton, on utilise la ligne suivante :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>gpio write 7 0 &amp;amp;&amp;amp; sleep 1 &amp;amp;&amp;amp; gpio write 7 1&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour paramétrer le GPIO en mode out et à l’état 1 (repos du bouton), il nous faut éditer le fichier /home/pi/.bashrc et rajouter les lignes suivantes :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>gpio mode 7 out
+gpio write 7 1&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ainsi à chaque démarrage, on configure le GPIO 7 en mode Out et à l’état 1.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div></description></item><item><title>Cafetière à Induction Domotisée</title><link>https://nicolasguilloux.eu/articles/cid/</link><pubDate>Sun, 25 Jun 2017 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/cid/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/cid/photo.jpg" alt="Featured image of post Cafetière à Induction Domotisée" />&lt;div class="paragraph">
+&lt;p>La Cafetière à Induction Domotisée, aka CID, est une cafetière avec plus d’un atout dans sa poche.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le but de ce projet était de faire du café rapidement, silencieusement avec la même qualité que les cafetières à dosette. En bref, combler les lacunes de ces dernières en ajoutant une partie domotique.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le projet a été commencé par mes soins, puis poursuivi dans le cadre des projets de deuxième année de l’ENSEA avec &lt;a href="https://www.linkedin.com/in/loirevalentin/" target="_blank" rel="noopener">Valentin Loire&lt;/a>. Nous poursuivons jusqu’à ce jour le développement.&lt;/p>
+&lt;/div>
+&lt;div class="quoteblock">
+&lt;blockquote>
+&lt;div class="paragraph">
+&lt;p>&lt;a href="https://nicolasguilloux.github.io/cid/" target="_blank" rel="noopener">Voir sa page de présentation&lt;/a>&lt;/p>
+&lt;/div>
+&lt;/blockquote>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;div class="video-wrapper">
+&lt;iframe loading="lazy"
+src="https://www.youtube.com/embed/DSbic6T9NO8"
+allowfullscreen
+title="YouTube Video"
+>
+&lt;/iframe>
+&lt;/div>
+&lt;/div></description></item><item><title>Douglas</title><link>https://nicolasguilloux.eu/articles/douglas/</link><pubDate>Wed, 01 Jan 2014 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/douglas/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/douglas/cover.png" alt="Featured image of post Douglas" />&lt;p>Douglas est une enceinte Bluetooth Low-Cost. Une batterie pour portable recyclée, à peu près 15€ de l&amp;rsquo;huile de coude et vous voilà avec un objet essentiel pour toute sortie entre amis.
+Pourquoi l&amp;rsquo;ourson ? Parce que c&amp;rsquo;est mignon, ça protège bien le matériel qu&amp;rsquo;il y a dedans et que c&amp;rsquo;est original.&lt;/p>
+&lt;p>Douglas est fonctionnel, mais toujours en développement. En effet, je souhaite y apporter quelques fonctionnalités comme la visualisation de la charge de la batterie, le réveil de l&amp;rsquo;enceinte sans besoin de bouton physique (hormis pour l&amp;rsquo;appairage).&lt;/p>
+&lt;h1 id="version-1">Version 1&lt;/h1>
+&lt;p>Douglas a surtout pour principe de ne pas couter cher en achetant le minimum possible. Ainsi, seuls les objets ayant un lien dans la liste suivante ont été acheté, le reste étant de la récupération.&lt;/p>
+&lt;ul>
+&lt;li>Une batterie Li-Ion&lt;/li>
+&lt;li>Un amplificateur symétrique&lt;/li>
+&lt;li>Deux haut-parleurs 3W&lt;/li>
+&lt;li>Un circuit de charge pour batterie Li-Ion&lt;/li>
+&lt;li>Un module Bluetooth A2DP (le BK800L)&lt;/li>
+&lt;li>Des résistances de 10kΩ, de des boutons poussoirs&lt;/li>
+&lt;li>Des fils, de l&amp;rsquo;étain et un fer à souder&lt;/li>
+&lt;li>Une plaquette pour souder&lt;/li>
+&lt;/ul>
+&lt;p>On en a en tout pour une 15aine d&amp;rsquo;euros, on s&amp;rsquo;en sort donc pas trop mal. Il reste maintenant à souder tous les composants ensembles afin que tout fonctionne correctement.&lt;/p>
+&lt;p>Les choses sérieuses arrivent et il faudra être bien concentré pour la suite des évènements. En effet, le module Bluetooth est un enfer à souder pour peu qu&amp;rsquo;on n&amp;rsquo;ai ni fil à wrapper, ni un fer à souder digne de ce nom&amp;hellip; J&amp;rsquo;ai donc fait au possible.
+J&amp;rsquo;ai dénudé un fil multibrin pour découper des brins de longueur 3cm. J&amp;rsquo;ai ensuite soudé chaque brin sur les cosses du module. C&amp;rsquo;est fastidieux et ça a tendance à déconner. Le meilleur aurait de faire un PCB, mais quand on a pas le matériel, on se débrouille quand même !&lt;/p>
+&lt;p>Je n&amp;rsquo;ai pas utilisé toutes les pins mais seulement les suivantes : 1, 2, 4, 5, 6, 7, 12, 16, 17, 25, 26, 29, 32.&lt;/p>
+&lt;p>J&amp;rsquo;ai préféré relier toutes les masses (GND sur le schéma) à la masse pour éviter au maximum les interférences. Je ne sais pas si c&amp;rsquo;est utile, mais ça me rassure. De plus, je n&amp;rsquo;ai choisi que les pins qui m&amp;rsquo;intéressaient à savoir les boutons, le son et l&amp;rsquo;alimentation. On peut très bien utiliser les pins Rx/Tx pour renommer le module Bluetooth par exemple (et remplacer cet affreux nom &amp;ldquo;BK8000L&amp;rdquo;).&lt;/p>
+&lt;p>Place maintenant au montage sur la carte. On prend une petite carte qui acceptera tous les composants.
+On colle dans un premier temps la batterie sur le circuit. Ensuite, on soude un à un les composants comme le stipule le schéma suivant :&lt;/p>
+&lt;p>&lt;img src="https://nicolasguilloux.eu/articles/douglas/schema.png"
+width="947"
+height="536"
+srcset="https://nicolasguilloux.eu/articles/douglas/schema_hudedf8d59ca883a4390b4d9a69f859e5e_173385_480x0_resize_box_3.png 480w, https://nicolasguilloux.eu/articles/douglas/schema_hudedf8d59ca883a4390b4d9a69f859e5e_173385_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Schema"
+class="gallery-image"
+data-flex-grow="176"
+data-flex-basis="424px"
+>&lt;/p>
+&lt;p>Assurez vous que les soudures soient bien faites afin de ne pas avoir de mauvaises surprises. De plus, prenez garde au soudage du module Bluetooth qui est extrêmement fastidieux compte tenu des petits espaces disponibles, d&amp;rsquo;où l&amp;rsquo;utilité des fils à wrapper.&lt;/p>
+&lt;p>Cela donne le résultat suivant. Vous avez théoriquement 4 fils non-reliés qui sont dédiés aux speakers. J&amp;rsquo;ai mis un fil supplémentaire qui est un câble USB directement soudé aux bornes du circuit de charge. J&amp;rsquo;ai donc un port femelle micro-USB ou un câble USB mâle sortant pour recharger facilement.&lt;/p>
+&lt;p>&lt;img src="https://nicolasguilloux.eu/articles/douglas/montage.jpg"
+width="1152"
+height="955"
+srcset="https://nicolasguilloux.eu/articles/douglas/montage_hu86b862263dc8a5c880bef30b8ea0599e_260275_480x0_resize_q75_box.jpg 480w, https://nicolasguilloux.eu/articles/douglas/montage_hu86b862263dc8a5c880bef30b8ea0599e_260275_1024x0_resize_q75_box.jpg 1024w"
+loading="lazy"
+alt="Montage"
+class="gallery-image"
+data-flex-grow="120"
+data-flex-basis="289px"
+>&lt;/p>
+&lt;p>Pour les enceintes, il a fallu faire 2 caisses de résonnance adaptée aux haut-parleurs et aux dimensions de mon ourson. J&amp;rsquo;ai pris des tubes en carton trouvés par-ci par-là. A vous d&amp;rsquo;adapter comme vous le voulez ou pouvez afin d&amp;rsquo;avoir une bonne caisse de résonnance. Il n&amp;rsquo;y a pas de règle particulière si ce n&amp;rsquo;est que de bien fixer les HP pour éviter toute fuite d&amp;rsquo;air ou vibration.&lt;/p>
+&lt;p>&lt;img src="https://nicolasguilloux.eu/articles/douglas/speaker.jpg"
+width="849"
+height="1045"
+srcset="https://nicolasguilloux.eu/articles/douglas/speaker_hu704a7857007f13a26bf776070e1a4b58_133177_480x0_resize_q75_box.jpg 480w, https://nicolasguilloux.eu/articles/douglas/speaker_hu704a7857007f13a26bf776070e1a4b58_133177_1024x0_resize_q75_box.jpg 1024w"
+loading="lazy"
+alt="Speakers"
+class="gallery-image"
+data-flex-grow="81"
+data-flex-basis="194px"
+>&lt;/p>
+&lt;h1 id="pour-une-prochaine-version">Pour une prochaine version&lt;/h1>
+&lt;p>Douglas v1 souffrait de quelques petits problèmes ergonomiques.&lt;/p>
+&lt;ul>
+&lt;li>Quand quelqu&amp;rsquo;un le serrait dans ses bras (ce qui arrivait souvent), cela pouvait appuyer sur le bouton situé au niveau du ventre. Un appui long redémarre le module ce qui est frustrant lorsque de la musique est en route.&lt;/li>
+&lt;li>Les boutons pour changer de chanson n&amp;rsquo;étaient quasiment jamais utilisés.&lt;/li>
+&lt;li>Les boutons volumes seraient souhaitables mais pourraient ne pas être utilisés.&lt;/li>
+&lt;li>Changer le volume sur le module s&amp;rsquo;effectue localement. Hors on pourrait souhaiter qu&amp;rsquo;un changement de volume sur Douglas se transmette au Smartphone afin que le volume s&amp;rsquo;actualise sur ce dernier.&lt;/li>
+&lt;li>Le circuit de charge n&amp;rsquo;est pas facile d&amp;rsquo;accès.&lt;/li>
+&lt;li>La carte en elle même n&amp;rsquo;est pas prévue pour une longue durée de vie, vu les soudures.&lt;/li>
+&lt;/ul>
+&lt;p>Ce sont des petits problèmes qui n&amp;rsquo;en sont pas. Je pinaille, mais c&amp;rsquo;est suffisant pour se lancer dans une version 2 qui pourrait résoudre certains de ces problèmes !&lt;/p>
+&lt;p>De plus, j&amp;rsquo;aimerai bien passer pour la version 2 sur du 5W afin d&amp;rsquo;avoir plus de puissance.&lt;/p>
+&lt;p>Autre chose qui m&amp;rsquo;embête, c&amp;rsquo;est le nom du module Bluetooth. En effet, il diffuse le nom &amp;ldquo;BK8000L&amp;rdquo;. Ce serait super chouette de pouvoir le modifier en Douglas par exemple.&lt;/p>
+&lt;p>Un petit plus serait aussi de pouvoir rediriger le son vers une sortie jack. J&amp;rsquo;ai pensé à ça quand il y a une petite sono sans bluetooth, et qu&amp;rsquo;on souhaite quand même profiter du sans fil sans installation bancale.&lt;/p>
+&lt;p>De la même manière, pouvoir brancher un câble Jack dans Douglas pour bénificier de ses haut-parleurs pourrait être sympathique. Dans le module ci-dessus du moins, les ports Aux_L et Aux_R (20 et 19) ne sont malheureusement pas déportés. Si nous voulons les utiliser, il faudra souder deux fils sur la carte ce qui peut s&amp;rsquo;avérer laborieux et dangereux pour la carte.&lt;/p>
+&lt;p>&lt;img src="https://nicolasguilloux.eu/articles/douglas/aux_module.png"
+width="700"
+height="542"
+srcset="https://nicolasguilloux.eu/articles/douglas/aux_module_huc7dc6da2c914796a17e11d4a73bf87d0_568546_480x0_resize_box_3.png 480w, https://nicolasguilloux.eu/articles/douglas/aux_module_huc7dc6da2c914796a17e11d4a73bf87d0_568546_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Aux module"
+class="gallery-image"
+data-flex-grow="129"
+data-flex-basis="309px"
+>&lt;/p>
+&lt;p>Enfin, je souhaiterai oublier les petites batteries Li-Ion si possible. En effet, dans une des enceintes que j&amp;rsquo;avais conçu, l&amp;rsquo;une d&amp;rsquo;elle avait gonflé et comme elles ne sont pas protégées, je ne suis pas rassurer.&lt;/p>
+&lt;p>Je préfère utiliser des batteries externes car elles sont généralement protégées par un boitier, et ont une bien plus grande capacité.&lt;/p></description></item><item><title>Yana</title><link>https://nicolasguilloux.eu/articles/yana/</link><pubDate>Thu, 24 Oct 2013 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/yana/</guid><description>&lt;img src="https://raw.github.com/Etsuni/YANA/master/presentation.png" alt="Featured image of post Yana" />&lt;p>YANA est une interface domotique développée par &lt;a class="link" href="https://github.com/ldleman" target="_blank" rel="noopener"
+>Idleman&lt;/a>.
+L&amp;rsquo;application Android permettait de dicter des ordres afin de déclencher les actions côté serveur. Elle servait donc d&amp;rsquo;interface portable pour controller l&amp;rsquo;installation.&lt;/p>
+&lt;p>A cause de mes études, j&amp;rsquo;ai dû mettre de côté le développement de l&amp;rsquo;application pour au final l&amp;rsquo;abandonner. En effet, le serveur a beaucoup évolué sans que je puisse poursuivre les mises à jour. Une autre personne a continué le développement et est donc en charge par la suite de maintenir.&lt;/p>
+&lt;p>Je remercie :&lt;/p>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://github.com/ldleman" target="_blank" rel="noopener"
+>Valentin Carruesco&lt;/a> pour le développement de YANA serveur.&lt;/li>
+&lt;li>Alexandre Roland pour la reprise du développement de YANA Android.&lt;/li>
+&lt;/ul></description></item></channel></rss>

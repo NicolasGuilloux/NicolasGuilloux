@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>smart-mirror on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/smart-mirror/</link><description>Recent content in smart-mirror on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Wed, 10 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/smart-mirror/rss.xml" rel="self" type="application/rss+xml"/><item><title>Mirint V2</title><link>https://nicolasguilloux.eu/articles/mirint-v2/</link><pubDate>Wed, 10 Mar 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mirint-v2/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mirint-v2/screen.jpg" alt="Featured image of post Mirint V2" />&lt;div class="paragraph">
+&lt;p>J’ai décidé de revoir mon &lt;a href="https://nicolasguilloux.eu/articles/mirint-v1">miroir intelligent&lt;/a> pour plusieurs raisons :&lt;/p>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>J’ai domotisé ma maison, et avoir un affichage des différents capteurs serait vraiment un plus&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>La page web affichée était fait à la main, alors que des solutions bien plus jolies existent comme &lt;a href="https://magicmirror.builders/" target="_blank" rel="noopener">MagicMirror&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Le miroir était beaucoup trop épais, il sortait du mur d’une 10aine de centimètres&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Il était moche&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Il était beaucoup trop lourd, impossible de l’installer sur un mur sans mettre 1 ou 2 chevilles&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>L’écran mettait trop de temps à s’allumer, c’est dommage pour quelque chose qui doit donner des informations de manière spontanée de prendre 10 secondes les afficher&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Autre chose qui en découle, mais on pouvait laisser l’écran allumer, mais il consommait beaucoup trop&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour toutes ces raisons, j’ai décidé de le démonter pour en faire une nouvelle version.&lt;/p>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_matériel">Matériel&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="sect2">
+&lt;h3 id="_ecran">Ecran&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>Je ne garderais par l’écran car c’est la principale raison pour laquelle le miroir n’était pas satisfaisant. Comme c’est une ancienne télévision, tout était prévu pour avoir de l’espace derrière l’écran et que celle-ci soit posée sur un meuble. On peut le voir notamment avec les ports HDMI qui sont à la perpendiculaire de la dalle, son épaisseur et son poids.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="screen_display.jpg" alt="Ecran"/>&lt;/span>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>J’ai réussi à récupérer un écran LCD d’un ordinateur portable et j’ai commandé une carte d’aquisition pour le modèle de l’écran de ~13€ qui fera l’interface entre la sortie HDMI du Rapsberry Pi et la dalle LCD. Le principal intérêt de récupérer un écran comme celui-ci est qu’il a été prévu pour ne pas consommer car étant à l’origine dans un appareil mobile, que son poids et son épaisseur est vraiment faible et que cela permet de déporter la dite carte où on peut pour économiser encore une fois de l’espace et réduire l’épaisseur du miroir.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>L’autre intérêt est le temps pour s’allumer. Il est quasi immédiat, c’est ainsi que sont utilisés les écrans d’ordinateurs portables. Vous verrez rarement un ordinateur mettre 10 secondes à s’allumer lorsque vous le sortez de veille, ou alors c’est votre OS qui prend son temps et non l’écran.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Et enfin la sécurité : je suis toujours plus à l’aise quand je ne travaille pas avec des tensions mortelles. Aussi, l’écran LCD et sa carte sont alimentés en 12V, ce qui permettra de sortir l’alimentation hors du miroir. Il faudra néanmoins prévoir un abaisseur de tension pour alimenter le Raspberry Pi en 5V.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_raspberry_pi">Raspberry Pi&lt;/h3>
+&lt;div class="quoteblock">
+&lt;blockquote>
+&lt;div class="paragraph">
+&lt;p>Parlons du Raspberry Pi. Il s’avère que je pensais avoir un Raspberry Pi 2, mais en fait c’est le premier modèle. Il est donc extrêmement lent, il n’a clairement pas les reins pour produire un affichage rapide qui pourrait avoir des animations fluides. Aussi, il faudra que je change ce composant, il n’est pas approprié. Pour le moment, j’ai rien d’autre sous la main, et donc je l’utilise comme navigateur avec MagicMirror hébergé à un autre endroit. Dans la suite, je ferais comme si MagicMirror était hébergé sur le Raspberry Pi&lt;/p>
+&lt;/div>
+&lt;/blockquote>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le Raspberry Pi va héberger le logiciel qui va nous permettre de facilement intégrer différents modules pour avoir l’affichage le plus complet possible : &lt;a href="https://magicmirror.builders/" target="_blank" rel="noopener">MagicMirror&lt;/a>. C’est un logiciel spécialement conçu ce qu’on veut faire. Vous pouvez rajouter des plugins pour avoir toute sorte d’information sur l’écran. Comme tout côté logiciel a été fait, on ne va pas beaucoup aborder la configuration de MagicMirror hormis le fait d’avoir une installation fonctionnelle.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div></description></item><item><title>Mirint</title><link>https://nicolasguilloux.eu/articles/mirint-v1/</link><pubDate>Mon, 10 Jul 2017 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mirint-v1/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mirint-v1/cover.jpg" alt="Featured image of post Mirint" />&lt;div class="paragraph">
+&lt;p>Le miroir intelligent est une petite interface qui devrait, le matin et le soir (ou à vrai dire, à chaque fois que vous allez dans la salle de bain), vous donner des informations pertinentes.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le but est de se dispenser de vérifier son Smartphone en affichant les choses à faire dans la journée, la météo et quelques news. Et dans un soucis d’ergonomie, pas besoin d’un bouton pour l’activer : un capteur de proximité se chargera de le réveiller quand vous le regardez.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour l’instant, le projet n’en est qu’à un stade de prototype non fini. Il n’est toutefois pas abandonné.
+Après l’achèvement des premières fonctionnalités, le travail suivant sera d’implémenter une reconnaissance vocale.&lt;/p>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_matériel">Matériel&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>Mirint regroupe différents appareils &amp;#34;recyclés&amp;#34; : ils ne servaient plus, donc je me suis servi.&lt;/p>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>Ecran de télévision LCD&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Raspberry Pi 2 et son alimentation&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Câble HDMI&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Un coffret&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Un film miroir sans teint&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Une plaque de plexiglas&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Du fil et de quoi souder&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>La première étape a été de dépioter le téléviseur. Afin que le miroir soit le plus fin possible, il faut enlever toute la partie protection plastique pour ne garder que la dalle et les circuits du téléviseur qui se divisent souvent en deux parties : un circuit d’alimentation où on relit l’appareil au secteur et un circuit d’entrées/sorties où vous branchez HDMI etc.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Il est important de &lt;strong>ne pas toucher le circuit d’alimentation&lt;/strong> quand le système est sous tension ! Il y a risque d’électrisation voire électrocution !&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="tele_dessus.jpg" alt="Vue de dessus"/>&lt;/span>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le Raspberry Pi est relié donc en HDMI au téléviseur. On pourrait auto-alimenter le RPi grâce au port USB du téléviseur, mais il sera tributaire de sa puissance. De plus, si le téléviseur est éteint, il y a de grandes chances que sur la plus part des téléviseur, le port USB soit désactivé. On opte donc pour une alimentation séparée.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le coffret a été raboté afin de pouvoir placer le téléviseur sur ses rebords et donc avoir la dalle sur le même plan horizontal que les bords du coffret. Il faudra aussi faire en sorte que ces mêmes bords ainsi que ceux du téléviseur soient noirs (peinture ou scotch noir).&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="tele_dos.jpg" alt="Dos de la télé"/>&lt;/span>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>La plaque de plexiglas a été découpée avec les dimensions extérieures du coffret afin qu’elle couvre toute la surface.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Le film miroir a été collé sur la surface qui sera vers l’intérieur du coffret afin d’éviter toute dégradation et rentrée de lumière. Pour le mettre en place :&lt;/p>
+&lt;/div>
+&lt;div class="olist arabic">
+&lt;ol class="arabic">
+&lt;li>
+&lt;p>Bien laver le plexiglas,&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Mettre de l’eau savoneuse sur la surface à coller,&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Enlever le film protecteur du revêtement miroir,&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Placer le film progressivement sur la surface en raclant avec une carte afin de chasser les bulles d’air&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Une fois placé et bien seché, couper l’excédent de film&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour ma part, j’ai percé puis fraisé le plexiglas pour le visser sur le coffret.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Par ailleurs, on veut pouvoir allumer le téléviseur sans appuyer physiquement sur le bouton &amp;#34;Allumer&amp;#34; car ça contraint à démonter le miroir à chaque fois. Ainsi, on regarde la tension appliquée aux bornes de ce bouton poussoir. Généralement, il y a 4 pattes donc pour peut vérifier avec deux bornes en diagonale.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="btn_power.jpg" alt="Boutons"/>&lt;/span>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une fois trouvé (pour ma part 3,3V), on soude deux fils : un qui ira à la masse du Raspberry Pi et l’autre à un de ses nombreux GPIO, j’ai choisi le n°7. Pour voir la partie logicielle, rendez vous un peu plus bas au paragraphe &amp;#34;Contrôle du téléviseur&amp;#34;.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_logiciel">Logiciel&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>&lt;strong>La partie logicielle est obsolète, puisque maintenant il y a &lt;a href="https://magicmirror.builders/" target="_blank" rel="noopener">MagicMirror&lt;/a> qui propose de faire tout ce que j’ai pu proposer.&lt;/strong>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Dans un premier temps, veillez à bien configurer votre téléviseur pour s’allumer lorsque qu’on le branche et de choisir la source HDMI par défaut. Vous pouvez aussi configurer la profondeur du noir : plus il sera profond plus le rendu sera de qualité.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>De plus, vous pouvez configurer le téléviseur pour ne pas s’éteindre. Une amélioration sera à prévoir pour économiser de l’énergie.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Venons au Raspberry qui sera le cerveau de notre miroir. J’ai choisi de faire l’affichage en HTML sur un serveur Web qui sera pour ma part plus facile à maintenir. Toutefois, avant parler du coeur du projet, il faut configurer notre Raspberry. Je me suis basé sur l’OS Raspbian Jessie Lite. Je pars du principe que les périphériques branchés fonctionnent correctement (comme la carte WiFi de votre RPi).&lt;/p>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_connexion_au_wifi">Connexion au Wifi&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>Commençons par chercher le SSID de votre réseau (son petit nom en fait) en scannant ce que le RPi reçoit : &lt;code>sudo iwlist wlan0 scan&lt;/code>. Cherchez le SSID de votre réseau et notez le dans un coin de votre tête.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On va maintenant modifier les paramètres des réseaux WiFi &lt;code>sudo nano /etc/wpa_supplicant/wpa_supplicant.conf&lt;/code> puis rentrez les informations comme suit à la fin du fichier (ou dans le champ correspondant s’il existe déjà la variable) :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>network={
+ssid=&amp;#34;votre SSID&amp;#34;
+psk=&amp;#34;votre mot de passe&amp;#34;
+}&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>ATTENTION : Votre mot de passe est stocké en clair.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ensuite, on valide nos changements en effectuant ce petit bout de code : &lt;code>sudo wpa_cli reconfigure&lt;/code>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On aura besoin d’une interface graphique et de mettre à jour le bousin. On installe donc un serveur X et on met à jour le système (et un petit brin de ménage au cas ou) avec la ligne suivante :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>sudo apt-get update
+sudo apt-get --no-install-recommends install xserver-xorg xserver-xorg-video-fbdev xinit pciutils xinput xfonts-100dpi xfonts-75dpi xfonts-scalable x11-xserver-utils unclutter
+sudo apt-get dist-upgrade
+sudo apt-get autoremove&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_paramétrage_du_raspberry_pi">Paramétrage du Raspberry Pi&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>On va maintenant aller dans les configurations de base du RPi : &lt;code>sudo raspi-config&lt;/code>. Cela vous amènera sur l’interface &amp;#34;graphique&amp;#34; suivante :&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="raspi-config.jpg" alt="Raspi config"/>&lt;/span>]&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On configure comme ça nous plait en changeant le mot de passe et les options de localisation. On choisit ensuite le menu Interfacing Option pour activer le SSH afin de piloter le miroir à distance.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Enfin, on appuie 2 fois sur Tab pour sélectionner &amp;#34;Finish&amp;#34; et on accepte de redémarrer notre Raspberry Pi.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_rotation_de_lécran">Rotation de l’écran&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>Une rotation de l’écran peut être souhaitable suivant le sens de votre miroir. Il nous faut alors modifier un fichier en suivant cette commande : &lt;code>sudo nano /boot/config.txt&lt;/code> et on y ajoute la ligne &lt;code>display_rotate = 1&lt;/code>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Voici les différentes options :&lt;/p>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>0 : Orientation normale&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>1 : 90 degrés&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>2 : 180 degrés&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>3 : 270 degrés&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_configuration_de_linterface_graphique">Configuration de l’interface graphique&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>D’abord, on ajoute un nouvel utilisateur pour se connecter avec lors des connexions SSH. On lance la commande &lt;code>sudo adduser NouvelUtilisateur&lt;/code>. On répond gentillement à tout ce qu’il nous demande.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On souhaite maintenant charger juste un navigateur. Il faut donc choisir votre navigateur préféré, j’ai choisi Chromium. Pour l’installer : &lt;code>sudo apt-get install chromium-browser&lt;/code>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ensuite, pour lancer le navigateur en plein écran sur GitHub, il faut suivre la commande suivante :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>startx /usr/bin/chromium-browser https://github.com/ --window-size=1080,1920 --start-fullscreen --kiosk --incognito -- -nocursor&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Il faut prendre garde à l’orientation de l’écran et sa résolution. Pour ma part, je l’avais mis format portrait en full HD.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour l’ajouter au démarrage, édite un fichier par la commande &lt;code>nano ~/.bashrc&lt;/code> sous l’utilisateur &amp;#34;pi&amp;#34; et ajoute la commande.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Il faudra maintenant arrêter l’écran de veille en éditant le fichier lightdm.conf par la commande suivant &lt;code>sudo nano /etc/lightdm/lightdm.conf&lt;/code> et on ajoute &lt;code>xserver-command=X -s 0 dpms&lt;/code>.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_pilotage_à_distance">Pilotage à distance&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>Notre miroir n’a ni clavier, ni souris. Et rien n’est moins pratique que de contrôler le miroir par la pensée. On va donc se servir du protocole VNC qui va nous servir à piloter l’interface graphique à distance, comme avec le SSH (ils peuvent d’ailleurs être liés). Pour cela, on installe x11vnc : &lt;code>sudo apt-get install x11vnc&lt;/code>. Ensuite, on peut lancer 1 session avec &lt;code>x11vnc -auth guess&lt;/code> une fois startx lancé par SSH.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_contrôle_du_téléviseur">Contrôle du téléviseur&lt;/h3>
+&lt;div class="paragraph float-right">
+&lt;p>&lt;span class="image">&lt;img src="gpio.png" alt="GPIO"/>&lt;/span>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Cela découle directement du soudage du bouton. Dans un premier, on installe WiringPi en suivant les instructions de ce &lt;a href="http://wiringpi.com/download-and-install/">lien&lt;/a>. Cela nous permettra d’utiliser facilement les GPIO ! Pour plus d’informations, je vous laisse checker le &lt;a href="http://blog.idleman.fr/raspberry-pi-06-utiliser-le-gpio-et-interagir-avec-le-monde-reel/">blog d’Idleman&lt;/a>.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une fois installé, on peut commencer les festivités. On paramètre d’abord le GPIO pour être en mode &amp;#34;out&amp;#34; : &lt;code>gpio mode 7 out&lt;/code>. Comme je l’ai dis précedemment, j’ai choisi le GPIO 7 (en suivant le schéma joint). On peut ensuite piloter le port en utilisant &lt;code>gpio write 7 bit&lt;/code> en remplaçant &amp;#34;bit&amp;#34; par 1 pour du 3,3V ou 0 pour du 0V.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On peut voir que le bouton réagit par front descendant en s’amusant à changer ces valeurs (donc pour simuler le bouton appuyé, on place le GPIO à 0).&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ainsi, pour simuler l’appui du bouton, on utilise la ligne suivante :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>gpio write 7 0 &amp;amp;&amp;amp; sleep 1 &amp;amp;&amp;amp; gpio write 7 1&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour paramétrer le GPIO en mode out et à l’état 1 (repos du bouton), il nous faut éditer le fichier /home/pi/.bashrc et rajouter les lignes suivantes :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code>gpio mode 7 out
+gpio write 7 1&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ainsi à chaque démarrage, on configure le GPIO 7 en mode Out et à l’état 1.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div></description></item></channel></rss>
