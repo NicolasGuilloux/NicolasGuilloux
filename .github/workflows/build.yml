@@ -23,7 +23,6 @@ jobs:
       with:
         root_file: NicolasGuilloux_CV.tex
         latexmk_use_lualatex: true
-        args: '--interaction=nonstopmode'
         extra_fonts: './fonts/*'
 
     # - uses: cachix/install-nix-action@v16
