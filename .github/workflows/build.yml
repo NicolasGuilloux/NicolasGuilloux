@@ -23,6 +23,7 @@ jobs:
       with:
         root_file: NicolasGuilloux_CV.tex
         latexmk_use_lualatex: true
+        args: '--interaction=nonstopmode --output-directory=./build'
         extra_fonts: |
           ./fonts/*
 
@@ -37,4 +38,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: CurriculumVitae PDF
-        path: NicolasGuilloux_CV.pdf
+        path: build/NicolasGuilloux_CV.pdf
