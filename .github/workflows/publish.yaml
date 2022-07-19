@@ -14,8 +14,17 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Build the website to public directory
-        uses: gaol/hugo-gh-action@v1.2
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.101.0'
+          extended: true
+
+      - name: Setup Asciidoc
+        run: sudo apt install asciidoctor
+
+      - name: Build
+        run: hugo --minify
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v3
