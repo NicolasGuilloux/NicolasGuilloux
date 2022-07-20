@@ -1,17 +1,316 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>traefik on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/traefik/</link><description>Recent content in traefik on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Wed, 11 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/traefik/rss.xml" rel="self" type="application/rss+xml"/><item><title>Reverse Proxy sur NixOS</title><link>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</link><pubDate>Wed, 11 May 2022 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</guid><description>&lt;img src="https://nicolasguilloux.eu/cover.svg" alt="Featured image of post Reverse Proxy sur NixOS" />&lt;div class="paragraph">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>traefik on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/traefik/</link><description>Recent content in traefik on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Wed, 11 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/traefik/rss.xml" rel="self" type="application/rss+xml"/><item><title>Reverse Proxy sur NixOS</title><link>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</link><pubDate>Wed, 11 May 2022 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</guid><description>&lt;img src="https://nicolasguilloux.eu/cover.png" alt="Featured image of post Reverse Proxy sur NixOS" />&lt;div class="paragraph">
 &lt;p>J’ai jonglé entre 3 proxies récemment afin de pouvoir facilement rediriger des requêtes vers les services appropriés, que ce soit en utilisant Docker ou en utilisant des services exposant des ports.&lt;/p>
 &lt;/div>
 &lt;div class="sect1">
 &lt;h2 id="_les_softwares">Les softwares&lt;/h2>
 &lt;div class="sectionbody">
 &lt;div class="paragraph">
-&lt;p>J’ai expérimenté les 3 proxies suivants, dans l’ordre chronologique. Je vais passer en revue pourquoi je les ai utilisés, et pourquoi je les ai aussi abandonnés.&lt;/p>
+&lt;p>J’ai expérimenté les proxies suivants dans l’ordre chronologique. Je vais passer en revue pourquoi je les ai utilisés, et pourquoi je les ai aussi abandonnés.&lt;br/>
+Il n’y en a pas nécessairement de meilleurs que d’autres, c’est juste que chacun trouve chaussure à son pied !&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>J’avais aussi utilisé une configuration qui permettait de facilement jongler entre les différents services en adaptant le module sans pour autant rajouter de configuration. C’est d’ailleurs l’un des gros avantages de NixOS : pouvoir dissocier la configuration de l’implémentation. Vous pouvez voir le code &lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/tree/master/modules/reverse-proxies" target="_blank" rel="noopener">ici&lt;/a>.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour des raisons de facilité, on va utiliser l’exemple d’un site web qui serait à l’adresse &lt;code>blog.nicolasguilloux.eu&lt;/code> et qui serait disponible en local sur le port 8080. Bien entendu, on souhaite que le site soit en &lt;code>https&lt;/code>.&lt;/p>
 &lt;/div>
 &lt;div class="sect2">
 &lt;h3 id="_nginx">Nginx&lt;/h3>
 &lt;div class="paragraph">
 &lt;p>C’est le premier proxy que j’ai utilisé, car c’est le serveur web que j’utilisais et qui permettait de facilement mettre en place cette fonctionnalité.&lt;/p>
 &lt;/div>
+&lt;div class="paragraph">
+&lt;p>La première chose à faire est de configurer le Acme challenge ainsi que 4 optimisations recommandées pour Nginx. Le premier servira bien entendu à générer automatiquement le certificat HTTPS pour notre site.&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix"># ACME Challenge
+security.acme.acceptTerms = true;
+security.acme.defaults.email = &amp;#34;nicolas.guilloux@proton.me&amp;#34;;
+# Use recommended settings
+services.nginx.recommendedGzipSettings = lib.mkDefault true;
+services.nginx.recommendedOptimisation = lib.mkDefault true;
+services.nginx.recommendedProxySettings = lib.mkDefault true;
+services.nginx.recommendedTlsSettings = lib.mkDefault true;&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ensuite, il nous faut dire à Nginx de rediriger le traffic entrant de &lt;code>blog.nicolasguilloux.eu&lt;/code> vers le port 8080. Pour ce faire, nous allons déclarer une virtual host, lui donner quelques configurations relatives au SSL et au proxy, mais surtout lui dire de rediriger tout le traffic vers la bonne adresse. La configuration parle d’elle-même :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">services.nginx.virtualHosts.&amp;#34;blog.nicolasguilloux.eu&amp;#34; = {
+forceSSL = true;
+enableACME = true;
+extraConfig = &amp;#34;proxy_buffering off&amp;#34;;
+locations.&amp;#34;/&amp;#34; = {
+proxyPass = &amp;#34;http://127.0.0.1:8080&amp;#34;;
+proxyWebsockets = true;
+extraConfig =
+# required when the target is also TLS server with multiple hosts
+&amp;#34;proxy_ssl_server_name on;&amp;#34; +
+# required when the server wants to use HTTP Authentication
+&amp;#34;proxy_pass_header Authorization;&amp;#34;;
+};
+};&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Nginx était bien mais nécessitait que le service en question expose un port pour être accessible. Comme je travaille beaucoup avec des images Docker, l’utiliser était devenu de plus en plus fastidieux car je devais réfléchir à quel port j’exposais.
+Si par exemple j’avais deux sites exposés sur le port 80, je devais choisir de l’exposer l’un sur le port 8080 et l’autre sur le port 8081.&lt;br/>
+Bref, rapidement j’ai trouvé que l’attribution arbitraire d’un port pour éviter les conflits n’était pas pérenne dans le temps.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_caddy_proxy">Caddy Proxy&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>Celui-ci est légèrement différent. C’est une &lt;a href="https://github.com/lucaslorentz/caddy-docker-proxy">image docker&lt;/a> qui a pour principe de se servir des labels associés à un container Docker pour le router.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Regardons comment &amp;#34;installer&amp;#34; le service the nix way :&lt;/p>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>On va devoir déclarer une container qui utilisera le port 80 et 443 pour respectivement le http et https.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>On doit donner un petit nom au network Docker. Tout container appartenant à ce network sera analysé par caddy-proxy pour trouver éventuellement des labels le concernant.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>On l’ajoute bien entendu à ce dit network.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>On lui donne accès à notre socket Docker, pour qu’il puisse analyser les différents containers.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>On lui donne un espace pour stocker ses données.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Une dernière configuration doit être ajoutée pour créer le network Docker avant de lancer le container pour éviter une erreur.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Voici donc la configuration correspondante :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">let
+dockerNetwork = &amp;#34;caddy-proxy&amp;#34;;
+in
+{
+virtualisation.oci-containers.containers.caddy-proxy = {
+autoStart = true;
+image = &amp;#34;lucaslorentz/caddy-docker-proxy:ci-alpine&amp;#34;;
+ports = [ &amp;#34;80:80&amp;#34; &amp;#34;443:443&amp;#34; ];
+environment = { CADDY_INGRESS_NETWORKS = &amp;#34;${dockerNetwork} };
+extraOptions = [ &amp;#34;--network=${dockerNetwork} ];
+volumes = [
+&amp;#34;/var/run/docker.sock:/var/run/docker.sock&amp;#34;
+&amp;#34;/var/lib/caddy-proxy:/data&amp;#34;
+];
+};
+systemd.services.docker-caddy-proxy.preStart = lib.mkAfter &amp;#39;&amp;#39;
+${pkgs.docker}/bin/docker network create -d bridge ${dockerNetwork} || true
+&amp;#39;&amp;#39;;
+}&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Et voilà, ça fonctionne. On pourra noter une amélioration à apporter : le support de Podman. Pour l’instant, c’est hardcodé pour Docker à cause de preStart ainsi que du socket.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Si on regarde maintenant pour instancier un service qui passerait par ce proxy, on se retrouverait avec une configuration de ce genre :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">let
+dockerNetwork = &amp;#34;caddy-proxy&amp;#34;;
+in
+{
+virtualisation.oci-containers.containers.whoami = {
+autoStart = true;
+image = &amp;#34;jwilder/whoami&amp;#34;;
+extraOptions = [
+&amp;#34;--network=${dockerNetwork}&amp;#34;
+&amp;#34;--label=caddy=whoami.example.com&amp;#34;
+&amp;#34;--label=caddy.reverse_proxy={{upstreams 8000}}&amp;#34;
+];
+};
+}&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>J’ai abandonné cette implémentation particulière d’un proxy car étant très pratique pour du développement local avec Docker, elle ne permet pas de facilement placer un service natif derrière celui-ci. De plus, je n’ai pas exploré la possibilité du SSL car je n’envisageais pas cette solution sur mon serveur.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect2">
+&lt;h3 id="_traefik">Traefik&lt;/h3>
+&lt;div class="paragraph">
+&lt;p>Ce qu’il me fallait, c’est le meilleur des deux mondes : placer des services natifs et des services dockerisés derrière un proxy. Si en plus je pouvais avoir une interface graphique pour debugger, ça serait parfait.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Traefik m’a alors été conseillé par un ami, et rempli totalement son rôle. On peut lui dire manuellement de forward tel host sur tel adresse et port, tout comme on peut bénéficier d’une configuration avec des labels via le Docker provider.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Voyons quelques prérequis qui expliquent la configuration :&lt;/p>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>Traefik doit avoir accès à Docker&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>On veut son Dashboard pour pouvoir facilement débugger&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>On doit configurer au moins deux points d’entrées : un pour le http et l’autre pour le https. Le http dans cette exemple redirigera vers le https.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>On doit configurer la génération des certificats&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>On souhaite par défaut que le dashboard soit accessible via &lt;code>&lt;a href="https://traefik.local" class="bare">https://traefik.local&lt;/a>&lt;/code>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Avec tout ça en tête, on obtient alors la configuration par défaut suivante :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">{ config, lib, pkgs, ... }:
+let
+localCertificationDirectory = config.security.localCertification.directory;
+in
+{
+# Enable Traefik
+services.traefik.enable = true;
+# Let Traefik interact with Docker
+services.traefik.group = &amp;#34;docker&amp;#34;;
+services.traefik.staticConfigOptions = {
+api.dashboard = true;
+api.insecure = false;
+# Enable logs
+log.filePath = &amp;#34;/var/log/traefik/traefik.log&amp;#34;;
+accessLog.filePath = &amp;#34;/var/log/traefik/accessLog.log&amp;#34;;
+# Enable Docker provider
+providers.docker = {
+endpoint = &amp;#34;unix:///run/docker.sock&amp;#34;;
+watch = true;
+exposedByDefault = false;
+};
+# Configure entrypoints, i.e the ports
+entryPoints = {
+websecure.address = &amp;#34;:443&amp;#34;;
+web = {
+address = &amp;#34;:80&amp;#34;;
+http.redirections.entryPoint = {
+to = &amp;#34;websecure&amp;#34;;
+scheme = &amp;#34;https&amp;#34;;
+};
+};
+};
+# Configure certification
+certificatesResolvers.acme-challenge.acme = {
+email = &amp;#34;nicolas.guilloux@proton.me&amp;#34;;
+storage = &amp;#34;/var/lib/traefik/acme.json&amp;#34;;
+httpChallenge.entryPoint = &amp;#34;web&amp;#34;;
+};
+};
+# Dashboard
+services.traefik.dynamicConfigOptions.http.routers.dashboard = {
+rule = lib.mkDefault &amp;#34;Host(`traefik.local`)&amp;#34;;
+service = &amp;#34;api@internal&amp;#34;;
+entryPoints = [ &amp;#34;websecure&amp;#34; ];
+tls = lib.mkDefault true;
+# Add certification
+# tls.certResolver = &amp;#34;acme-challenge&amp;#34;;
+};
+# Add Dashboard to hosts
+networking.hosts.&amp;#34;127.0.0.1&amp;#34; =
+if config.services.traefik.dynamicConfigOptions.http.routers.dashboard.rule == &amp;#34;Host(`traefik.local`)&amp;#34; then
+[ &amp;#34;traefik.local&amp;#34; ]
+else
+[ ];
+}&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>À partir de là, on a un Traefik qui dispose d’un dashboard et qui surveille Docker, quel que soit le network.&lt;/p>
+&lt;/div>
+&lt;div class="admonitionblock note">
+&lt;table>
+&lt;tbody>&lt;tr>
+&lt;td class="icon">
+&lt;div class="title">Note&lt;/div>
+&lt;/td>
+&lt;td class="content">
+Si jamais vous voulez manipuler des headers, il faut passer par des middlewares.
+&lt;/td>
+&lt;/tr>
+&lt;/tbody>&lt;/table>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Regardons déjà la déclaration d’un container pour qu’il soit cabler sur Traefik. L’attribution des labels est plutôt évidentes.&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">virtualisation.oci-containers.containers.whoami = {
+autoStart = true;
+image = &amp;#34;jwilder/whoami&amp;#34;;
+extraOptions = [
+&amp;#34;--label=traefik.enable=true&amp;#34;
+&amp;#34;--label=traefik.http.routers.whoami.entrypoints=websecure&amp;#34;
+&amp;#34;--label=traefik.http.routers.whoami.rule=Host(`whoami.example.com`)&amp;#34;
+&amp;#34;--label=traefik.http.routers.whoami.tls=true&amp;#34;
+&amp;#34;--label=traefik.http.services.whoami.loadbalancer.server.port=8000&amp;#34;
+# Add certification
+# &amp;#34;--label=traefik.http.routers.whoami.tls.certresolver=acme-challenge&amp;#34;
+];
+};&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour ajouter notre fameux blog, c’est-à-dire un service natif, on peut le faire de la manière suivante :&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">services.traefik.dynamicConfigOptions.http.services.&amp;#34;blog.nicolasguilloux.eu&amp;#34; = {
+loadBalancer.servers = [
+{ url = &amp;#34;http://127.0.0.1:8080&amp;#34;; }
+];
+};&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Traefik est pour moi la solution qui me convient le mieux, car elle réunit le meilleur des deux précédents proxy, tout en proposant davantage. Le dashboard est très pratique pour surveiller le routing, et je pourrais explorer d’autres fonctionnalités à l’avenir comme le routing TCP/UDP.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_aller_plus_loin">Aller plus loin&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>Il y a plusieurs fonctionnalités que j’ai ou vais explorer avec Traefik :&lt;/p>
+&lt;/div>
+&lt;div class="ulist">
+&lt;ul>
+&lt;li>
+&lt;p>Faire de la certification en local (Prochain article !)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Faire du routing TCP/UDP&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Implémenter du monitoring&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Implémenter + de securité (Crowdsec ?)&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;/div>
 &lt;/div>
 &lt;/div></description></item></channel></rss>
