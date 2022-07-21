@@ -2,7 +2,7 @@
 &lt;p>J’ai jonglé entre 3 proxies récemment afin de pouvoir facilement rediriger des requêtes vers les services appropriés, que ce soit en utilisant Docker ou en utilisant des services exposant des ports.&lt;/p>
 &lt;/div>
 &lt;div class="sect1">
-&lt;h2 id="_les_softwares">Les softwares&lt;/h2>
+&lt;h2 id="_lets_get_started">Let’s get started&lt;/h2>
 &lt;div class="sectionbody">
 &lt;div class="paragraph">
 &lt;p>J’ai expérimenté les proxies suivants dans l’ordre chronologique. Je vais passer en revue pourquoi je les ai utilisés, et pourquoi je les ai aussi abandonnés.&lt;br/>
@@ -64,7 +64,7 @@ Bref, rapidement j’ai trouvé que l’attribution arbitraire d’un port pour 
 &lt;div class="sect2">
 &lt;h3 id="_caddy_proxy">Caddy Proxy&lt;/h3>
 &lt;div class="paragraph">
-&lt;p>Celui-ci est légèrement différent. C’est une &lt;a href="https://github.com/lucaslorentz/caddy-docker-proxy">image docker&lt;/a> qui a pour principe de se servir des labels associés à un container Docker pour le router.&lt;/p>
+&lt;p>Celui-ci est légèrement différent. C’est une &lt;a href="https://github.com/lucaslorentz/caddy-docker-proxy" target="_blank" rel="noopener">image docker&lt;/a> qui a pour principe de se servir des labels associés à un container Docker pour le router.&lt;/p>
 &lt;/div>
 &lt;div class="paragraph">
 &lt;p>Regardons comment &amp;#34;installer&amp;#34; le service the nix way :&lt;/p>
