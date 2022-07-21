@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>traefik on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/traefik/</link><description>Recent content in traefik on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Wed, 11 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/traefik/rss.xml" rel="self" type="application/rss+xml"/><item><title>Reverse Proxy sur NixOS</title><link>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</link><pubDate>Wed, 11 May 2022 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/reverse-proxy-nixos/cover.png" alt="Featured image of post Reverse Proxy sur NixOS" />&lt;div class="paragraph">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>traefik on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/traefik/</link><description>Recent content in traefik on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Fri, 01 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/traefik/rss.xml" rel="self" type="application/rss+xml"/><item><title>Reverse Proxy sur NixOS</title><link>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</link><pubDate>Fri, 01 Jul 2022 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/reverse-proxy-nixos/cover.png" alt="Featured image of post Reverse Proxy sur NixOS" />&lt;div class="paragraph">
 &lt;p>J’ai jonglé entre 3 proxies récemment afin de pouvoir facilement rediriger des requêtes vers les services appropriés, que ce soit en utilisant Docker ou en utilisant des services exposant des ports.&lt;/p>
 &lt;/div>
 &lt;div class="sect1">
@@ -17,7 +17,10 @@ Il n’y en a pas nécessairement de meilleurs que d’autres, c’est juste que
 &lt;div class="sect2">
 &lt;h3 id="_nginx">Nginx&lt;/h3>
 &lt;div class="paragraph">
-&lt;p>C’est le premier proxy que j’ai utilisé, car c’est le serveur web que j’utilisais et qui permettait de facilement mettre en place cette fonctionnalité.&lt;/p>
+&lt;p>C’est le premier proxy que j’ai utilisé, car c’est le serveur web que j’utilisais et qui permettait de facilement mettre en place cette fonctionnalité. C’est aussi le serveur web majoritairement utilisé.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="nginx.png" alt="nginx"/>&lt;/span>&lt;/p>
 &lt;/div>
 &lt;div class="paragraph">
 &lt;p>La première chose à faire est de configurer le Acme challenge ainsi que 4 optimisations recommandées pour Nginx. Le premier servira bien entendu à générer automatiquement le certificat HTTPS pour notre site.&lt;/p>
@@ -64,7 +67,10 @@ Bref, rapidement j’ai trouvé que l’attribution arbitraire d’un port pour 
 &lt;div class="sect2">
 &lt;h3 id="_caddy_proxy">Caddy Proxy&lt;/h3>
 &lt;div class="paragraph">
-&lt;p>Celui-ci est légèrement différent. C’est une &lt;a href="https://github.com/lucaslorentz/caddy-docker-proxy" target="_blank" rel="noopener">image docker&lt;/a> qui a pour principe de se servir des labels associés à un container Docker pour le router.&lt;/p>
+&lt;p>Celui-ci est légèrement différent. À la base, &lt;a href="" target="_blank" rel="noopener">Caddy&lt;/a> est un serveur Web qui fournit beaucoup de fonctionnalité et se veut facile d’accès. Pour notre utilisation, c’est une &lt;a href="https://github.com/lucaslorentz/caddy-docker-proxy" target="_blank" rel="noopener">image docker&lt;/a> qui a pour principe de se servir des labels associés à un container Docker pour le router.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="caddy.png" alt="caddy"/>&lt;/span>&lt;/p>
 &lt;/div>
 &lt;div class="paragraph">
 &lt;p>Regardons comment &amp;#34;installer&amp;#34; le service the nix way :&lt;/p>
@@ -152,6 +158,9 @@ extraOptions = [
 &lt;/div>
 &lt;div class="paragraph">
 &lt;p>Traefik m’a alors été conseillé par un ami, et rempli totalement son rôle. On peut lui dire manuellement de forward tel host sur tel adresse et port, tout comme on peut bénéficier d’une configuration avec des labels via le Docker provider.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="traefik.png" alt="traefik"/>&lt;/span>&lt;/p>
 &lt;/div>
 &lt;div class="paragraph">
 &lt;p>Voyons quelques prérequis qui expliquent la configuration :&lt;/p>
@@ -299,7 +308,7 @@ loadBalancer.servers = [
 &lt;div class="ulist">
 &lt;ul>
 &lt;li>
-&lt;p>Faire de la certification en local (Prochain article !)&lt;/p>
+&lt;p>&lt;a href="../reverse-proxy/">Faire de la certification en local&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>Faire du routing TCP/UDP&lt;/p>

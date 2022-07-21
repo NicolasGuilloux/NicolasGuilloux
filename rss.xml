@@ -1,4 +1,154 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nicolas Guilloux</title><link>https://nicolasguilloux.eu/</link><description>Recent content on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Wed, 11 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/rss.xml" rel="self" type="application/rss+xml"/><item><title>Reverse Proxy sur NixOS</title><link>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</link><pubDate>Wed, 11 May 2022 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/reverse-proxy-nixos/cover.png" alt="Featured image of post Reverse Proxy sur NixOS" />&lt;div class="paragraph">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nicolas Guilloux</title><link>https://nicolasguilloux.eu/</link><description>Recent content on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Thu, 21 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/rss.xml" rel="self" type="application/rss+xml"/><item><title>Certification locale</title><link>https://nicolasguilloux.eu/articles/local-certification/</link><pubDate>Thu, 21 Jul 2022 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/local-certification/</guid><description>&lt;img src="https://nicolasguilloux.eu/cover.png" alt="Featured image of post Certification locale" />&lt;div class="paragraph">
+&lt;p>La certification locale est très utile majoritairement pour du développement local.
+Il s’agit de fournir un certificat pour chaque domaine hébergé sur la machine, et que la fameuse page vous disant que le site est dangereux disparaisse.&lt;/p>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_comment_fonctionne_un_certificat">Comment fonctionne un certificat&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>Tout d’abord, un certificat sert à garantir l’authenticité d’un site par l’intermédiaire une autorité de confiance abrégée CA pour Certification Authority.
+Je vais faire un exemple.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="certification_workflow.png" alt="certification workflow"/>&lt;/span>&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Je souhaite certifier que le site &lt;code>blog.nicolasguilloux.eu&lt;/code> est à moi auprès d’un CA (par exemple &lt;a href="https://letsencrypt.org/fr/" target="_blank" rel="noopener">Let’s Encrypt&lt;/a>). Il va alors se passer plusieurs choses successivement :&lt;/p>
+&lt;/div>
+&lt;div class="olist arabic">
+&lt;ol class="arabic">
+&lt;li>
+&lt;p>Je créé un couple de clé privée et clé publique.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Je demande au CA de me donner un challenge pour qu’il vérifie que je contrôle bien l’adresse en question&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Généralement, c’est un texte que l’on doit fournir à une URL précise (par exemple mettre le texte &lt;code>ed98&lt;/code> dans l’URL &lt;a href="https://blog.nicolasguilloux.eu/8303" class="bare">https://blog.nicolasguilloux.eu/8303&lt;/a>) et de le signer avec ma clé privée.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Le CA vérifie alors que le challenge est OK en déchiffrant le contenu de ladite page avec la clé publique qu’on lui fournit.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Le CA enregistre alors cette clé publique et la fournie à qui veut vérifier la certification du site &lt;code>blog.nicolasguilloux.eu&lt;/code>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Ainsi, une personne lambda qui accède au site demande la clé publique au CA et vérifie le certificat fourni par le site avec chaque requête HTTPS avec celle-ci pour vérifier que je suis bien le propriétaire du site.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Pour plus d’information, vous pouvez consulter la &lt;a href="https://letsencrypt.org/fr/how-it-works/" target="_blank" rel="noopener">documentation&lt;/a> de Let’s Encrypt. L’image précédente est d’ailleurs tirée de cette page.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_notre_certification_custom">Notre certification custom&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>Quand on demande une page https sans fournir de certificat, notre navigateur nous met en garde que ce n’est pas sécurisé, car il ne peut pas vérifier la source des informations données.
+On va donc y remédier en créant un certificat par nous même, et en disant au système que l’autorité de confiance que nous avons créée est justement de confiance.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On remarque qu’on ne s’occupera pas de la partie challenge, qui est uniquement là pour que le CA nous croit notre légitimité. Ici, on est légitime, on détient de le système. Et le CA, c’est nous, on fait ce qu’on veut !&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On va créer une dérivation qui va générer les certificats grâce à la liste des domaines qu’on lui aura fournis ainsi que l’éventuelle autorité de certification qu’on lui aura donné.&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">{ stdenv
+, mkcert
+, domains ? [ &amp;#34;local&amp;#34; &amp;#34;*.local&amp;#34; ]
+, authority ? null
+}:
+let
+domainsToString = builtins.concatStringsSep &amp;#34; &amp;#34; (
+builtins.map (domain: &amp;#34;\&amp;#34;${domain}\&amp;#34;&amp;#34;) domains
+);
+in
+stdenv.mkDerivation rec {
+name = &amp;#34;local-certificates&amp;#34;;
+dontUnpack = true;
+installPhase = &amp;#39;&amp;#39;
+# Create the directories
+mkdir -p $out/ssl/authority;
+&amp;#39;&amp;#39; +
+if authority != null then
+&amp;#34;cp ${authority} $out/ssl/authority/rootCA.pem&amp;#34;
+else
+&amp;#34;&amp;#34;
++ &amp;#39;&amp;#39;
+# Generate the certificates
+CAROOT=&amp;#34;$out/ssl/authority&amp;#34; \
+${mkcert}/bin/mkcert \
+-cert-file $out/ssl/local-cert.pem \
+-key-file $out/ssl/local-key.pem \
+${domainsToString}
+&amp;#39;&amp;#39;;
+}&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_lintégration_dans_le_système">L’intégration dans le système&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>Regardons maintenant son intégration dans la configuration générale de NixOS.&lt;/p>
+&lt;/div>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">{ config, lib, pkgs, ... }:
+let
+localCerts = pkgs.callPackage ./local-certs.nix {
+domains = config.networking.hosts.&amp;#34;127.0.0.1&amp;#34;;
+# authority = ./rootCA.pem;
+};
+in
+{
+# Add certificates systemwide
+security.pki.certificateFiles = [
+(localCerts + &amp;#34;/ssl/authority/rootCA.pem&amp;#34;)
+];
+# Add local certificates
+services.traefik.dynamicConfigOptions.tls = {
+certificates = [
+{
+certFile = &amp;#34;${localCerts}/ssl/local-cert.pem&amp;#34;;
+keyFile = &amp;#34;${localCerts}/ssl/local-key.pem&amp;#34;;
+}
+];
+stores.default.defaultCertificate = {
+certFile = &amp;#34;${localCerts}/ssl/local-cert.pem&amp;#34;;
+keyFile = &amp;#34;${localCerts}/ssl/local-key.pem&amp;#34;;
+};
+};
+}&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On peut déjà constater que je build la dérivation précédemment mentionnée afin de pouvoir l’exploiter ensuite. Comme domaine, je donne tous ceux qui renvoient vers mon localhost. Je brasse large, mais c’est plus simple ainsi.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On remarque aussi que j’ai commenté le &lt;code>authority&lt;/code>. Si vous avez déjà créé l’autorité, vous pouvez l’utiliser sinon une sera créée pour vous. Cependant, cela peut poser problème si vous ne redémarrez pas entièrement votre système. En effet, si par exemple vous lancez Chrome, celui-ci récupèrera les autorités de votre système lors du démarrage. Ainsi, si les certificats locaux sont reconstruits, l’autorité aussi et Chrome n’aura pas la nouvelle autorité tout juste créée, du moins jusqu’à son prochain redémarrage.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>On remarque donc qu’on ajoute le &lt;code>rootCA.pem&lt;/code> dans les autorités du système. Ainsi, le système croira tous les certificats émis par cette autorité, c’est-à-dire la notre.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>En prime, j’ai ajouté une configuration pour dire à Traefik d’associer le certificat généré par défaut. C’est un exemple et certaines personnes pourraient vouloir l’implémenter autrement.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_et_voilà">Et voilà !&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="paragraph">
+&lt;p>Vous avez dorénavant une certification locale qui se régénère dès que vous ajoutez un site dans vos hosts.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div></description></item><item><title>Reverse Proxy sur NixOS</title><link>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</link><pubDate>Fri, 01 Jul 2022 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/reverse-proxy-nixos/cover.png" alt="Featured image of post Reverse Proxy sur NixOS" />&lt;div class="paragraph">
 &lt;p>J’ai jonglé entre 3 proxies récemment afin de pouvoir facilement rediriger des requêtes vers les services appropriés, que ce soit en utilisant Docker ou en utilisant des services exposant des ports.&lt;/p>
 &lt;/div>
 &lt;div class="sect1">
@@ -17,7 +167,10 @@ Il n’y en a pas nécessairement de meilleurs que d’autres, c’est juste que
 &lt;div class="sect2">
 &lt;h3 id="_nginx">Nginx&lt;/h3>
 &lt;div class="paragraph">
-&lt;p>C’est le premier proxy que j’ai utilisé, car c’est le serveur web que j’utilisais et qui permettait de facilement mettre en place cette fonctionnalité.&lt;/p>
+&lt;p>C’est le premier proxy que j’ai utilisé, car c’est le serveur web que j’utilisais et qui permettait de facilement mettre en place cette fonctionnalité. C’est aussi le serveur web majoritairement utilisé.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="nginx.png" alt="nginx"/>&lt;/span>&lt;/p>
 &lt;/div>
 &lt;div class="paragraph">
 &lt;p>La première chose à faire est de configurer le Acme challenge ainsi que 4 optimisations recommandées pour Nginx. Le premier servira bien entendu à générer automatiquement le certificat HTTPS pour notre site.&lt;/p>
@@ -64,7 +217,10 @@ Bref, rapidement j’ai trouvé que l’attribution arbitraire d’un port pour 
 &lt;div class="sect2">
 &lt;h3 id="_caddy_proxy">Caddy Proxy&lt;/h3>
 &lt;div class="paragraph">
-&lt;p>Celui-ci est légèrement différent. C’est une &lt;a href="https://github.com/lucaslorentz/caddy-docker-proxy" target="_blank" rel="noopener">image docker&lt;/a> qui a pour principe de se servir des labels associés à un container Docker pour le router.&lt;/p>
+&lt;p>Celui-ci est légèrement différent. À la base, &lt;a href="" target="_blank" rel="noopener">Caddy&lt;/a> est un serveur Web qui fournit beaucoup de fonctionnalité et se veut facile d’accès. Pour notre utilisation, c’est une &lt;a href="https://github.com/lucaslorentz/caddy-docker-proxy" target="_blank" rel="noopener">image docker&lt;/a> qui a pour principe de se servir des labels associés à un container Docker pour le router.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="caddy.png" alt="caddy"/>&lt;/span>&lt;/p>
 &lt;/div>
 &lt;div class="paragraph">
 &lt;p>Regardons comment &amp;#34;installer&amp;#34; le service the nix way :&lt;/p>
@@ -152,6 +308,9 @@ extraOptions = [
 &lt;/div>
 &lt;div class="paragraph">
 &lt;p>Traefik m’a alors été conseillé par un ami, et rempli totalement son rôle. On peut lui dire manuellement de forward tel host sur tel adresse et port, tout comme on peut bénéficier d’une configuration avec des labels via le Docker provider.&lt;/p>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>&lt;span class="image">&lt;img src="traefik.png" alt="traefik"/>&lt;/span>&lt;/p>
 &lt;/div>
 &lt;div class="paragraph">
 &lt;p>Voyons quelques prérequis qui expliquent la configuration :&lt;/p>
@@ -299,7 +458,7 @@ loadBalancer.servers = [
 &lt;div class="ulist">
 &lt;ul>
 &lt;li>
-&lt;p>Faire de la certification en local (Prochain article !)&lt;/p>
+&lt;p>&lt;a href="../reverse-proxy/">Faire de la certification en local&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>Faire du routing TCP/UDP&lt;/p>
