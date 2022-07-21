@@ -458,7 +458,7 @@ loadBalancer.servers = [
 &lt;div class="ulist">
 &lt;ul>
 &lt;li>
-&lt;p>&lt;a href="../reverse-proxy/">Faire de la certification en local&lt;/a>&lt;/p>
+&lt;p>&lt;a href="../local-certification/">Faire de la certification en local&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>Faire du routing TCP/UDP&lt;/p>
