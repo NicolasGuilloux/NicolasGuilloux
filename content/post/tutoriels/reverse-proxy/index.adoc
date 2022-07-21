@@ -17,7 +17,7 @@ tags:
 
 J'ai jonglé entre 3 proxies récemment afin de pouvoir facilement rediriger des requêtes vers les services appropriés, que ce soit en utilisant Docker ou en utilisant des services exposant des ports.
 
-== Les softwares
+== Let's get started
 
 J'ai expérimenté les proxies suivants dans l'ordre chronologique. Je vais passer en revue pourquoi je les ai utilisés, et pourquoi je les ai aussi abandonnés. +
 Il n'y en a pas nécessairement de meilleurs que d'autres, c'est juste que chacun trouve chaussure à son pied !
@@ -74,7 +74,7 @@ Bref, rapidement j'ai trouvé que l'attribution arbitraire d'un port pour évite
 
 === Caddy Proxy
 
-Celui-ci est légèrement différent. C'est une link:https://github.com/lucaslorentz/caddy-docker-proxy[image docker] qui a pour principe de se servir des labels associés à un container Docker pour le router.
+Celui-ci est légèrement différent. C'est une link:https://github.com/lucaslorentz/caddy-docker-proxy[image docker^] qui a pour principe de se servir des labels associés à un container Docker pour le router.
 
 Regardons comment "installer" le service the nix way :
 
