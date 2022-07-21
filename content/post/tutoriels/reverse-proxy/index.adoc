@@ -270,7 +270,7 @@ Traefik est pour moi la solution qui me convient le mieux, car elle réunit le m
 
 Il y a plusieurs fonctionnalités que j'ai ou vais explorer avec Traefik :
 
-* link:../reverse-proxy/[Faire de la certification en local]
+* link:../local-certification/[Faire de la certification en local]
 * Faire du routing TCP/UDP
 * Implémenter du monitoring
 * Implémenter + de securité (Crowdsec ?)
