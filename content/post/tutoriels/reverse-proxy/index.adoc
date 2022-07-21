@@ -1,7 +1,7 @@
 ---
 title: Reverse Proxy sur NixOS
 description: Un petit tour de mon implémentation d'un Reverse Proxy sur mon NixOS
-date: 2022-05-11
+date: 2022-07-01
 slug: reverse-proxy-nixos
 image: cover.png
 categories:
@@ -17,6 +17,7 @@ tags:
 
 J'ai jonglé entre 3 proxies récemment afin de pouvoir facilement rediriger des requêtes vers les services appropriés, que ce soit en utilisant Docker ou en utilisant des services exposant des ports.
 
+
 == Let's get started
 
 J'ai expérimenté les proxies suivants dans l'ordre chronologique. Je vais passer en revue pourquoi je les ai utilisés, et pourquoi je les ai aussi abandonnés. +
@@ -29,7 +30,10 @@ Pour des raisons de facilité, on va utiliser l'exemple d'un site web qui serait
 
 === Nginx
 
-C'est le premier proxy que j'ai utilisé, car c'est le serveur web que j'utilisais et qui permettait de facilement mettre en place cette fonctionnalité.
+
+C'est le premier proxy que j'ai utilisé, car c'est le serveur web que j'utilisais et qui permettait de facilement mettre en place cette fonctionnalité. C'est aussi le serveur web majoritairement utilisé.
+
+image:nginx.png[]
 
 La première chose à faire est de configurer le Acme challenge ainsi que 4 optimisations recommandées pour Nginx. Le premier servira bien entendu à générer automatiquement le certificat HTTPS pour notre site.
 
@@ -74,7 +78,9 @@ Bref, rapidement j'ai trouvé que l'attribution arbitraire d'un port pour évite
 
 === Caddy Proxy
 
-Celui-ci est légèrement différent. C'est une link:https://github.com/lucaslorentz/caddy-docker-proxy[image docker^] qui a pour principe de se servir des labels associés à un container Docker pour le router.
+Celui-ci est légèrement différent. À la base, link:[Caddy^] est un serveur Web qui fournit beaucoup de fonctionnalité et se veut facile d'accès. Pour notre utilisation, c'est une link:https://github.com/lucaslorentz/caddy-docker-proxy[image docker^] qui a pour principe de se servir des labels associés à un container Docker pour le router.
+
+image:caddy.png[]
 
 Regardons comment "installer" le service the nix way :
 
@@ -142,6 +148,8 @@ J'ai abandonné cette implémentation particulière d'un proxy car étant très 
 Ce qu'il me fallait, c'est le meilleur des deux mondes : placer des services natifs et des services dockerisés derrière un proxy. Si en plus je pouvais avoir une interface graphique pour debugger, ça serait parfait.
 
 Traefik m'a alors été conseillé par un ami, et rempli totalement son rôle. On peut lui dire manuellement de forward tel host sur tel adresse et port, tout comme on peut bénéficier d'une configuration avec des labels via le Docker provider.
+
+image:traefik.png[]
 
 Voyons quelques prérequis qui expliquent la configuration :
 
@@ -262,7 +270,7 @@ Traefik est pour moi la solution qui me convient le mieux, car elle réunit le m
 
 Il y a plusieurs fonctionnalités que j'ai ou vais explorer avec Traefik :
 
-* Faire de la certification en local (Prochain article !)
+* link:../reverse-proxy/[Faire de la certification en local]
 * Faire du routing TCP/UDP
 * Implémenter du monitoring
 * Implémenter + de securité (Crowdsec ?)
