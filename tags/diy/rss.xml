@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>diy on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/diy/</link><description>Recent content in diy on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Wed, 10 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/diy/rss.xml" rel="self" type="application/rss+xml"/><item><title>Mirint V2</title><link>https://nicolasguilloux.eu/articles/mirint-v2/</link><pubDate>Wed, 10 Mar 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mirint-v2/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mirint-v2/screen.jpg" alt="Featured image of post Mirint V2" />&lt;div class="paragraph">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Diy on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/diy/</link><description>Recent content in Diy on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Wed, 10 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/diy/rss.xml" rel="self" type="application/rss+xml"/><item><title>Mirint V2</title><link>https://nicolasguilloux.eu/articles/mirint-v2/</link><pubDate>Wed, 10 Mar 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mirint-v2/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mirint-v2/screen.jpg" alt="Featured image of post Mirint V2" />&lt;div class="paragraph">
 &lt;p>J’ai décidé de revoir mon &lt;a href="https://nicolasguilloux.eu/articles/mirint-v1">miroir intelligent&lt;/a> pour plusieurs raisons :&lt;/p>
 &lt;/div>
 &lt;div class="ulist">
@@ -322,8 +322,8 @@ gpio write 7 1&lt;/code>&lt;/pre>
 &lt;/div></description></item><item><title>Douglas</title><link>https://nicolasguilloux.eu/articles/douglas/</link><pubDate>Wed, 01 Jan 2014 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/douglas/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/douglas/cover.png" alt="Featured image of post Douglas" />&lt;p>Douglas est une enceinte Bluetooth Low-Cost. Une batterie pour portable recyclée, à peu près 15€ de l&amp;rsquo;huile de coude et vous voilà avec un objet essentiel pour toute sortie entre amis.
 Pourquoi l&amp;rsquo;ourson ? Parce que c&amp;rsquo;est mignon, ça protège bien le matériel qu&amp;rsquo;il y a dedans et que c&amp;rsquo;est original.&lt;/p>
 &lt;p>Douglas est fonctionnel, mais toujours en développement. En effet, je souhaite y apporter quelques fonctionnalités comme la visualisation de la charge de la batterie, le réveil de l&amp;rsquo;enceinte sans besoin de bouton physique (hormis pour l&amp;rsquo;appairage).&lt;/p>
-&lt;h1 id="version-1">Version 1&lt;/h1>
-&lt;p>Douglas a surtout pour principe de ne pas couter cher en achetant le minimum possible. Ainsi, seuls les objets ayant un lien dans la liste suivante ont été acheté, le reste étant de la récupération.&lt;/p>
+&lt;h1 id="version-1">Version 1
+&lt;/h1>&lt;p>Douglas a surtout pour principe de ne pas couter cher en achetant le minimum possible. Ainsi, seuls les objets ayant un lien dans la liste suivante ont été acheté, le reste étant de la récupération.&lt;/p>
 &lt;ul>
 &lt;li>Une batterie Li-Ion&lt;/li>
 &lt;li>Un amplificateur symétrique&lt;/li>
@@ -344,7 +344,7 @@ On colle dans un premier temps la batterie sur le circuit. Ensuite, on soude un 
 &lt;p>&lt;img src="https://nicolasguilloux.eu/articles/douglas/schema.png"
 width="947"
 height="536"
-srcset="https://nicolasguilloux.eu/articles/douglas/schema_hudedf8d59ca883a4390b4d9a69f859e5e_173385_480x0_resize_box_3.png 480w, https://nicolasguilloux.eu/articles/douglas/schema_hudedf8d59ca883a4390b4d9a69f859e5e_173385_1024x0_resize_box_3.png 1024w"
+srcset="https://nicolasguilloux.eu/articles/douglas/schema_hu11352489962141436590.png 480w, https://nicolasguilloux.eu/articles/douglas/schema_hu17030918485959813175.png 1024w"
 loading="lazy"
 alt="Schema"
 class="gallery-image"
@@ -356,7 +356,7 @@ data-flex-basis="424px"
 &lt;p>&lt;img src="https://nicolasguilloux.eu/articles/douglas/montage.jpg"
 width="1152"
 height="955"
-srcset="https://nicolasguilloux.eu/articles/douglas/montage_hu86b862263dc8a5c880bef30b8ea0599e_260275_480x0_resize_q75_box.jpg 480w, https://nicolasguilloux.eu/articles/douglas/montage_hu86b862263dc8a5c880bef30b8ea0599e_260275_1024x0_resize_q75_box.jpg 1024w"
+srcset="https://nicolasguilloux.eu/articles/douglas/montage_hu1449698822096385597.jpg 480w, https://nicolasguilloux.eu/articles/douglas/montage_hu4616292512162892966.jpg 1024w"
 loading="lazy"
 alt="Montage"
 class="gallery-image"
@@ -367,15 +367,15 @@ data-flex-basis="289px"
 &lt;p>&lt;img src="https://nicolasguilloux.eu/articles/douglas/speaker.jpg"
 width="849"
 height="1045"
-srcset="https://nicolasguilloux.eu/articles/douglas/speaker_hu704a7857007f13a26bf776070e1a4b58_133177_480x0_resize_q75_box.jpg 480w, https://nicolasguilloux.eu/articles/douglas/speaker_hu704a7857007f13a26bf776070e1a4b58_133177_1024x0_resize_q75_box.jpg 1024w"
+srcset="https://nicolasguilloux.eu/articles/douglas/speaker_hu69782485442868972.jpg 480w, https://nicolasguilloux.eu/articles/douglas/speaker_hu3644859748213854605.jpg 1024w"
 loading="lazy"
 alt="Speakers"
 class="gallery-image"
 data-flex-grow="81"
 data-flex-basis="194px"
 >&lt;/p>
-&lt;h1 id="pour-une-prochaine-version">Pour une prochaine version&lt;/h1>
-&lt;p>Douglas v1 souffrait de quelques petits problèmes ergonomiques.&lt;/p>
+&lt;h1 id="pour-une-prochaine-version">Pour une prochaine version
+&lt;/h1>&lt;p>Douglas v1 souffrait de quelques petits problèmes ergonomiques.&lt;/p>
 &lt;ul>
 &lt;li>Quand quelqu&amp;rsquo;un le serrait dans ses bras (ce qui arrivait souvent), cela pouvait appuyer sur le bouton situé au niveau du ventre. Un appui long redémarre le module ce qui est frustrant lorsque de la musique est en route.&lt;/li>
 &lt;li>Les boutons pour changer de chanson n&amp;rsquo;étaient quasiment jamais utilisés.&lt;/li>
@@ -392,7 +392,7 @@ data-flex-basis="194px"
 &lt;p>&lt;img src="https://nicolasguilloux.eu/articles/douglas/aux_module.png"
 width="700"
 height="542"
-srcset="https://nicolasguilloux.eu/articles/douglas/aux_module_huc7dc6da2c914796a17e11d4a73bf87d0_568546_480x0_resize_box_3.png 480w, https://nicolasguilloux.eu/articles/douglas/aux_module_huc7dc6da2c914796a17e11d4a73bf87d0_568546_1024x0_resize_box_3.png 1024w"
+srcset="https://nicolasguilloux.eu/articles/douglas/aux_module_hu11796249593996303290.png 480w, https://nicolasguilloux.eu/articles/douglas/aux_module_hu16934321203998357779.png 1024w"
 loading="lazy"
 alt="Aux module"
 class="gallery-image"
