@@ -10,21 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v2
         with:
           submodules: recursive
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
+      - uses: cachix/install-nix-action@v26
+      - uses: cachix/cachix-action@v14
         with:
-          hugo-version: '0.101.0'
-          extended: true
+          name: devenv
 
-      - name: Setup Asciidoc
-        run: sudo apt install asciidoctor
+      - name: Install devenv.sh
+        run: nix profile install nixpkgs#devenv
 
       - name: Build
-        run: hugo --minify
+        run: devenv shell build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v3

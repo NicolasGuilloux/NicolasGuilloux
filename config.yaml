@@ -1,7 +1,8 @@
 baseurl: https://nicolasguilloux.eu
 languageCode: fr-fr
 theme: hugo-theme-stack
-paginate: 5
+pagination:
+    pagerSize: 5
 title: Nicolas Guilloux
 
 # Change it to your Disqus shortname before using

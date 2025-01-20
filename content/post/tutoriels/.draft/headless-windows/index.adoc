@@ -1,0 +1,101 @@
+---
+title: Une VM Windows sur un serveur pour le jeu
+description: Les outils et astuces pour faire tourner Windows sur un serveur pour du gaming
+date: 2023-10-26
+slug: windows-vm-gaming
+draft: true
+categories:
+ - Tutoriels
+ - Notes
+tags:
+ - windows
+ - passthrough
+ - gaming
+ - nixos
+---
+
+On a tous rêvé d'avoir un ordinateur portable capable de faire tourner les jeux les plus gourmands, sans la batterie qui fond comme neige au soleil, ou les 10kg a mettre dans son sac à dos.
+
+C'est la promesse de link:https://shadow.tech/fr-FR[Shadow^], un service de location de PC à distance. J'ai été longtemps actif dans la communauté, mais je me suis écarté suites aux différents rachats, à la montée des prix. De plus, j'ai emménagé en campagne et je compte actuellement sur Starlink pour m'apporter mon précieux internet. Clairement incompatible avec le cloud gaming.
+
+Mais l'idée reste intéressante. Et pourquoi pas faire son propre "cloud gaming" local après tout ? Ca permettrait de jouer sur mon Macbook, sur ma télévision, sur mon téléphone. Un autre avantage : mon serveur n'est pas dans mon bureau, donc on évite les 30°C en été dès que je fais quelques parties avec un bruit d'hélicoptère. Et en plus, c'est plus aéré là où il est, le meilleur des mondes !
+
+Je vais découper cet article en plusieurs parties distinctes, vous pouvez piocher dedans de manière indépendante. 
+
+
+== Construire notre machine virtuelle
+
+IMPORTANT: Une machine virtuelle sous Windows ne pourra pas faire tourner certains jeux. Le seul que j'ai en tête, c'est Valorant avec son fameux Vanguard qui vous impose d'avoir une machine "physique". Je sais qu'à l'époque, Shadow avait essayé de dialoguer avec Riot pour trouver une solution, mais sans succès. Vous pouvez aussi trouver des "tutos" pour contourner ça, mais gardez bien à l'esprit que ça peut vous valoir un ban définitif. Personnellement, j'ai juste dis "Au revoir Valorant", car de toute manière j'en avais fait le tour.
+
+En premier lieu, je me suis dis que c'est une couche de complexité supplémentaire inutile. Puis j'ai commencé à faire du Homelab, et je me suis rendu compte que je jouais 1 ou 2 soirs par semaine. Et si mon PC de Gamer servait justement de serveur sous stéroïde, mais qu'il se transformait en machine de jeu quand j'en ai besoin ?
+
+Voilà l'idée : quand je ne joue pas, plein de services tournent dessus. Quand je veux jouer, la VM Windows se lance et récupère quasiment toutes les ressources, et ça de manière transparente. Pour moi, le meilleur des 2 mondes !
+
+=== Glossaire
+
+On va vraiment utiliser du jargon, mais pas de panique rien n'est compliqué quand on prend le temps de définir les choses.
+
+* **Host** : C'est l'OS original, celui directement installé sur votre machine. Ce sera forcément un Linux pour ce tutoriel
+* **Guest** : C'est la machine virtuelle, ou même l'OS qui tourne dessus. Dans notre cas, ce sera Windows 11. On pourra aussi l'appeler VM, pour Virtual Machine.
+* **Groupes IOMMU** : Quand c'est supporté, la machine au niveau du hardware créer des groupes de périphériques. Pour un ordre de grandeur, j'ai une 20aine de groupes mais il y a beaucoup d'appareils ! Donc plusieurs appareils peuvent se retrouver dans le même groupe.
+* **Passthrough** : On cherche à passer notre GPU à notre VM, on appelle ça Passthrough to VM (passer à travers la VM littéralement)
+
+=== Pré-requis
+
+Si il est admis que votre Host est sous Linux, je détaillerais particulièrement pour NixOS.
+
+Il vous faut une machine qui supporte les technologies de virtualisation, et qu'il supporte les link:https://iommu.info/#:~:text=An%20IOMMU%20group%20is%20the,can%20only%20be%20passed%20together[groupes IOMMU^]. 
+
+Les informations sur le support de la virtualisation se trouvent généralement dans le Bios. On cherche `VT-d` pour Intel, ou `AMD-Vi` pour AMD. +
+Pour les groupes IOMMU, assurez-vous que la carte graphique est seule dans son groupe. Si ce n'est pas le cas, essayez de la changer de port.
+
+NOTE: Pour passer un périphérique, il faut au préalable que tous les périphériques du groupe soient détachés du Host. On verra ça plus tard, mais il est très primordiale que la carte graphique soit seule dans son groupe ou à minima dans un groupe avec des appareils non essentiels au Host.
+
+Quoi qu'il arrive, suivez *scrupuleusement* les instructions de cette linkhttps://github.com/bryansteiner/gpu-passthrough-tutorial#----part-1-prerequisites[documentation^]. pour les prérequis. 
+
+NOTE: Sur cette documentation, il demande 2 cartes graphiques, on n'en a besoin que d'une, et d'un accès SSH pour avoir accès au Host.
+
+=== Entrons dans le vif du sujet
+
+On va utiliser libvirt 
+
+
+== Le streaming
+
+IMPORTANT: Si votre plan est d'avoir votre machine virtuelle Windows sur le même ordinateur que vous utilisez au quotidien, je vous conseille de ne pas lire la suite et de directement jeter un coup d'oeil à link:https://looking-glass.io/[Looking Glass^] qui permet de "stream" votre VM Windows directement sur votre Host Linux. C'est très pratique, et ça permet de ne pas avoir à jongler entre 2 ordinateurs. Vous devrez avoir 2 cartes graphiques part contre.
+
+Notre Windows tourne bien, et on souhaite pouvoir y accéder à distance en passant par notre réseau local ou même internet. Plusieurs solutions existent, on va détailler notre choix afin d'avoir la meilleure expérience possible.
+
+=== Le glossaire
+
+Et on repart pour un glossaire pour être sûr des termes.
+
+* **Headless** : littéralement sans tête, c'est typiquement un serveur sans écran, sans clavier, sans souris. On y accède à distance, et on n'a pas vraiment de matériel pour interagir en direct avec.
+
+
+=== Le choix des logiciels
+
+Plusieurs logiciels existent dans la nature qui propose du streaming :
+
+* link:https://parsec.app[Parsec^] est le logiciel le plus connu. Il est très simple d'utilisation, et propose une qualité satisfaisante. Il est disponible sur beaucoup de plateforme, et propose vraiment une expérience quasi plug'n'play. Toutefois, certaines fonctionnalités sont payantes (comme une meilleur colorimétrie ou certaines résolutions + rafraichissement), et il n'est pas OpenSource même s'il embrasse quelques idées. Certaines choses sont très bien par contre, notamment la notion de plusieurs personnes qui peuvent profiter du stream.
+
+* link:https://www.nvidia.com/fr-fr/drivers/geforce-experience-gamestream/[Nvidia GameStream^] ou devrais-je dire feu GameStream. C'est le logiciel de Nvidia, et il est intégré dans Geforce Experience. Il est très simple d'utilisation, et propose une excellente qualité. Il y avait de l'idée en capturant l'image à la sortie du buffer plutôt qu'une fois affichée sur l'écran. Mais bon, c'est Nvidia, c'est très propriétaire, ça ne fonctionne que sur Nvidia avec les logiciels Nvidia optimisés pour du Nvidia. De plus, ils ont abandonné la technologie. Donc on va passer notre chemin.
+
+* link:https://store.steampowered.com/app/353380/Steam_Link/?l=french[Steam Link^] a ses chances, mais je trouve le stream trop instable. De plus, c'est très fortement lié à Steam, ça vous force à ajouter les jeux d'une manière ou d'une autre dans Steam, ou à aller sur bureau pour faire vos affaires.
+
+* link:https://github.com/LizardByte/Sunshine[Sunshine^] est une réimplémentation du Nvidia GameStream mais compatible Intel, AMD, Nvidia et même pure Software même si ce dernier n'est pas souhaitable. Aucune restriction, 100% OpenSource, et il marche bougrement bien.
+
+* Les serveurs VNC, Spice, etc., oubliez tout de suite. Ce n'est clairement pas optimisé pour de la faible latence ou de la qualité. C'est très bien pour de l'administration, mais pas pour du jeu.
+
+Le grand gagnant est link:https://github.com/LizardByte/Sunshine[Sunshine^]. 
+
+=== Installation
+
+Téléchargez et installer link:https://github.com/LizardByte/Sunshine/releases/tag/v0.21.0[sunshine-windows-installer.exe^] sur votre VM Windows.+
+Suivez l'installeur, précisez bien que vous voulez lancer Sunshine au démarrage de la machine. 
+
+J'aimerais vous dire que c'est tout, mais il reste une dernière chose à faire : il n'y a pas d'écran de branché. Et c'est un soucis, comment la carte graphique peut générer une image pour quelque chose qui n'existe pas ? On va donc devoir utiliser une astuce qui permet de faire croire à notre Windows qu'on a bel et bien un écran de branché, et qu'en plus il supporte plein de résolutions !
+
+Suivez pour cela bien les instructions du link:https://github.com/itsmikethetech/Virtual-Display-Driver#installation[Virtual Display Driver^]. Au lieu de lancer le `.bat` directement, je vous conseille plutôt de le lancer à partir d'un Invite de commande ouvert en administrateur. Cela permet de voir les erreurs si il y en a, et ça ne fonctionnait pas pour ma part en direct.
+
+Ca y est, vous pouvez débrancher votre écran et votre clavier/souris, et vous pouvez vous connecter à distance à votre VM Windows !

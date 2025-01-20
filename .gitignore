@@ -10,3 +10,12 @@ resources
 public
 .cache
 .hugo_build.lock
+
+# Devenv
+.devenv*
+devenv.local.nix
+.direnv
+.devenv
+
+# pre-commit
+.pre-commit-config.yaml
