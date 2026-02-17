@@ -1,6 +1,8 @@
-{ pkgs, lib, config, inputs, ... }:
+{ pkgs, ... }:
 
 {
+  imports = [ ./devenv.ai.nix ];
+
   # https://devenv.sh/packages/
   packages = with pkgs; [
     git

@@ -19,3 +19,18 @@ devenv.local.nix
 
 # pre-commit
 .pre-commit-config.yaml
+
+# Claude
+.claude
+.mcp.json
+
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
