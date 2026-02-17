@@ -1,63 +1,63 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nixos on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/nixos/</link><description>Recent content in Nixos on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Thu, 21 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/nixos/rss.xml" rel="self" type="application/rss+xml"/><item><title>Certification locale</title><link>https://nicolasguilloux.eu/articles/local-certification/</link><pubDate>Thu, 21 Jul 2022 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/local-certification/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/local-certification/cover.png" alt="Featured image of post Certification locale" />&lt;div class="paragraph">
-&lt;p>La certification locale est très utile majoritairement pour du développement local.
-Il s’agit de fournir un certificat pour chaque domaine hébergé sur la machine, et que la fameuse page vous disant que le site est dangereux disparaisse.&lt;/p>
-&lt;/div>
-&lt;div class="sect1">
-&lt;h2 id="_comment_fonctionne_un_certificat">Comment fonctionne un certificat&lt;/h2>
-&lt;div class="sectionbody">
-&lt;div class="paragraph">
-&lt;p>Tout d’abord, un certificat sert à garantir l’authenticité d’un site par l’intermédiaire une autorité de confiance abrégée CA pour Certification Authority.
-Je vais faire un exemple.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>&lt;span class="image">&lt;img src="certification_workflow.png" alt="certification workflow"/>&lt;/span>&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Je souhaite certifier que le site &lt;code>blog.nicolasguilloux.eu&lt;/code> est à moi auprès d’un CA (par exemple &lt;a href="https://letsencrypt.org/fr/" target="_blank" rel="noopener">Let’s Encrypt&lt;/a>). Il va alors se passer plusieurs choses successivement :&lt;/p>
-&lt;/div>
-&lt;div class="olist arabic">
-&lt;ol class="arabic">
-&lt;li>
-&lt;p>Je créé un couple de clé privée et clé publique.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>Je demande au CA de me donner un challenge pour qu’il vérifie que je contrôle bien l’adresse en question&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>Généralement, c’est un texte que l’on doit fournir à une URL précise (par exemple mettre le texte &lt;code>ed98&lt;/code> dans l’URL &lt;a href="https://blog.nicolasguilloux.eu/8303" class="bare">https://blog.nicolasguilloux.eu/8303&lt;/a>) et de le signer avec ma clé privée.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>Le CA vérifie alors que le challenge est OK en déchiffrant le contenu de ladite page avec la clé publique qu’on lui fournit.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>Le CA enregistre alors cette clé publique et la fournie à qui veut vérifier la certification du site &lt;code>blog.nicolasguilloux.eu&lt;/code>&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Ainsi, une personne lambda qui accède au site demande la clé publique au CA et vérifie le certificat fourni par le site avec chaque requête HTTPS avec celle-ci pour vérifier que je suis bien le propriétaire du site.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Pour plus d’information, vous pouvez consulter la &lt;a href="https://letsencrypt.org/fr/how-it-works/" target="_blank" rel="noopener">documentation&lt;/a> de Let’s Encrypt. L’image précédente est d’ailleurs tirée de cette page.&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;/div>
-&lt;div class="sect1">
-&lt;h2 id="_notre_certification_custom">Notre certification custom&lt;/h2>
-&lt;div class="sectionbody">
-&lt;div class="paragraph">
-&lt;p>Quand on demande une page https sans fournir de certificat, notre navigateur nous met en garde que ce n’est pas sécurisé, car il ne peut pas vérifier la source des informations données.
-On va donc y remédier en créant un certificat par nous même, et en disant au système que l’autorité de confiance que nous avons créée est justement de confiance.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On remarque qu’on ne s’occupera pas de la partie challenge, qui est uniquement là pour que le CA nous croit notre légitimité. Ici, on est légitime, on détient de le système. Et le CA, c’est nous, on fait ce qu’on veut !&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On va créer une dérivation qui va générer les certificats grâce à la liste des domaines qu’on lui aura fournis ainsi que l’éventuelle autorité de certification qu’on lui aura donné.&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">{ stdenv
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nixos on Nicolas Guilloux</title><link>https://nicolasguilloux.eu/tags/nixos/</link><description>Recent content in Nixos on Nicolas Guilloux</description><generator>Hugo -- gohugo.io</generator><language>fr-fr</language><lastBuildDate>Thu, 21 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://nicolasguilloux.eu/tags/nixos/rss.xml" rel="self" type="application/rss+xml"/><item><title>Certification locale</title><link>https://nicolasguilloux.eu/articles/local-certification/</link><pubDate>Thu, 21 Jul 2022 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/local-certification/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/local-certification/cover.png" alt="Featured image of post Certification locale" /&gt;&lt;div class="paragraph"&gt;
+&lt;p&gt;La certification locale est très utile majoritairement pour du développement local.
+Il s’agit de fournir un certificat pour chaque domaine hébergé sur la machine, et que la fameuse page vous disant que le site est dangereux disparaisse.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="sect1"&gt;
+&lt;h2 id="_comment_fonctionne_un_certificat"&gt;Comment fonctionne un certificat&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Tout d’abord, un certificat sert à garantir l’authenticité d’un site par l’intermédiaire une autorité de confiance abrégée CA pour Certification Authority.
+Je vais faire un exemple.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;span class="image"&gt;&lt;img src="certification_workflow.png" alt="certification workflow"/&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Je souhaite certifier que le site &lt;code&gt;blog.nicolasguilloux.eu&lt;/code&gt; est à moi auprès d’un CA (par exemple &lt;a href="https://letsencrypt.org/fr/" target="_blank" rel="noopener"&gt;Let’s Encrypt&lt;/a&gt;). Il va alors se passer plusieurs choses successivement :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="olist arabic"&gt;
+&lt;ol class="arabic"&gt;
+&lt;li&gt;
+&lt;p&gt;Je créé un couple de clé privée et clé publique.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Je demande au CA de me donner un challenge pour qu’il vérifie que je contrôle bien l’adresse en question&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Généralement, c’est un texte que l’on doit fournir à une URL précise (par exemple mettre le texte &lt;code&gt;ed98&lt;/code&gt; dans l’URL &lt;a href="https://blog.nicolasguilloux.eu/8303" class="bare"&gt;https://blog.nicolasguilloux.eu/8303&lt;/a&gt;) et de le signer avec ma clé privée.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Le CA vérifie alors que le challenge est OK en déchiffrant le contenu de ladite page avec la clé publique qu’on lui fournit.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Le CA enregistre alors cette clé publique et la fournie à qui veut vérifier la certification du site &lt;code&gt;blog.nicolasguilloux.eu&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Ainsi, une personne lambda qui accède au site demande la clé publique au CA et vérifie le certificat fourni par le site avec chaque requête HTTPS avec celle-ci pour vérifier que je suis bien le propriétaire du site.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Pour plus d’information, vous pouvez consulter la &lt;a href="https://letsencrypt.org/fr/how-it-works/" target="_blank" rel="noopener"&gt;documentation&lt;/a&gt; de Let’s Encrypt. L’image précédente est d’ailleurs tirée de cette page.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect1"&gt;
+&lt;h2 id="_notre_certification_custom"&gt;Notre certification custom&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Quand on demande une page https sans fournir de certificat, notre navigateur nous met en garde que ce n’est pas sécurisé, car il ne peut pas vérifier la source des informations données.
+On va donc y remédier en créant un certificat par nous même, et en disant au système que l’autorité de confiance que nous avons créée est justement de confiance.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On remarque qu’on ne s’occupera pas de la partie challenge, qui est uniquement là pour que le CA nous croit notre légitimité. Ici, on est légitime, on détient de le système. Et le CA, c’est nous, on fait ce qu’on veut !&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On va créer une dérivation qui va générer les certificats grâce à la liste des domaines qu’on lui aura fournis ainsi que l’éventuelle autorité de certification qu’on lui aura donné.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code class="language-nix" data-lang="nix"&gt;{ stdenv
 , mkcert
 , domains ? [ &amp;#34;local&amp;#34; &amp;#34;*.local&amp;#34; ]
 , authority ? null
@@ -86,20 +86,20 @@ ${mkcert}/bin/mkcert \
 -key-file $out/ssl/local-key.pem \
 ${domainsToString}
 &amp;#39;&amp;#39;;
-}&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;/div>
-&lt;/div>
-&lt;div class="sect1">
-&lt;h2 id="_lintégration_dans_le_système">L’intégration dans le système&lt;/h2>
-&lt;div class="sectionbody">
-&lt;div class="paragraph">
-&lt;p>Regardons maintenant son intégration dans la configuration générale de NixOS.&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">{ config, lib, pkgs, ... }:
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect1"&gt;
+&lt;h2 id="_lintégration_dans_le_système"&gt;L’intégration dans le système&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Regardons maintenant son intégration dans la configuration générale de NixOS.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code class="language-nix" data-lang="nix"&gt;{ config, lib, pkgs, ... }:
 let
 localCerts = pkgs.callPackage ./local-certs.nix {
 domains = config.networking.hosts.&amp;#34;127.0.0.1&amp;#34;;
@@ -124,75 +124,75 @@ certFile = &amp;#34;${localCerts}/ssl/local-cert.pem&amp;#34;;
 keyFile = &amp;#34;${localCerts}/ssl/local-key.pem&amp;#34;;
 };
 };
-}&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On peut déjà constater que je build la dérivation précédemment mentionnée afin de pouvoir l’exploiter ensuite. Comme domaine, je donne tous ceux qui renvoient vers mon localhost. Je brasse large, mais c’est plus simple ainsi.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On remarque aussi que j’ai commenté le &lt;code>authority&lt;/code>. Si vous avez déjà créé l’autorité, vous pouvez l’utiliser sinon une sera créée pour vous. Cependant, cela peut poser problème si vous ne redémarrez pas entièrement votre système. En effet, si par exemple vous lancez Chrome, celui-ci récupèrera les autorités de votre système lors du démarrage. Ainsi, si les certificats locaux sont reconstruits, l’autorité aussi et Chrome n’aura pas la nouvelle autorité tout juste créée, du moins jusqu’à son prochain redémarrage.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On remarque donc qu’on ajoute le &lt;code>rootCA.pem&lt;/code> dans les autorités du système. Ainsi, le système croira tous les certificats émis par cette autorité, c’est-à-dire la notre.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>En prime, j’ai ajouté une configuration pour dire à Traefik d’associer le certificat généré par défaut. C’est un exemple et certaines personnes pourraient vouloir l’implémenter autrement.&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;/div>
-&lt;div class="sect1">
-&lt;h2 id="_et_voilà">Et voilà !&lt;/h2>
-&lt;div class="sectionbody">
-&lt;div class="paragraph">
-&lt;p>Vous avez dorénavant une certification locale qui se régénère dès que vous ajoutez un site dans vos hosts.&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;/div></description></item><item><title>Reverse Proxy sur NixOS</title><link>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</link><pubDate>Fri, 01 Jul 2022 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/reverse-proxy-nixos/cover.png" alt="Featured image of post Reverse Proxy sur NixOS" />&lt;div class="paragraph">
-&lt;p>J’ai jonglé entre 3 proxies récemment afin de pouvoir facilement rediriger des requêtes vers les services appropriés, que ce soit en utilisant Docker ou en utilisant des services exposant des ports.&lt;/p>
-&lt;/div>
-&lt;div class="sect1">
-&lt;h2 id="_lets_get_started">Let’s get started&lt;/h2>
-&lt;div class="sectionbody">
-&lt;div class="paragraph">
-&lt;p>J’ai expérimenté les proxies suivants dans l’ordre chronologique. Je vais passer en revue pourquoi je les ai utilisés, et pourquoi je les ai aussi abandonnés.&lt;br/>
-Il n’y en a pas nécessairement de meilleurs que d’autres, c’est juste que chacun trouve chaussure à son pied !&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>J’avais aussi utilisé une configuration qui permettait de facilement jongler entre les différents services en adaptant le module sans pour autant rajouter de configuration. C’est d’ailleurs l’un des gros avantages de NixOS : pouvoir dissocier la configuration de l’implémentation. Vous pouvez voir le code &lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/tree/master/modules/reverse-proxies" target="_blank" rel="noopener">ici&lt;/a>.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Pour des raisons de facilité, on va utiliser l’exemple d’un site web qui serait à l’adresse &lt;code>blog.nicolasguilloux.eu&lt;/code> et qui serait disponible en local sur le port 8080. Bien entendu, on souhaite que le site soit en &lt;code>https&lt;/code>.&lt;/p>
-&lt;/div>
-&lt;div class="sect2">
-&lt;h3 id="_nginx">Nginx&lt;/h3>
-&lt;div class="paragraph">
-&lt;p>C’est le premier proxy que j’ai utilisé, car c’est le serveur web que j’utilisais et qui permettait de facilement mettre en place cette fonctionnalité. C’est aussi le serveur web majoritairement utilisé.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>&lt;span class="image">&lt;img src="nginx.png" alt="nginx"/>&lt;/span>&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>La première chose à faire est de configurer le Acme challenge ainsi que 4 optimisations recommandées pour Nginx. Le premier servira bien entendu à générer automatiquement le certificat HTTPS pour notre site.&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix"># ACME Challenge
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On peut déjà constater que je build la dérivation précédemment mentionnée afin de pouvoir l’exploiter ensuite. Comme domaine, je donne tous ceux qui renvoient vers mon localhost. Je brasse large, mais c’est plus simple ainsi.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On remarque aussi que j’ai commenté le &lt;code&gt;authority&lt;/code&gt;. Si vous avez déjà créé l’autorité, vous pouvez l’utiliser sinon une sera créée pour vous. Cependant, cela peut poser problème si vous ne redémarrez pas entièrement votre système. En effet, si par exemple vous lancez Chrome, celui-ci récupèrera les autorités de votre système lors du démarrage. Ainsi, si les certificats locaux sont reconstruits, l’autorité aussi et Chrome n’aura pas la nouvelle autorité tout juste créée, du moins jusqu’à son prochain redémarrage.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On remarque donc qu’on ajoute le &lt;code&gt;rootCA.pem&lt;/code&gt; dans les autorités du système. Ainsi, le système croira tous les certificats émis par cette autorité, c’est-à-dire la notre.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;En prime, j’ai ajouté une configuration pour dire à Traefik d’associer le certificat généré par défaut. C’est un exemple et certaines personnes pourraient vouloir l’implémenter autrement.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect1"&gt;
+&lt;h2 id="_et_voilà"&gt;Et voilà !&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Vous avez dorénavant une certification locale qui se régénère dès que vous ajoutez un site dans vos hosts.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Reverse Proxy sur NixOS</title><link>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</link><pubDate>Fri, 01 Jul 2022 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/reverse-proxy-nixos/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/reverse-proxy-nixos/cover.png" alt="Featured image of post Reverse Proxy sur NixOS" /&gt;&lt;div class="paragraph"&gt;
+&lt;p&gt;J’ai jonglé entre 3 proxies récemment afin de pouvoir facilement rediriger des requêtes vers les services appropriés, que ce soit en utilisant Docker ou en utilisant des services exposant des ports.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="sect1"&gt;
+&lt;h2 id="_lets_get_started"&gt;Let’s get started&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;J’ai expérimenté les proxies suivants dans l’ordre chronologique. Je vais passer en revue pourquoi je les ai utilisés, et pourquoi je les ai aussi abandonnés.&lt;br/&gt;
+Il n’y en a pas nécessairement de meilleurs que d’autres, c’est juste que chacun trouve chaussure à son pied !&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;J’avais aussi utilisé une configuration qui permettait de facilement jongler entre les différents services en adaptant le module sans pour autant rajouter de configuration. C’est d’ailleurs l’un des gros avantages de NixOS : pouvoir dissocier la configuration de l’implémentation. Vous pouvez voir le code &lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/tree/master/modules/reverse-proxies" target="_blank" rel="noopener"&gt;ici&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Pour des raisons de facilité, on va utiliser l’exemple d’un site web qui serait à l’adresse &lt;code&gt;blog.nicolasguilloux.eu&lt;/code&gt; et qui serait disponible en local sur le port 8080. Bien entendu, on souhaite que le site soit en &lt;code&gt;https&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="sect2"&gt;
+&lt;h3 id="_nginx"&gt;Nginx&lt;/h3&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;C’est le premier proxy que j’ai utilisé, car c’est le serveur web que j’utilisais et qui permettait de facilement mettre en place cette fonctionnalité. C’est aussi le serveur web majoritairement utilisé.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;span class="image"&gt;&lt;img src="nginx.png" alt="nginx"/&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;La première chose à faire est de configurer le Acme challenge ainsi que 4 optimisations recommandées pour Nginx. Le premier servira bien entendu à générer automatiquement le certificat HTTPS pour notre site.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code class="language-nix" data-lang="nix"&gt;# ACME Challenge
 security.acme.acceptTerms = true;
 security.acme.defaults.email = &amp;#34;nicolas.guilloux@proton.me&amp;#34;;
 # Use recommended settings
 services.nginx.recommendedGzipSettings = lib.mkDefault true;
 services.nginx.recommendedOptimisation = lib.mkDefault true;
 services.nginx.recommendedProxySettings = lib.mkDefault true;
-services.nginx.recommendedTlsSettings = lib.mkDefault true;&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Ensuite, il nous faut dire à Nginx de rediriger le traffic entrant de &lt;code>blog.nicolasguilloux.eu&lt;/code> vers le port 8080. Pour ce faire, nous allons déclarer une virtual host, lui donner quelques configurations relatives au SSL et au proxy, mais surtout lui dire de rediriger tout le traffic vers la bonne adresse. La configuration parle d’elle-même :&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">services.nginx.virtualHosts.&amp;#34;blog.nicolasguilloux.eu&amp;#34; = {
+services.nginx.recommendedTlsSettings = lib.mkDefault true;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Ensuite, il nous faut dire à Nginx de rediriger le traffic entrant de &lt;code&gt;blog.nicolasguilloux.eu&lt;/code&gt; vers le port 8080. Pour ce faire, nous allons déclarer une virtual host, lui donner quelques configurations relatives au SSL et au proxy, mais surtout lui dire de rediriger tout le traffic vers la bonne adresse. La configuration parle d’elle-même :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code class="language-nix" data-lang="nix"&gt;services.nginx.virtualHosts.&amp;#34;blog.nicolasguilloux.eu&amp;#34; = {
 forceSSL = true;
 enableACME = true;
 extraConfig = &amp;#34;proxy_buffering off&amp;#34;;
@@ -205,54 +205,54 @@ extraConfig =
 # required when the server wants to use HTTP Authentication
 &amp;#34;proxy_pass_header Authorization;&amp;#34;;
 };
-};&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Nginx était bien mais nécessitait que le service en question expose un port pour être accessible. Comme je travaille beaucoup avec des images Docker, l’utiliser était devenu de plus en plus fastidieux car je devais réfléchir à quel port j’exposais.
-Si par exemple j’avais deux sites exposés sur le port 80, je devais choisir de l’exposer l’un sur le port 8080 et l’autre sur le port 8081.&lt;br/>
-Bref, rapidement j’ai trouvé que l’attribution arbitraire d’un port pour éviter les conflits n’était pas pérenne dans le temps.&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;div class="sect2">
-&lt;h3 id="_caddy_proxy">Caddy Proxy&lt;/h3>
-&lt;div class="paragraph">
-&lt;p>Celui-ci est légèrement différent. À la base, &lt;a href="" target="_blank" rel="noopener">Caddy&lt;/a> est un serveur Web qui fournit beaucoup de fonctionnalité et se veut facile d’accès. Pour notre utilisation, c’est une &lt;a href="https://github.com/lucaslorentz/caddy-docker-proxy" target="_blank" rel="noopener">image docker&lt;/a> qui a pour principe de se servir des labels associés à un container Docker pour le router.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>&lt;span class="image">&lt;img src="caddy.png" alt="caddy"/>&lt;/span>&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Regardons comment &amp;#34;installer&amp;#34; le service the nix way :&lt;/p>
-&lt;/div>
-&lt;div class="ulist">
-&lt;ul>
-&lt;li>
-&lt;p>On va devoir déclarer une container qui utilisera le port 80 et 443 pour respectivement le http et https.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>On doit donner un petit nom au network Docker. Tout container appartenant à ce network sera analysé par caddy-proxy pour trouver éventuellement des labels le concernant.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>On l’ajoute bien entendu à ce dit network.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>On lui donne accès à notre socket Docker, pour qu’il puisse analyser les différents containers.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>On lui donne un espace pour stocker ses données.&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Une dernière configuration doit être ajoutée pour créer le network Docker avant de lancer le container pour éviter une erreur.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Voici donc la configuration correspondante :&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">let
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Nginx était bien mais nécessitait que le service en question expose un port pour être accessible. Comme je travaille beaucoup avec des images Docker, l’utiliser était devenu de plus en plus fastidieux car je devais réfléchir à quel port j’exposais.
+Si par exemple j’avais deux sites exposés sur le port 80, je devais choisir de l’exposer l’un sur le port 8080 et l’autre sur le port 8081.&lt;br/&gt;
+Bref, rapidement j’ai trouvé que l’attribution arbitraire d’un port pour éviter les conflits n’était pas pérenne dans le temps.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect2"&gt;
+&lt;h3 id="_caddy_proxy"&gt;Caddy Proxy&lt;/h3&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Celui-ci est légèrement différent. À la base, &lt;a href="" target="_blank" rel="noopener"&gt;Caddy&lt;/a&gt; est un serveur Web qui fournit beaucoup de fonctionnalité et se veut facile d’accès. Pour notre utilisation, c’est une &lt;a href="https://github.com/lucaslorentz/caddy-docker-proxy" target="_blank" rel="noopener"&gt;image docker&lt;/a&gt; qui a pour principe de se servir des labels associés à un container Docker pour le router.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;span class="image"&gt;&lt;img src="caddy.png" alt="caddy"/&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Regardons comment &amp;#34;installer&amp;#34; le service the nix way :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="ulist"&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;On va devoir déclarer une container qui utilisera le port 80 et 443 pour respectivement le http et https.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;On doit donner un petit nom au network Docker. Tout container appartenant à ce network sera analysé par caddy-proxy pour trouver éventuellement des labels le concernant.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;On l’ajoute bien entendu à ce dit network.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;On lui donne accès à notre socket Docker, pour qu’il puisse analyser les différents containers.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;On lui donne un espace pour stocker ses données.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Une dernière configuration doit être ajoutée pour créer le network Docker avant de lancer le container pour éviter une erreur.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Voici donc la configuration correspondante :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code class="language-nix" data-lang="nix"&gt;let
 dockerNetwork = &amp;#34;caddy-proxy&amp;#34;;
 in
 {
@@ -270,18 +270,18 @@ volumes = [
 systemd.services.docker-caddy-proxy.preStart = lib.mkAfter &amp;#39;&amp;#39;
 ${pkgs.docker}/bin/docker network create -d bridge ${dockerNetwork} || true
 &amp;#39;&amp;#39;;
-}&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Et voilà, ça fonctionne. On pourra noter une amélioration à apporter : le support de Podman. Pour l’instant, c’est hardcodé pour Docker à cause de preStart ainsi que du socket.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Si on regarde maintenant pour instancier un service qui passerait par ce proxy, on se retrouverait avec une configuration de ce genre :&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">let
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Et voilà, ça fonctionne. On pourra noter une amélioration à apporter : le support de Podman. Pour l’instant, c’est hardcodé pour Docker à cause de preStart ainsi que du socket.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Si on regarde maintenant pour instancier un service qui passerait par ce proxy, on se retrouverait avec une configuration de ce genre :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code class="language-nix" data-lang="nix"&gt;let
 dockerNetwork = &amp;#34;caddy-proxy&amp;#34;;
 in
 {
@@ -294,52 +294,52 @@ extraOptions = [
 &amp;#34;--label=caddy.reverse_proxy={{upstreams 8000}}&amp;#34;
 ];
 };
-}&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>J’ai abandonné cette implémentation particulière d’un proxy car étant très pratique pour du développement local avec Docker, elle ne permet pas de facilement placer un service natif derrière celui-ci. De plus, je n’ai pas exploré la possibilité du SSL car je n’envisageais pas cette solution sur mon serveur.&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;div class="sect2">
-&lt;h3 id="_traefik">Traefik&lt;/h3>
-&lt;div class="paragraph">
-&lt;p>Ce qu’il me fallait, c’est le meilleur des deux mondes : placer des services natifs et des services dockerisés derrière un proxy. Si en plus je pouvais avoir une interface graphique pour debugger, ça serait parfait.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Traefik m’a alors été conseillé par un ami, et rempli totalement son rôle. On peut lui dire manuellement de forward tel host sur tel adresse et port, tout comme on peut bénéficier d’une configuration avec des labels via le Docker provider.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>&lt;span class="image">&lt;img src="traefik.png" alt="traefik"/>&lt;/span>&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Voyons quelques prérequis qui expliquent la configuration :&lt;/p>
-&lt;/div>
-&lt;div class="ulist">
-&lt;ul>
-&lt;li>
-&lt;p>Traefik doit avoir accès à Docker&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>On veut son Dashboard pour pouvoir facilement débugger&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>On doit configurer au moins deux points d’entrées : un pour le http et l’autre pour le https. Le http dans cette exemple redirigera vers le https.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>On doit configurer la génération des certificats&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>On souhaite par défaut que le dashboard soit accessible via &lt;code>&lt;a href="https://traefik.local" class="bare">https://traefik.local&lt;/a>&lt;/code>&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Avec tout ça en tête, on obtient alors la configuration par défaut suivante :&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">{ config, lib, pkgs, ... }:
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;J’ai abandonné cette implémentation particulière d’un proxy car étant très pratique pour du développement local avec Docker, elle ne permet pas de facilement placer un service natif derrière celui-ci. De plus, je n’ai pas exploré la possibilité du SSL car je n’envisageais pas cette solution sur mon serveur.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect2"&gt;
+&lt;h3 id="_traefik"&gt;Traefik&lt;/h3&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Ce qu’il me fallait, c’est le meilleur des deux mondes : placer des services natifs et des services dockerisés derrière un proxy. Si en plus je pouvais avoir une interface graphique pour debugger, ça serait parfait.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Traefik m’a alors été conseillé par un ami, et rempli totalement son rôle. On peut lui dire manuellement de forward tel host sur tel adresse et port, tout comme on peut bénéficier d’une configuration avec des labels via le Docker provider.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;span class="image"&gt;&lt;img src="traefik.png" alt="traefik"/&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Voyons quelques prérequis qui expliquent la configuration :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="ulist"&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Traefik doit avoir accès à Docker&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;On veut son Dashboard pour pouvoir facilement débugger&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;On doit configurer au moins deux points d’entrées : un pour le http et l’autre pour le https. Le http dans cette exemple redirigera vers le https.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;On doit configurer la génération des certificats&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;On souhaite par défaut que le dashboard soit accessible via &lt;code&gt;&lt;a href="https://traefik.local" class="bare"&gt;https://traefik.local&lt;/a&gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Avec tout ça en tête, on obtient alors la configuration par défaut suivante :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code class="language-nix" data-lang="nix"&gt;{ config, lib, pkgs, ... }:
 let
 localCertificationDirectory = config.security.localCertification.directory;
 in
@@ -393,30 +393,30 @@ if config.services.traefik.dynamicConfigOptions.http.routers.dashboard.rule == &
 [ &amp;#34;traefik.local&amp;#34; ]
 else
 [ ];
-}&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>À partir de là, on a un Traefik qui dispose d’un dashboard et qui surveille Docker, quel que soit le network.&lt;/p>
-&lt;/div>
-&lt;div class="admonitionblock note">
-&lt;table>
-&lt;tbody>&lt;tr>
-&lt;td class="icon">
-&lt;div class="title">Note&lt;/div>
-&lt;/td>
-&lt;td class="content">
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;À partir de là, on a un Traefik qui dispose d’un dashboard et qui surveille Docker, quel que soit le network.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="admonitionblock note"&gt;
+&lt;table&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td class="icon"&gt;
+&lt;div class="title"&gt;Note&lt;/div&gt;
+&lt;/td&gt;
+&lt;td class="content"&gt;
 Si jamais vous voulez manipuler des headers, il faut passer par des middlewares.
-&lt;/td>
-&lt;/tr>
-&lt;/tbody>&lt;/table>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Regardons déjà la déclaration d’un container pour qu’il soit cabler sur Traefik. L’attribution des labels est plutôt évidentes.&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">virtualisation.oci-containers.containers.whoami = {
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Regardons déjà la déclaration d’un container pour qu’il soit cabler sur Traefik. L’attribution des labels est plutôt évidentes.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code class="language-nix" data-lang="nix"&gt;virtualisation.oci-containers.containers.whoami = {
 autoStart = true;
 image = &amp;#34;jwilder/whoami&amp;#34;;
 extraOptions = [
@@ -428,70 +428,70 @@ extraOptions = [
 # Add certification
 # &amp;#34;--label=traefik.http.routers.whoami.tls.certresolver=acme-challenge&amp;#34;
 ];
-};&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Pour ajouter notre fameux blog, c’est-à-dire un service natif, on peut le faire de la manière suivante :&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code class="language-nix" data-lang="nix">services.traefik.dynamicConfigOptions.http.services.&amp;#34;blog.nicolasguilloux.eu&amp;#34; = {
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Pour ajouter notre fameux blog, c’est-à-dire un service natif, on peut le faire de la manière suivante :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code class="language-nix" data-lang="nix"&gt;services.traefik.dynamicConfigOptions.http.services.&amp;#34;blog.nicolasguilloux.eu&amp;#34; = {
 loadBalancer.servers = [
 { url = &amp;#34;http://127.0.0.1:8080&amp;#34;; }
 ];
-};&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Traefik est pour moi la solution qui me convient le mieux, car elle réunit le meilleur des deux précédents proxy, tout en proposant davantage. Le dashboard est très pratique pour surveiller le routing, et je pourrais explorer d’autres fonctionnalités à l’avenir comme le routing TCP/UDP.&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;/div>
-&lt;/div>
-&lt;div class="sect1">
-&lt;h2 id="_aller_plus_loin">Aller plus loin&lt;/h2>
-&lt;div class="sectionbody">
-&lt;div class="paragraph">
-&lt;p>Il y a plusieurs fonctionnalités que j’ai ou vais explorer avec Traefik :&lt;/p>
-&lt;/div>
-&lt;div class="ulist">
-&lt;ul>
-&lt;li>
-&lt;p>&lt;a href="../local-certification/">Faire de la certification en local&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>Faire du routing TCP/UDP&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>Implémenter du monitoring&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>Implémenter + de securité (Crowdsec ?)&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;/div>
-&lt;/div>
-&lt;/div></description></item><item><title>Le Bridge Signal pour Matrix</title><link>https://nicolasguilloux.eu/articles/mautrix-signal/</link><pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mautrix-signal/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mautrix-signal/cover.svg" alt="Featured image of post Le Bridge Signal pour Matrix" />&lt;div class="paragraph">
-&lt;p>Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d’aller lire le tutoriel précédent :
-&lt;a href="../matrix">Matrix sur NixOS&lt;/a>&lt;/p>
-&lt;/div>
-&lt;div class="sect1">
-&lt;h2 id="_telegram_messenger">Telegram Messenger&lt;/h2>
-&lt;div class="sectionbody">
-&lt;div class="paragraph">
-&lt;p>&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/signal.nix" target="_blank" rel="noopener">&lt;span class="image">&lt;img src="https://img.shields.io/badge/Gitlab-Mautrix%20Signal-orange" alt="Gitlab"/>&lt;/span>&lt;/a>&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Le bridge Signal supporte les conversations de groupe et les messages directs. Toutefois, toute conversation chiffrée ne sera pas supportée.&lt;br/>
-La petite particularité sur ce bridge est que Signal ne dispose pas d’une API. Ainsi, il va falloir utiliser une image Docker qui va simuler un accès Web à Signal.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Voici la configuration que je préconise :&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code>{ config, lib, ... }:
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Traefik est pour moi la solution qui me convient le mieux, car elle réunit le meilleur des deux précédents proxy, tout en proposant davantage. Le dashboard est très pratique pour surveiller le routing, et je pourrais explorer d’autres fonctionnalités à l’avenir comme le routing TCP/UDP.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect1"&gt;
+&lt;h2 id="_aller_plus_loin"&gt;Aller plus loin&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Il y a plusieurs fonctionnalités que j’ai ou vais explorer avec Traefik :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="ulist"&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="../local-certification/"&gt;Faire de la certification en local&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Faire du routing TCP/UDP&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Implémenter du monitoring&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Implémenter + de securité (Crowdsec ?)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Le Bridge Signal pour Matrix</title><link>https://nicolasguilloux.eu/articles/mautrix-signal/</link><pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mautrix-signal/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mautrix-signal/cover.svg" alt="Featured image of post Le Bridge Signal pour Matrix" /&gt;&lt;div class="paragraph"&gt;
+&lt;p&gt;Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d’aller lire le tutoriel précédent :
+&lt;a href="../matrix"&gt;Matrix sur NixOS&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="sect1"&gt;
+&lt;h2 id="_telegram_messenger"&gt;Telegram Messenger&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/signal.nix" target="_blank" rel="noopener"&gt;&lt;span class="image"&gt;&lt;img src="https://img.shields.io/badge/Gitlab-Mautrix%20Signal-orange" alt="Gitlab"/&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Le bridge Signal supporte les conversations de groupe et les messages directs. Toutefois, toute conversation chiffrée ne sera pas supportée.&lt;br/&gt;
+La petite particularité sur ce bridge est que Signal ne dispose pas d’une API. Ainsi, il va falloir utiliser une image Docker qui va simuler un accès Web à Signal.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Voici la configuration que je préconise :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code&gt;{ config, lib, ... }:
 let
 bridgeFolder = &amp;#34;/var/lib/mautrix-signal&amp;#34;;
 toListIfExists = path:
@@ -518,25 +518,25 @@ volumes = [
 };
 # Add configuration to Matrix server
 services.matrix-synapse.app_service_config_files = toListIfExists &amp;#34;${bridgeFolder}/data/registration.yaml&amp;#34;;
-}&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Si on résume, toutes les données sont stockées dans &lt;code>/var/lib/mautrix-signal&lt;/code>. On ajoute les image Docker qui permet de lancer le bridge.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>L’image &lt;code>signald&lt;/code> est le daemon pour pouvoir simuler une interface Web auprès de notre application Signal. C’est nécessaire pour pouvoir récupérer les messages en toute sécurité vu que Signal ne dispose pas d’API.&lt;br/>
-C’est aussi pour celà qu’on doit partager le volume où sont stockées toutes les informations (comme les avatars) entre le daemon et le bridge.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On va dès maintenant configurer ce dernier en éditant &lt;strong>en tant que root&lt;/strong> le fichier &lt;code>/var/lib/mautrix-signal/data/config.yaml&lt;/code>…​ Enfin faite votre &lt;code>nixos-rebuild switch&lt;/code> pour lancer le bridge.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code>homeserver:
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Si on résume, toutes les données sont stockées dans &lt;code&gt;/var/lib/mautrix-signal&lt;/code&gt;. On ajoute les image Docker qui permet de lancer le bridge.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;L’image &lt;code&gt;signald&lt;/code&gt; est le daemon pour pouvoir simuler une interface Web auprès de notre application Signal. C’est nécessaire pour pouvoir récupérer les messages en toute sécurité vu que Signal ne dispose pas d’API.&lt;br/&gt;
+C’est aussi pour celà qu’on doit partager le volume où sont stockées toutes les informations (comme les avatars) entre le daemon et le bridge.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On va dès maintenant configurer ce dernier en éditant &lt;strong&gt;en tant que root&lt;/strong&gt; le fichier &lt;code&gt;/var/lib/mautrix-signal/data/config.yaml&lt;/code&gt;…​ Enfin faite votre &lt;code&gt;nixos-rebuild switch&lt;/code&gt; pour lancer le bridge.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code&gt;homeserver:
 address: http://localhost:8008
 domain: server_name
 verify_ssl: false
@@ -548,83 +548,83 @@ data_dir: /signald/data
 bridge:
 permissions:
 &amp;#34;*&amp;#34;: user
-&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="ulist">
-&lt;ul>
-&lt;li>
-&lt;p>&lt;code>homeserver.address&lt;/code> : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>homeserver.domain&lt;/code> : C’est le &lt;code>server_name&lt;/code>, vous devez maintenance savoir ce que c’est :)&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>homeserver.verify_ssl&lt;/code> : Comme on est dans une boucle locale, par besoin de vérifier le SSL&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>signal.socket-path&lt;/code> : Socket pour dialoguer avec le daemon&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>signal.outgoing_attachment_dir&lt;/code> : Répertoire du daemon où sont mis les pièces jointes&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>signal.avatar_dir&lt;/code> : Répertoire du daemon où sont mis les avatars&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>signal.data_dir&lt;/code> : Répertoire du daemon où sont mis les autres données utiles aux bridges&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>bridge.permissions&lt;/code> : Ce sont les permissions. Pour ma part, j’ai mis &lt;code>&amp;#34;*&amp;#34;: user&lt;/code> pour que tous les utilisateurs puissent utiliser le bridge, et enfin &lt;code>&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code> pour que votre utilisateur puisse l’administrer&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Une fois ça fait, pensez à redémarrer votre image docker &lt;code>docker restart mautrix-signal&lt;/code> et faites ensuite un petit &lt;code>nixos-rebuild switch&lt;/code>. Normalement, &lt;code>matrix-synapse&lt;/code> se redémarrera car le fichier &lt;code>registration.yaml&lt;/code> existera.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Vous pouvez maintenant constater que vous pouvez parler au bot dans votre client Matrix en ouvrant une conversation avec &lt;code>@signalbot:server_name&lt;/code>.&lt;br/>
-Celui-ci devrait accepter votre invitation. Vous pouvez alors lui demander de l’aide comme il le propose.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>A partir d’ici vous avez plusieurs choix, car vous pouvez :&lt;/p>
-&lt;/div>
-&lt;div class="ulist">
-&lt;ul>
-&lt;li>
-&lt;p>Créer un compte de zéro en utilisant la commande &lt;code>register +33xxxxxxxxx&lt;/code>. Si vous n’avez pas signal sur votre téléphone, cela permettra de tout recevoir sur Matrix directement.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>Lier votre compte déjà existant, relié à votre téléphone, et forward tous les messages à Matrix en tapant &lt;code>link&lt;/code> et en scannant le QR Code.&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Une fois connecté, attendez un peu et vous allez recevoir plein d’invitations :) Bien joué, tout devrait fonctionner !&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;/div></description></item><item><title>Le Bridge Telegram pour Matrix</title><link>https://nicolasguilloux.eu/articles/mautrix-telegram/</link><pubDate>Mon, 05 Apr 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mautrix-telegram/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mautrix-telegram/cover.svg" alt="Featured image of post Le Bridge Telegram pour Matrix" />&lt;div class="paragraph">
-&lt;p>Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d’aller lire le tutoriel précédent :
-&lt;a href="../matrix">Matrix sur NixOS&lt;/a>&lt;/p>
-&lt;/div>
-&lt;div class="sect1">
-&lt;h2 id="_telegram_messenger">Telegram Messenger&lt;/h2>
-&lt;div class="sectionbody">
-&lt;div class="paragraph">
-&lt;p>&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/telegram.nix" target="_blank" rel="noopener">&lt;span class="image">&lt;img src="https://img.shields.io/badge/Gitlab-Mautrix%20Telegram-orange" alt="Gitlab"/>&lt;/span>&lt;/a>&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Le bridge de Telegram supporte quasiment toutes les fonctionnalités. La configuration est quasiment la même que pour
-&lt;a href="../mautrix-facebook">Mautrix Facebook&lt;/a>
-hormis un léger changement au niveau de la configuration d’une API.&lt;br/>
-Je n’ai volontairement pas suivi la configuration proposé par NixOS car je n’ai jamais réussi à la faire fonctionner, et je souhaite avoir une installation cohérente. Comme NixOS ne propose pas de module pour Mautrix Facebook, Mautrix Telegram et Mautrix Signal, je préfère les configurer de la même manière.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Voici la configuration que je préconise :&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code>{ config, lib, ... }:
+&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="ulist"&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;homeserver.address&lt;/code&gt; : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;homeserver.domain&lt;/code&gt; : C’est le &lt;code&gt;server_name&lt;/code&gt;, vous devez maintenance savoir ce que c’est :)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;homeserver.verify_ssl&lt;/code&gt; : Comme on est dans une boucle locale, par besoin de vérifier le SSL&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;signal.socket-path&lt;/code&gt; : Socket pour dialoguer avec le daemon&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;signal.outgoing_attachment_dir&lt;/code&gt; : Répertoire du daemon où sont mis les pièces jointes&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;signal.avatar_dir&lt;/code&gt; : Répertoire du daemon où sont mis les avatars&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;signal.data_dir&lt;/code&gt; : Répertoire du daemon où sont mis les autres données utiles aux bridges&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;bridge.permissions&lt;/code&gt; : Ce sont les permissions. Pour ma part, j’ai mis &lt;code&gt;&amp;#34;*&amp;#34;: user&lt;/code&gt; pour que tous les utilisateurs puissent utiliser le bridge, et enfin &lt;code&gt;&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code&gt; pour que votre utilisateur puisse l’administrer&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Une fois ça fait, pensez à redémarrer votre image docker &lt;code&gt;docker restart mautrix-signal&lt;/code&gt; et faites ensuite un petit &lt;code&gt;nixos-rebuild switch&lt;/code&gt;. Normalement, &lt;code&gt;matrix-synapse&lt;/code&gt; se redémarrera car le fichier &lt;code&gt;registration.yaml&lt;/code&gt; existera.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Vous pouvez maintenant constater que vous pouvez parler au bot dans votre client Matrix en ouvrant une conversation avec &lt;code&gt;@signalbot:server_name&lt;/code&gt;.&lt;br/&gt;
+Celui-ci devrait accepter votre invitation. Vous pouvez alors lui demander de l’aide comme il le propose.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;A partir d’ici vous avez plusieurs choix, car vous pouvez :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="ulist"&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Créer un compte de zéro en utilisant la commande &lt;code&gt;register +33xxxxxxxxx&lt;/code&gt;. Si vous n’avez pas signal sur votre téléphone, cela permettra de tout recevoir sur Matrix directement.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Lier votre compte déjà existant, relié à votre téléphone, et forward tous les messages à Matrix en tapant &lt;code&gt;link&lt;/code&gt; et en scannant le QR Code.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Une fois connecté, attendez un peu et vous allez recevoir plein d’invitations :) Bien joué, tout devrait fonctionner !&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Le Bridge Telegram pour Matrix</title><link>https://nicolasguilloux.eu/articles/mautrix-telegram/</link><pubDate>Mon, 05 Apr 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mautrix-telegram/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mautrix-telegram/cover.svg" alt="Featured image of post Le Bridge Telegram pour Matrix" /&gt;&lt;div class="paragraph"&gt;
+&lt;p&gt;Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d’aller lire le tutoriel précédent :
+&lt;a href="../matrix"&gt;Matrix sur NixOS&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="sect1"&gt;
+&lt;h2 id="_telegram_messenger"&gt;Telegram Messenger&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/telegram.nix" target="_blank" rel="noopener"&gt;&lt;span class="image"&gt;&lt;img src="https://img.shields.io/badge/Gitlab-Mautrix%20Telegram-orange" alt="Gitlab"/&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Le bridge de Telegram supporte quasiment toutes les fonctionnalités. La configuration est quasiment la même que pour
+&lt;a href="../mautrix-facebook"&gt;Mautrix Facebook&lt;/a&gt;
+hormis un léger changement au niveau de la configuration d’une API.&lt;br/&gt;
+Je n’ai volontairement pas suivi la configuration proposé par NixOS car je n’ai jamais réussi à la faire fonctionner, et je souhaite avoir une installation cohérente. Comme NixOS ne propose pas de module pour Mautrix Facebook, Mautrix Telegram et Mautrix Signal, je préfère les configurer de la même manière.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Voici la configuration que je préconise :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code&gt;{ config, lib, ... }:
 let
 bridgeFolder = &amp;#34;/var/lib/mautrix-telegram&amp;#34;;
 toListIfExists = path:
@@ -641,24 +641,24 @@ volumes = [ &amp;#34;${bridgeFolder}/data:/data&amp;#34; ];
 };
 # Add configuration to Matrix server
 services.matrix-synapse.app_service_config_files = toListIfExists &amp;#34;${bridgeFolder}/data/registration.yaml&amp;#34;;
-}&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Si on résume, toutes les données sont stockées dans &lt;code>/var/lib/mautrix-telegram&lt;/code>. On ajoute l’image docker qui permet de lancer le bridge.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On va dès maintenant le configurer en éditant &lt;strong>en tant que root&lt;/strong> le fichier &lt;code>/var/lib/mautrix-telegram/data/config.yaml&lt;/code>…​ Enfin faite votre &lt;code>nixos-rebuild switch&lt;/code> pour lancer le bridge.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Dans un premier temps, il faut faire une application sur le site de Telegram pour récupérer un ID et un hash qui serviront au bridge pour interagir avec l’API. Pour ce faire, allez sur cette &lt;a href="https://core.telegram.org/api/obtaining_api_id#obtaining" target="_blank" rel="noopener">page d’aide de Telegram&lt;/a> et suivez les instructions pour récupérer le &lt;code>api_id&lt;/code> et le &lt;code>api_hash&lt;/code>.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code>homeserver:
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Si on résume, toutes les données sont stockées dans &lt;code&gt;/var/lib/mautrix-telegram&lt;/code&gt;. On ajoute l’image docker qui permet de lancer le bridge.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On va dès maintenant le configurer en éditant &lt;strong&gt;en tant que root&lt;/strong&gt; le fichier &lt;code&gt;/var/lib/mautrix-telegram/data/config.yaml&lt;/code&gt;…​ Enfin faite votre &lt;code&gt;nixos-rebuild switch&lt;/code&gt; pour lancer le bridge.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Dans un premier temps, il faut faire une application sur le site de Telegram pour récupérer un ID et un hash qui serviront au bridge pour interagir avec l’API. Pour ce faire, allez sur cette &lt;a href="https://core.telegram.org/api/obtaining_api_id#obtaining" target="_blank" rel="noopener"&gt;page d’aide de Telegram&lt;/a&gt; et suivez les instructions pour récupérer le &lt;code&gt;api_id&lt;/code&gt; et le &lt;code&gt;api_hash&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code&gt;homeserver:
 address: http://localhost:8008
 domain: server_name
 verify_ssl: false
@@ -668,73 +668,73 @@ api_hash: #ApiHash#
 bridge:
 permissions:
 &amp;#34;*&amp;#34;: user
-&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="ulist">
-&lt;ul>
-&lt;li>
-&lt;p>&lt;code>homeserver.address&lt;/code> : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>homeserver.domain&lt;/code> : C’est le &lt;code>server_name&lt;/code>, vous devez maintenance savoir ce que c’est :)&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>homeserver.verify_ssl&lt;/code> : Comme on est dans une boucle locale, par besoin de vérifier le SSL&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>telegram.api_id&lt;/code> : ID fourni par Telegram sur le site&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>telegram.api_hash&lt;/code> : Hash fourni par Telegram sur le site&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>bridge.permissions&lt;/code> : Ce sont les permissions. Pour ma part, j’ai mis &lt;code>&amp;#34;*&amp;#34;: user&lt;/code> pour que tous les utilisateurs puissent utiliser le bridge, et enfin &lt;code>&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code> pour que votre utilisateur puisse l’administrer&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Une fois ça fait, pensez à redémarrer votre image docker &lt;code>docker restart mautrix-telegram&lt;/code> et faites ensuite un petit &lt;code>nixos-rebuild switch&lt;/code>. Normalement, &lt;code>matrix-synapse&lt;/code> se redémarrera car le fichier &lt;code>registration.yaml&lt;/code> existera.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Vous pouvez maintenant constater que vous pouvez parler au bot dans votre client Matrix en ouvrant une conversation avec &lt;code>@telegrambot:server_name&lt;/code>.&lt;br/>
-Celui-ci devrait accepter votre invitation. Vous pouvez alors lui demander de l’aide comme il le propose. Pour lier votre compte, faites &lt;code>!tg login&lt;/code> et suivez les instructions.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Une fois connecté, attendez un peu et vous allez recevoir plein d’invitations :) Bien joué, tout devrait fonctionner !&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;/div></description></item><item><title>Le Bridge Facebook pour Matrix</title><link>https://nicolasguilloux.eu/articles/mautrix-facebook/</link><pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mautrix-facebook/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mautrix-facebook/cover.svg" alt="Featured image of post Le Bridge Facebook pour Matrix" />&lt;div class="paragraph">
-&lt;p>Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d’aller lire le tutoriel précédent :
-&lt;a href="../matrix">Matrix sur NixOS&lt;/a>&lt;/p>
-&lt;/div>
-&lt;div class="sect1">
-&lt;h2 id="_facebook_messenger">Facebook Messenger&lt;/h2>
-&lt;div class="sectionbody">
-&lt;div class="paragraph">
-&lt;p>&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/facebook.nix" target="_blank" rel="noopener">&lt;span class="image">&lt;img src="https://img.shields.io/badge/Gitlab-Mautrix%20Facebook-orange" alt="Gitlab"/>&lt;/span>&lt;/a>&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Bon, qu’on se le dise, j’aimerai bien partir de Facebook mais beaucoup de personnes ne veulent pas par simplicité. Même si ça m’embête pour des raisons évidentes, je dois rester dessus car j’ai vraiment des personnes que j’aime beaucoup qui refusent de passer sur d’autres plateformes.&lt;br/>
-C’est d’ailleurs un intérêt de ce bridge : je vais désinstaller toutes les applications Facebook, ma seule interaction sera via Matrix.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Dans un premier temps, on va préparer notre base de données afin d’y stocker les données utilent au bridge. Pour le moment, celui-ci ne supporte que PostgreSQL. Ca tombe bien, on a déjà une BDD disponible via le serveur Synapse. Aussi, on va pouvoir facilement créer un user et une base.&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code>sudo -u postgres psql
+&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="ulist"&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;homeserver.address&lt;/code&gt; : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;homeserver.domain&lt;/code&gt; : C’est le &lt;code&gt;server_name&lt;/code&gt;, vous devez maintenance savoir ce que c’est :)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;homeserver.verify_ssl&lt;/code&gt; : Comme on est dans une boucle locale, par besoin de vérifier le SSL&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;telegram.api_id&lt;/code&gt; : ID fourni par Telegram sur le site&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;telegram.api_hash&lt;/code&gt; : Hash fourni par Telegram sur le site&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;bridge.permissions&lt;/code&gt; : Ce sont les permissions. Pour ma part, j’ai mis &lt;code&gt;&amp;#34;*&amp;#34;: user&lt;/code&gt; pour que tous les utilisateurs puissent utiliser le bridge, et enfin &lt;code&gt;&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code&gt; pour que votre utilisateur puisse l’administrer&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Une fois ça fait, pensez à redémarrer votre image docker &lt;code&gt;docker restart mautrix-telegram&lt;/code&gt; et faites ensuite un petit &lt;code&gt;nixos-rebuild switch&lt;/code&gt;. Normalement, &lt;code&gt;matrix-synapse&lt;/code&gt; se redémarrera car le fichier &lt;code&gt;registration.yaml&lt;/code&gt; existera.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Vous pouvez maintenant constater que vous pouvez parler au bot dans votre client Matrix en ouvrant une conversation avec &lt;code&gt;@telegrambot:server_name&lt;/code&gt;.&lt;br/&gt;
+Celui-ci devrait accepter votre invitation. Vous pouvez alors lui demander de l’aide comme il le propose. Pour lier votre compte, faites &lt;code&gt;!tg login&lt;/code&gt; et suivez les instructions.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Une fois connecté, attendez un peu et vous allez recevoir plein d’invitations :) Bien joué, tout devrait fonctionner !&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Le Bridge Facebook pour Matrix</title><link>https://nicolasguilloux.eu/articles/mautrix-facebook/</link><pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/mautrix-facebook/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/mautrix-facebook/cover.svg" alt="Featured image of post Le Bridge Facebook pour Matrix" /&gt;&lt;div class="paragraph"&gt;
+&lt;p&gt;Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d’aller lire le tutoriel précédent :
+&lt;a href="../matrix"&gt;Matrix sur NixOS&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="sect1"&gt;
+&lt;h2 id="_facebook_messenger"&gt;Facebook Messenger&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/facebook.nix" target="_blank" rel="noopener"&gt;&lt;span class="image"&gt;&lt;img src="https://img.shields.io/badge/Gitlab-Mautrix%20Facebook-orange" alt="Gitlab"/&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Bon, qu’on se le dise, j’aimerai bien partir de Facebook mais beaucoup de personnes ne veulent pas par simplicité. Même si ça m’embête pour des raisons évidentes, je dois rester dessus car j’ai vraiment des personnes que j’aime beaucoup qui refusent de passer sur d’autres plateformes.&lt;br/&gt;
+C’est d’ailleurs un intérêt de ce bridge : je vais désinstaller toutes les applications Facebook, ma seule interaction sera via Matrix.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Dans un premier temps, on va préparer notre base de données afin d’y stocker les données utilent au bridge. Pour le moment, celui-ci ne supporte que PostgreSQL. Ca tombe bien, on a déjà une BDD disponible via le serveur Synapse. Aussi, on va pouvoir facilement créer un user et une base.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code&gt;sudo -u postgres psql
 CREATE ROLE &amp;#34;mautrixfacebook&amp;#34; WITH LOGIN PASSWORD &amp;#39;VotreMotDePasseUnique&amp;#39;;
 CREATE DATABASE &amp;#34;mautrixfacebook&amp;#34; WITH OWNER &amp;#34;mautrixfacebook&amp;#34; TEMPLATE template0 LC_COLLATE = &amp;#34;C&amp;#34; LC_CTYPE = &amp;#34;C&amp;#34;;
-\q&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Une fois fait, on va pouvoir préparer notre module qui va démarrer l’image docker du bridge. On va aussi câbler ce bridge à notre instance Matrix.&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code>{ config, lib, ... }:
+\q&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Une fois fait, on va pouvoir préparer notre module qui va démarrer l’image docker du bridge. On va aussi câbler ce bridge à notre instance Matrix.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code&gt;{ config, lib, ... }:
 let
 bridgeFolder = &amp;#34;/var/lib/mautrix-facebook&amp;#34;;
 toListIfExists = path:
@@ -751,22 +751,22 @@ volumes = [ &amp;#34;${bridgeFolder}/data:/data&amp;#34; ];
 };
 # Add configuration to Matrix server
 services.matrix-synapse.app_service_config_files = toListIfExists &amp;#34;${bridgeFolder}/data/registration.yaml&amp;#34;;
-}&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Si on résume, toutes les données sont stockées dans &lt;code>/var/lib/mautrix-facebook&lt;/code>. On ajoute l’image docker qui permet de lancer le bridge.&lt;br/>
-La partie où on relie notre bridge à notre serveur est commentée pour le moment car le fichier en question sera généré par le bridge, et donc n’existe pas avant d’avoir bien parametré le bridge.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On va dès maintenant le configurer en éditant &lt;strong>en tant que root&lt;/strong> le fichier &lt;code>/var/lib/mautrix-facebook/data/config.yaml&lt;/code>…​ Enfin faite votre &lt;code>nixos-rebuild switch&lt;/code> pour lancer le bridge.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code>homeserver:
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Si on résume, toutes les données sont stockées dans &lt;code&gt;/var/lib/mautrix-facebook&lt;/code&gt;. On ajoute l’image docker qui permet de lancer le bridge.&lt;br/&gt;
+La partie où on relie notre bridge à notre serveur est commentée pour le moment car le fichier en question sera généré par le bridge, et donc n’existe pas avant d’avoir bien parametré le bridge.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On va dès maintenant le configurer en éditant &lt;strong&gt;en tant que root&lt;/strong&gt; le fichier &lt;code&gt;/var/lib/mautrix-facebook/data/config.yaml&lt;/code&gt;…​ Enfin faite votre &lt;code&gt;nixos-rebuild switch&lt;/code&gt; pour lancer le bridge.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code&gt;homeserver:
 address: http://localhost:8008
 domain: server_name
 verify_ssl: false
@@ -775,87 +775,87 @@ database: postgres://mautrixfacebook:VotreMotDePasseUnique@127.0.0.1/mautrixface
 bridge:
 permissions:
 &amp;#34;*&amp;#34;: user
-&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="ulist">
-&lt;ul>
-&lt;li>
-&lt;p>&lt;code>homeserver.address&lt;/code> : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>homeserver.domain&lt;/code> : C’est le &lt;code>server_name&lt;/code>, vous devez maintenance savoir ce que c’est :)&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>homeserver.verify_ssl&lt;/code> : Comme on est dans une boucle locale, par besoin de vérifier le SSL&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>appservice.database&lt;/code> : Lien vers *votre base de données. Pensez à changer le mot de passe pour celui que vous avez utilisé au dessus.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>bridge.permissions&lt;/code> : Ce sont les permissions. Pour ma part, j’ai mis &lt;code>&amp;#34;*&amp;#34;: user&lt;/code> pour que tous les utilisateurs puissent utiliser le bridge, et enfin &lt;code>&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code> pour que votre utilisateur puisse l’administrer&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Une fois ça fait, pensez à redémarrer votre image docker &lt;code>docker restart mautrix-facebook&lt;/code> et faites ensuite un petit &lt;code>nixos-rebuild switch&lt;/code>. Normalement, &lt;code>matrix-synapse&lt;/code> se redémarrera car le fichier &lt;code>registration.yaml&lt;/code> existera.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Vous pouvez maintenant constater que vous pouvez parler au bot dans votre client Matrix en ouvrant une conversation avec &lt;code>@facebookbot:server_name&lt;/code>.&lt;br/>
-Celui-ci devrait accepter votre invitation. Vous pouvez alors lui demander de l’aide comme il le propose. Pour lier votre compte, faites &lt;code>login &amp;lt;email&amp;gt;&lt;/code> avec l’email de votre compte Facebook bien entendu ! Suivez ce qu’il vous dit, il va vous demander votre mot de passe et potentiellement votre code de double authentification.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Une fois connecté, attendez un peu et vous allez recevoir plein d’invitations :) Bien joué, tout devrait fonctionner !&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;/div></description></item><item><title>Matrix sur NixOS</title><link>https://nicolasguilloux.eu/articles/matrix/</link><pubDate>Fri, 26 Mar 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/matrix/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/matrix/matrix.svg" alt="Featured image of post Matrix sur NixOS" />&lt;div class="paragraph">
-&lt;p>Comme beaucoup de personnes, j’ai beaucoup de messageries qui ont su évoluer (ou pas) dans le temps. Et chacunes de ces messageries apportent ses avantages et ses inconvénients, et la plupart des gens ne veulent pas toutes les avoir. Et j’en fais partie !&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Aussi, j’ai toujours reluqué &lt;a href="https://matrix.org" target="_blank" rel="noopener">Matrix&lt;/a> de loin. Les seules fois où j’avais abordé ce standard, j’ai été très déçu à cause de la lenteur de celui-ci et aussi le fait que ce soit extrêmement intimidant au niveau sécurité.&lt;/p>
-&lt;/div>
-&lt;div id="beeper" class="paragraph">
-&lt;p>&lt;span class="image center">&lt;img src="beeper.png" alt="beeper"/>&lt;/span>&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Finalement, j’ai décidé de me lancer en entendant parler de &lt;a href="https://www.beeper.com" target="_blank" rel="noopener">Beeper&lt;/a> qui permettait de centraliser plein de protocoles au même endroit. J’ai été déçu de voir que c’était très payant pour une utilisation domestique. Et j’ai remarqué par mon don incroyable de lecture de la seule et unique page disponible que Beeper était une application basée sur Matrix et la notion de bridges. Donc, en théorie, on peut faire la même chose sans payer.&lt;/p>
-&lt;/div>
-&lt;div class="sect1">
-&lt;h2 id="_quest_ce_que_matrix">Qu’est-ce que Matrix&lt;/h2>
-&lt;div class="sectionbody">
-&lt;div class="paragraph">
-&lt;p>Matrix est un standard OpenSource pour construire une messagerie sécurisée en temps réel et décentralisée. Beaucoup de buzz words, on va expliquer tout ça.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>C’est un &lt;strong>standard&lt;/strong>, ce qui veut dire que Matrix n’est pas un logiciel mais simplement une liste de fonctionnalités à implémenter afin de supporter le protocole. C’est un peu comme si on parlait d’un mixeur, qui est la fonctionnalité, ce qui ne l’empêche pas d’avoir un nom donné par la marque ou par les utilisateurs. Le mixeur de mes parents s’appelle Bob.&lt;br/>
-Une &lt;strong>messagerie sécurisée en temps réel&lt;/strong>, c’est assez simple à comprendre.&lt;br/>
-Pour le côté &lt;strong>décentralisé&lt;/strong>, ça veut dire que un seul et unique serveur n’est pas souverain du réseau. Ainsi, installer un serveur chez vous permettra d’avoir accès au service sur votre réseau. Matrix implémente aussi un système pour faire dialoguer les serveurs entre eux, comme ça votre serveur ne reste pas dans son coin et pourra dialoguer avec le monde extérieur.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On a parlé plus haut des bridges, et ça c’est une des fonctionnalités de Matrix. Le principe est qu’on peut ajouter un genre de plugin qui joue le rôle d’interface avec quelque chose d’autre. Ouais c’est un peu abstrait, mais concrètement un bridge peut se charger en temps réel de relayer les messages d’une autre messagerie par exemple.&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;/div>
-&lt;div class="sect1">
-&lt;h2 id="_installation_du_serveur">Installation du serveur&lt;/h2>
-&lt;div class="sectionbody">
-&lt;div class="paragraph">
-&lt;p>J’ai rassemblé tous mes efforts pour que tout fonctionne dans un dossier de mon installation NixOS. Il peut varier dans le temps, j’actualiserais le tutoriel et les liens vers ma configuration en fonction des updates.&lt;/p>
-&lt;/div>
-&lt;div class="sect2">
-&lt;h3 id="_le_serveur_synapse">Le serveur Synapse&lt;/h3>
-&lt;div class="paragraph">
-&lt;p>&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/server.nix" target="_blank" rel="noopener">&lt;span class="image">&lt;img src="https://img.shields.io/badge/Gitlab-Synapse-orange" alt="Gitlab"/>&lt;/span>&lt;/a>&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Tout commence d’abord par installer &lt;a href="https://matrix.org/docs/projects/server/synapse">Synapse&lt;/a> qui est un serveur Matrix. Matrix étant un standard, Synapse est une implémentation de celui-ci. Si vous êtes déjà perdu, relisez le point précédent ;)&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Ici, NixOS nous a bien facilité la tache vu qu’une configuration est disponible, donc on peut aller très vite.&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code>services.matrix-synapse = {
+&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="ulist"&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;homeserver.address&lt;/code&gt; : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;homeserver.domain&lt;/code&gt; : C’est le &lt;code&gt;server_name&lt;/code&gt;, vous devez maintenance savoir ce que c’est :)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;homeserver.verify_ssl&lt;/code&gt; : Comme on est dans une boucle locale, par besoin de vérifier le SSL&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;appservice.database&lt;/code&gt; : Lien vers *votre base de données. Pensez à changer le mot de passe pour celui que vous avez utilisé au dessus.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;bridge.permissions&lt;/code&gt; : Ce sont les permissions. Pour ma part, j’ai mis &lt;code&gt;&amp;#34;*&amp;#34;: user&lt;/code&gt; pour que tous les utilisateurs puissent utiliser le bridge, et enfin &lt;code&gt;&amp;#34;@pseudo:server_name&amp;#34;: admin&lt;/code&gt; pour que votre utilisateur puisse l’administrer&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Une fois ça fait, pensez à redémarrer votre image docker &lt;code&gt;docker restart mautrix-facebook&lt;/code&gt; et faites ensuite un petit &lt;code&gt;nixos-rebuild switch&lt;/code&gt;. Normalement, &lt;code&gt;matrix-synapse&lt;/code&gt; se redémarrera car le fichier &lt;code&gt;registration.yaml&lt;/code&gt; existera.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Vous pouvez maintenant constater que vous pouvez parler au bot dans votre client Matrix en ouvrant une conversation avec &lt;code&gt;@facebookbot:server_name&lt;/code&gt;.&lt;br/&gt;
+Celui-ci devrait accepter votre invitation. Vous pouvez alors lui demander de l’aide comme il le propose. Pour lier votre compte, faites &lt;code&gt;login &amp;lt;email&amp;gt;&lt;/code&gt; avec l’email de votre compte Facebook bien entendu ! Suivez ce qu’il vous dit, il va vous demander votre mot de passe et potentiellement votre code de double authentification.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Une fois connecté, attendez un peu et vous allez recevoir plein d’invitations :) Bien joué, tout devrait fonctionner !&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Matrix sur NixOS</title><link>https://nicolasguilloux.eu/articles/matrix/</link><pubDate>Fri, 26 Mar 2021 00:00:00 +0000</pubDate><guid>https://nicolasguilloux.eu/articles/matrix/</guid><description>&lt;img src="https://nicolasguilloux.eu/articles/matrix/matrix.svg" alt="Featured image of post Matrix sur NixOS" /&gt;&lt;div class="paragraph"&gt;
+&lt;p&gt;Comme beaucoup de personnes, j’ai beaucoup de messageries qui ont su évoluer (ou pas) dans le temps. Et chacunes de ces messageries apportent ses avantages et ses inconvénients, et la plupart des gens ne veulent pas toutes les avoir. Et j’en fais partie !&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Aussi, j’ai toujours reluqué &lt;a href="https://matrix.org" target="_blank" rel="noopener"&gt;Matrix&lt;/a&gt; de loin. Les seules fois où j’avais abordé ce standard, j’ai été très déçu à cause de la lenteur de celui-ci et aussi le fait que ce soit extrêmement intimidant au niveau sécurité.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id="beeper" class="paragraph"&gt;
+&lt;p&gt;&lt;span class="image center"&gt;&lt;img src="beeper.png" alt="beeper"/&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Finalement, j’ai décidé de me lancer en entendant parler de &lt;a href="https://www.beeper.com" target="_blank" rel="noopener"&gt;Beeper&lt;/a&gt; qui permettait de centraliser plein de protocoles au même endroit. J’ai été déçu de voir que c’était très payant pour une utilisation domestique. Et j’ai remarqué par mon don incroyable de lecture de la seule et unique page disponible que Beeper était une application basée sur Matrix et la notion de bridges. Donc, en théorie, on peut faire la même chose sans payer.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="sect1"&gt;
+&lt;h2 id="_quest_ce_que_matrix"&gt;Qu’est-ce que Matrix&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Matrix est un standard OpenSource pour construire une messagerie sécurisée en temps réel et décentralisée. Beaucoup de buzz words, on va expliquer tout ça.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;C’est un &lt;strong&gt;standard&lt;/strong&gt;, ce qui veut dire que Matrix n’est pas un logiciel mais simplement une liste de fonctionnalités à implémenter afin de supporter le protocole. C’est un peu comme si on parlait d’un mixeur, qui est la fonctionnalité, ce qui ne l’empêche pas d’avoir un nom donné par la marque ou par les utilisateurs. Le mixeur de mes parents s’appelle Bob.&lt;br/&gt;
+Une &lt;strong&gt;messagerie sécurisée en temps réel&lt;/strong&gt;, c’est assez simple à comprendre.&lt;br/&gt;
+Pour le côté &lt;strong&gt;décentralisé&lt;/strong&gt;, ça veut dire que un seul et unique serveur n’est pas souverain du réseau. Ainsi, installer un serveur chez vous permettra d’avoir accès au service sur votre réseau. Matrix implémente aussi un système pour faire dialoguer les serveurs entre eux, comme ça votre serveur ne reste pas dans son coin et pourra dialoguer avec le monde extérieur.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On a parlé plus haut des bridges, et ça c’est une des fonctionnalités de Matrix. Le principe est qu’on peut ajouter un genre de plugin qui joue le rôle d’interface avec quelque chose d’autre. Ouais c’est un peu abstrait, mais concrètement un bridge peut se charger en temps réel de relayer les messages d’une autre messagerie par exemple.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect1"&gt;
+&lt;h2 id="_installation_du_serveur"&gt;Installation du serveur&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;J’ai rassemblé tous mes efforts pour que tout fonctionne dans un dossier de mon installation NixOS. Il peut varier dans le temps, j’actualiserais le tutoriel et les liens vers ma configuration en fonction des updates.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="sect2"&gt;
+&lt;h3 id="_le_serveur_synapse"&gt;Le serveur Synapse&lt;/h3&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/server.nix" target="_blank" rel="noopener"&gt;&lt;span class="image"&gt;&lt;img src="https://img.shields.io/badge/Gitlab-Synapse-orange" alt="Gitlab"/&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Tout commence d’abord par installer &lt;a href="https://matrix.org/docs/projects/server/synapse"&gt;Synapse&lt;/a&gt; qui est un serveur Matrix. Matrix étant un standard, Synapse est une implémentation de celui-ci. Si vous êtes déjà perdu, relisez le point précédent ;)&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Ici, NixOS nous a bien facilité la tache vu qu’une configuration est disponible, donc on peut aller très vite.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code&gt;services.matrix-synapse = {
 enable = true;
 server_name = &amp;#34;matrix.nicolasguilloux.eu&amp;#34;;
 registration_shared_secret = &amp;#34;UnSecretTemporaire&amp;#34;;
@@ -878,33 +878,33 @@ compress = false;
 };
 # For the registration of a user
 services.matrix-synapse.registration_shared_secret = &amp;#34;UnSecretTemporaire&amp;#34;;
-environment.systemPackages = [ pkgs.matrix-synapse ];&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Il faut s’assurer que l’option &lt;code>server_name&lt;/code> correspond bien à l’adresse finale du serveur. C’est important pour faire dialoguer le monde extérieur avec notre instance. Si jamais vous vous lancez dans l’installation et que cette adresse est fausse, il faudra tout recommencer.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Ici, on n’utilise qu’un seul port : le &lt;code>8008&lt;/code>. C’est celui conseillé dans la documentation. Vous remarquerez qu’il n’y a pas de SSL, c’est parce que mon serveur sera exposé à travers un Reverse Proxy géré par Nginx. On va voir ça après.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>L’option &lt;code>registration_shared_secret&lt;/code> est là uniquement pour enregistrer votre utilisateur administrateur. Il faudra bien penser à l’enlever, car elle permet de créer des utilisateurs un peu comme on veut en utilisant le dit mot de passe.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Et enfin, pas besoin d’importer le paquet de Synapse dans les ceux de système hormis pour l’inscription d’un nouvel utilisateur via un terminal.&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;div class="sect2">
-&lt;h3 id="_la_base_de_données">La base de données&lt;/h3>
-&lt;div class="paragraph">
-&lt;p>&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/database.nix" target="_blank" rel="noopener">&lt;span class="image">&lt;img src="https://img.shields.io/badge/Gitlab-BDD-orange" alt="Gitlab"/>&lt;/span>&lt;/a>&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Il faudra aussi configurer une base de données PostgreSQL pour le serveur.&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code># Manually configure PostgreSQL
+environment.systemPackages = [ pkgs.matrix-synapse ];&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Il faut s’assurer que l’option &lt;code&gt;server_name&lt;/code&gt; correspond bien à l’adresse finale du serveur. C’est important pour faire dialoguer le monde extérieur avec notre instance. Si jamais vous vous lancez dans l’installation et que cette adresse est fausse, il faudra tout recommencer.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Ici, on n’utilise qu’un seul port : le &lt;code&gt;8008&lt;/code&gt;. C’est celui conseillé dans la documentation. Vous remarquerez qu’il n’y a pas de SSL, c’est parce que mon serveur sera exposé à travers un Reverse Proxy géré par Nginx. On va voir ça après.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;L’option &lt;code&gt;registration_shared_secret&lt;/code&gt; est là uniquement pour enregistrer votre utilisateur administrateur. Il faudra bien penser à l’enlever, car elle permet de créer des utilisateurs un peu comme on veut en utilisant le dit mot de passe.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Et enfin, pas besoin d’importer le paquet de Synapse dans les ceux de système hormis pour l’inscription d’un nouvel utilisateur via un terminal.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect2"&gt;
+&lt;h3 id="_la_base_de_données"&gt;La base de données&lt;/h3&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/database.nix" target="_blank" rel="noopener"&gt;&lt;span class="image"&gt;&lt;img src="https://img.shields.io/badge/Gitlab-BDD-orange" alt="Gitlab"/&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Il faudra aussi configurer une base de données PostgreSQL pour le serveur.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code&gt;# Manually configure PostgreSQL
 # ref: https://www.foxypossibilities.com/2018/02/04/running-matrix-synapse-on-nixos/
 services.postgresql.enable = true;
 services.postgresql.initialScript = pkgs.writeText &amp;#34;synapse-init.sql&amp;#34; &amp;#39;&amp;#39;
@@ -913,43 +913,43 @@ CREATE DATABASE &amp;#34;matrix-synapse&amp;#34; WITH OWNER &amp;#34;matrix-syna
 TEMPLATE template0
 LC_COLLATE = &amp;#34;C&amp;#34;
 LC_CTYPE = &amp;#34;C&amp;#34;;
-&amp;#39;&amp;#39;;&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Ici, mon mot de passe est défini bien au chaud dans la config. Pensez à mettre votre mot de passe. Vous pouvez aussi faire cette étape à la mano en allant tater &lt;code>sudo -u postgres psql&lt;/code>.&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;div class="sect2">
-&lt;h3 id="_création_de_notre_admin">Création de notre admin&lt;/h3>
-&lt;div class="paragraph">
-&lt;p>Avant d’exposer sur Internet, on va déjà créer notre utilisateur admin puis désactiver la possibilité de s’enregistrer en utilisant les lignes de commandes. Comme ça, on ferme une porte !&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Ici, rappelez vous la &lt;code>registration_shared_secret&lt;/code> mis plus haut et simplement tapez la commande suivante&lt;/p>
-&lt;/div>
-&lt;div class="quoteblock">
-&lt;blockquote>
-&lt;div class="paragraph">
-&lt;p>register_new_matrix_user --shared-secret &amp;#34;UnSecretTemporaire&amp;#34; &lt;a href="http://localhost:8008" class="bare">http://localhost:8008&lt;/a>&lt;/p>
-&lt;/div>
-&lt;/blockquote>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On suit donc tout ce qu’il nous dit comme il faut en prenant soin de mettre votre utilisateur Admin.&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;div class="sect2">
-&lt;h3 id="_le_reverse_proxy">Le Reverse Proxy&lt;/h3>
-&lt;div class="paragraph">
-&lt;p>&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/nginx.nix" target="_blank" rel="noopener">&lt;span class="image">&lt;img src="https://img.shields.io/badge/Gitlab-Nginx-orange" alt="Gitlab"/>&lt;/span>&lt;/a>&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On va maintenant configurer notre Reverse Proxy pour qu’il puisse être accessible du monde extérieur. C’est important aussi pour pouvoir dialoguer avec les autres serveurs.&lt;/p>
-&lt;/div>
-&lt;div class="listingblock">
-&lt;div class="content">
-&lt;pre class="highlight">&lt;code>let
+&amp;#39;&amp;#39;;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Ici, mon mot de passe est défini bien au chaud dans la config. Pensez à mettre votre mot de passe. Vous pouvez aussi faire cette étape à la mano en allant tater &lt;code&gt;sudo -u postgres psql&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect2"&gt;
+&lt;h3 id="_création_de_notre_admin"&gt;Création de notre admin&lt;/h3&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Avant d’exposer sur Internet, on va déjà créer notre utilisateur admin puis désactiver la possibilité de s’enregistrer en utilisant les lignes de commandes. Comme ça, on ferme une porte !&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Ici, rappelez vous la &lt;code&gt;registration_shared_secret&lt;/code&gt; mis plus haut et simplement tapez la commande suivante&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="quoteblock"&gt;
+&lt;blockquote&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;register_new_matrix_user --shared-secret &amp;#34;UnSecretTemporaire&amp;#34; &lt;a href="http://localhost:8008" class="bare"&gt;http://localhost:8008&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On suit donc tout ce qu’il nous dit comme il faut en prenant soin de mettre votre utilisateur Admin.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect2"&gt;
+&lt;h3 id="_le_reverse_proxy"&gt;Le Reverse Proxy&lt;/h3&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;a href="https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/nginx.nix" target="_blank" rel="noopener"&gt;&lt;span class="image"&gt;&lt;img src="https://img.shields.io/badge/Gitlab-Nginx-orange" alt="Gitlab"/&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On va maintenant configurer notre Reverse Proxy pour qu’il puisse être accessible du monde extérieur. C’est important aussi pour pouvoir dialoguer avec les autres serveurs.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="highlight"&gt;&lt;code&gt;let
 listenPort = port: ssl: {
 addr = &amp;#34;0.0.0.0&amp;#34;;
 port = port;
@@ -972,38 +972,38 @@ locations.&amp;#34;/_matrix&amp;#34; = {
 proxyPass = &amp;#34;http://[::1]:8008&amp;#34;;
 };
 };
-}&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Ici, on voit que nous redirigeons tout vers notre serveur Synpase. On peut aussi voir qu’on utilise le port 8448. Il est important car c’est ce port qui est utilisé par la fédération des serveurs Matrix. Ainsi, un serveur lambda ira questionner notre serveur via ce port uniquement.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Une fois tout installé, vous pouvez d’ailleurs &lt;a href="https://federationtester.matrix.org" target="_blank" rel="noopener">tester votre serveur&lt;/a> pour voir s’il est bien accessible par la fédération.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Si vous avez tout bien fait, normalement vous devez pouvoir vous connecter sur &lt;a href="https://app.element.io/#/login">Element.io&lt;/a>, modifier le serveur d’accueil (le fameux &lt;code>server_name&lt;/code>) et vous connecter.&lt;br/>
-Vous remarquerez alors que votre pseudo est &lt;code>pseudo:server_name&lt;/code>. Par exemple, pour ma part, c’est &lt;code>nover:matrix.nicolasguilloux.eu&lt;/code>.&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;/div>
-&lt;/div>
-&lt;div class="sect1">
-&lt;h2 id="_les_bridges">Les Bridges&lt;/h2>
-&lt;div class="sectionbody">
-&lt;div class="paragraph">
-&lt;p>Une fois votre serveur fonctionnel, vous pouvez jouir de toutes les fonctionnalités de Matrix de base. Vous pouvez donc rejoindre des salons et discuter avec des personnes mêmes si elles ne sont pas sur votre serveur grâce à la magie de la fédération.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>On va maintenant pouvoir ajouter des bridges qui vont être les interfaces entre un autre protocole et celui de Matrix. En plus simple : ça va permettre d’envoyer des messages en utilisant Matrix vers des destinataires comme Signal ou encore Messenger.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>Ici, je ne vais passer en revue que les bridges que j’ai implémenté sur mon serveur. On notera que la plupart ont été conçu par la même personne et donc ont le préfix &lt;code>mautrix&lt;/code>. On peut donc constater qu’ils se configurent quasiment de la même manière.&lt;br/>
-Je vais aussi essayer de trier l’ordre des bridges ci-dessous en fonction de leur difficulté à installer. Ca permettra de monter progressivement en difficulté.&lt;/p>
-&lt;/div>
-&lt;div class="paragraph">
-&lt;p>&lt;a href="../mautrix-facebook">&lt;span class="image">&lt;img src="https://img.shields.io/badge/mautrix-facebook-blue" alt="mautrix facebook blue"/>&lt;/span>&lt;/a>
-&lt;a href="../mautrix-telegram">&lt;span class="image">&lt;img src="https://img.shields.io/badge/mautrix-telegram-blue" alt="mautrix telegram blue"/>&lt;/span>&lt;/a>&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;/div></description></item></channel></rss>
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Ici, on voit que nous redirigeons tout vers notre serveur Synpase. On peut aussi voir qu’on utilise le port 8448. Il est important car c’est ce port qui est utilisé par la fédération des serveurs Matrix. Ainsi, un serveur lambda ira questionner notre serveur via ce port uniquement.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Une fois tout installé, vous pouvez d’ailleurs &lt;a href="https://federationtester.matrix.org" target="_blank" rel="noopener"&gt;tester votre serveur&lt;/a&gt; pour voir s’il est bien accessible par la fédération.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Si vous avez tout bien fait, normalement vous devez pouvoir vous connecter sur &lt;a href="https://app.element.io/#/login"&gt;Element.io&lt;/a&gt;, modifier le serveur d’accueil (le fameux &lt;code&gt;server_name&lt;/code&gt;) et vous connecter.&lt;br/&gt;
+Vous remarquerez alors que votre pseudo est &lt;code&gt;pseudo:server_name&lt;/code&gt;. Par exemple, pour ma part, c’est &lt;code&gt;nover:matrix.nicolasguilloux.eu&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect1"&gt;
+&lt;h2 id="_les_bridges"&gt;Les Bridges&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Une fois votre serveur fonctionnel, vous pouvez jouir de toutes les fonctionnalités de Matrix de base. Vous pouvez donc rejoindre des salons et discuter avec des personnes mêmes si elles ne sont pas sur votre serveur grâce à la magie de la fédération.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;On va maintenant pouvoir ajouter des bridges qui vont être les interfaces entre un autre protocole et celui de Matrix. En plus simple : ça va permettre d’envoyer des messages en utilisant Matrix vers des destinataires comme Signal ou encore Messenger.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Ici, je ne vais passer en revue que les bridges que j’ai implémenté sur mon serveur. On notera que la plupart ont été conçu par la même personne et donc ont le préfix &lt;code&gt;mautrix&lt;/code&gt;. On peut donc constater qu’ils se configurent quasiment de la même manière.&lt;br/&gt;
+Je vais aussi essayer de trier l’ordre des bridges ci-dessous en fonction de leur difficulté à installer. Ca permettra de monter progressivement en difficulté.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;a href="../mautrix-facebook"&gt;&lt;span class="image"&gt;&lt;img src="https://img.shields.io/badge/mautrix-facebook-blue" alt="mautrix facebook blue"/&gt;&lt;/span&gt;&lt;/a&gt;
+&lt;a href="../mautrix-telegram"&gt;&lt;span class="image"&gt;&lt;img src="https://img.shields.io/badge/mautrix-telegram-blue" alt="mautrix telegram blue"/&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>
