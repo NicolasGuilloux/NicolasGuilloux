@@ -16,7 +16,7 @@ tags:
 ---
 
 
-Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d'aller lire le tutoriel précédent :
+Matrix est un protocole de messagerie instantanée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d'aller lire le tutoriel précédent :
 link:../matrix[Matrix sur NixOS]
 
 
@@ -27,7 +27,7 @@ https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matr
 Le bridge de Telegram supporte quasiment toutes les fonctionnalités. La configuration est quasiment la même que pour
 link:../mautrix-facebook[Mautrix Facebook]
 hormis un léger changement au niveau de la configuration d'une API. +
-Je n'ai volontairement pas suivi la configuration proposé par NixOS car je n'ai jamais réussi à la faire fonctionner, et je souhaite avoir une installation cohérente. Comme NixOS ne propose pas de module pour Mautrix Facebook, Mautrix Telegram et Mautrix Signal, je préfère les configurer de la même manière.
+Je n'ai volontairement pas suivi la configuration proposée par NixOS car je n'ai jamais réussi à la faire fonctionner, et je souhaite avoir une installation cohérente. Comme NixOS ne propose pas de module pour Mautrix Facebook, Mautrix Telegram et Mautrix Signal, je préfère les configurer de la même manière.
 
 Voici la configuration que je préconise :
 
@@ -82,8 +82,8 @@ bridge:
 ----
 
 * `homeserver.address` : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local
-* `homeserver.domain` : C'est le `server_name`, vous devez maintenance savoir ce que c'est :)
-* `homeserver.verify_ssl` : Comme on est dans une boucle locale, par besoin de vérifier le SSL
+* `homeserver.domain` : C'est le `server_name`, vous devriez maintenant savoir ce que c'est :)
+* `homeserver.verify_ssl` : Comme on est dans une boucle locale, pas besoin de vérifier le SSL
 * `telegram.api_id` : ID fourni par Telegram sur le site
 * `telegram.api_hash` : Hash fourni par Telegram sur le site
 * `bridge.permissions` :  Ce sont les permissions. Pour ma part, j'ai mis `"*": user` pour que tous les utilisateurs puissent utiliser le bridge, et enfin `"@pseudo:server_name": admin` pour que votre utilisateur puisse l'administrer

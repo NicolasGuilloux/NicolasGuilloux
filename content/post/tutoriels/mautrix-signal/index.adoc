@@ -16,11 +16,11 @@ tags:
 ---
 
 
-Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d'aller lire le tutoriel précédent :
+Matrix est un protocole de messagerie instantanée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d'aller lire le tutoriel précédent :
 link:../matrix[Matrix sur NixOS]
 
 
-== Telegram Messenger
+== Signal Messenger
 
 https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/signal.nix[image:https://img.shields.io/badge/Gitlab-Mautrix Signal-orange[Gitlab]^]
 
@@ -66,10 +66,10 @@ in {
 
 ----
 
-Si on résume, toutes les données sont stockées dans `/var/lib/mautrix-signal`. On ajoute les image Docker qui permet de lancer le bridge.
+Si on résume, toutes les données sont stockées dans `/var/lib/mautrix-signal`. On ajoute les images Docker qui permettent de lancer le bridge.
 
 L'image `signald` est le daemon pour pouvoir simuler une interface Web auprès de notre application Signal. C'est nécessaire pour pouvoir récupérer les messages en toute sécurité vu que Signal ne dispose pas d'API. +
-C'est aussi pour celà qu'on doit partager le volume où sont stockées toutes les informations (comme les avatars) entre le daemon et le bridge.
+C'est aussi pour cela qu'on doit partager le volume où sont stockées toutes les informations (comme les avatars) entre le daemon et le bridge.
 
 On va dès maintenant configurer ce dernier en éditant **en tant que root** le fichier `/var/lib/mautrix-signal/data/config.yaml`... Enfin faite votre `nixos-rebuild switch` pour lancer le bridge.
 
@@ -95,8 +95,8 @@ bridge:
 ----
 
 * `homeserver.address` : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local
-* `homeserver.domain` : C'est le `server_name`, vous devez maintenance savoir ce que c'est :)
-* `homeserver.verify_ssl` : Comme on est dans une boucle locale, par besoin de vérifier le SSL
+* `homeserver.domain` : C'est le `server_name`, vous devriez maintenant savoir ce que c'est :)
+* `homeserver.verify_ssl` : Comme on est dans une boucle locale, pas besoin de vérifier le SSL
 * `signal.socket-path` : Socket pour dialoguer avec le daemon
 * `signal.outgoing_attachment_dir` : Répertoire du daemon où sont mis les pièces jointes
 * `signal.avatar_dir` : Répertoire du daemon où sont mis les avatars

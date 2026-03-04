@@ -15,7 +15,7 @@ tags:
 ---
 
 YANA est une interface domotique développée par [Idleman](https://github.com/ldleman).
-L'application Android permettait de dicter des ordres afin de déclencher les actions côté serveur. Elle servait donc d'interface portable pour controller l'installation.
+L'application Android permettait de dicter des ordres afin de déclencher les actions côté serveur. Elle servait donc d'interface portable pour contrôler l'installation.
 
 A cause de mes études, j'ai dû mettre de côté le développement de l'application pour au final l'abandonner. En effet, le serveur a beaucoup évolué sans que je puisse poursuivre les mises à jour. Une autre personne a continué le développement et est donc en charge par la suite de maintenir.
 

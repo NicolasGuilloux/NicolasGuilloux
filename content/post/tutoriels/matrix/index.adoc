@@ -15,7 +15,7 @@ tags:
  - docker
 ---
 
-Comme beaucoup de personnes, j'ai beaucoup de messageries qui ont su évoluer (ou pas) dans le temps. Et chacunes de ces messageries apportent ses avantages et ses inconvénients, et la plupart des gens ne veulent pas toutes les avoir. Et j'en fais partie !
+Comme beaucoup de personnes, j'ai beaucoup de messageries qui ont su évoluer (ou pas) dans le temps. Et chacune de ces messageries apporte ses avantages et ses inconvénients, et la plupart des gens ne veulent pas toutes les avoir. Et j'en fais partie !
 
 Aussi, j'ai toujours reluqué https://matrix.org[Matrix^] de loin. Les seules fois où j'avais abordé ce standard, j'ai été très déçu à cause de la lenteur de celui-ci et aussi le fait que ce soit extrêmement intimidant au niveau sécurité.
 
@@ -48,7 +48,7 @@ https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matr
 
 Tout commence d'abord par installer https://matrix.org/docs/projects/server/synapse[Synapse] qui est un serveur Matrix. Matrix étant un standard, Synapse est une implémentation de celui-ci. Si vous êtes déjà perdu, relisez le point précédent ;)
 
-Ici, NixOS nous a bien facilité la tache vu qu'une configuration est disponible, donc on peut aller très vite.
+Ici, NixOS nous a bien facilité la tâche vu qu'une configuration est disponible, donc on peut aller très vite.
 
 [source]
 ----
@@ -86,7 +86,7 @@ Ici, on n'utilise qu'un seul port : le `8008`. C'est celui conseillé dans la do
 
 L'option `registration_shared_secret` est là uniquement pour enregistrer votre utilisateur administrateur. Il faudra bien penser à l'enlever, car elle permet de créer des utilisateurs un peu comme on veut en utilisant le dit mot de passe.
 
-Et enfin, pas besoin d'importer le paquet de Synapse dans les ceux de système hormis pour l'inscription d'un nouvel utilisateur via un terminal.
+Et enfin, pas besoin d'importer le paquet de Synapse dans ceux de système hormis pour l'inscription d'un nouvel utilisateur via un terminal.
 
 
 === La base de données
@@ -163,7 +163,7 @@ in
 }
 ----
 
-Ici, on voit que nous redirigeons tout vers notre serveur Synpase. On peut aussi voir qu'on utilise le port 8448. Il est important car c'est ce port qui est utilisé par la fédération des serveurs Matrix. Ainsi, un serveur lambda ira questionner notre serveur via ce port uniquement.
+Ici, on voit que nous redirigeons tout vers notre serveur Synapse. On peut aussi voir qu'on utilise le port 8448. Il est important car c'est ce port qui est utilisé par la fédération des serveurs Matrix. Ainsi, un serveur lambda ira questionner notre serveur via ce port uniquement.
 
 Une fois tout installé, vous pouvez d'ailleurs https://federationtester.matrix.org[tester votre serveur^] pour voir s'il est bien accessible par la fédération.
 
@@ -178,7 +178,7 @@ Une fois votre serveur fonctionnel, vous pouvez jouir de toutes les fonctionnali
 On va maintenant pouvoir ajouter des bridges qui vont être les interfaces entre un autre protocole et celui de Matrix. En plus simple : ça va permettre d'envoyer des messages en utilisant Matrix vers des destinataires comme Signal ou encore Messenger.
 
 Ici, je ne vais passer en revue que les bridges que j'ai implémenté sur mon serveur. On notera que la plupart ont été conçu par la même personne et donc ont le préfix `mautrix`. On peut donc constater qu'ils se configurent quasiment de la même manière. +
-Je vais aussi essayer de trier l'ordre des bridges ci-dessous en fonction de leur difficulté à installer. Ca permettra de monter progressivement en difficulté.
+Je vais aussi essayer de trier l'ordre des bridges ci-dessous en fonction de leur difficulté à installer. Ça permettra de monter progressivement en difficulté.
 
 link:../mautrix-facebook[image:https://img.shields.io/badge/mautrix-facebook-blue[]]
 link:../mautrix-telegram[image:https://img.shields.io/badge/mautrix-telegram-blue[]]

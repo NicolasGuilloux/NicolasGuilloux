@@ -15,7 +15,7 @@ tags:
  - docker
 ---
 
-Matrix est un protocole de messagerie instantannée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d'aller lire le tutoriel précédent :
+Matrix est un protocole de messagerie instantanée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d'aller lire le tutoriel précédent :
 link:../matrix[Matrix sur NixOS]
 
 
@@ -26,7 +26,7 @@ https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matr
 Bon, qu'on se le dise, j'aimerai bien partir de Facebook mais beaucoup de personnes ne veulent pas par simplicité. Même si ça m'embête pour des raisons évidentes, je dois rester dessus car j'ai vraiment des personnes que j'aime beaucoup qui refusent de passer sur d'autres plateformes. +
 C'est d'ailleurs un intérêt de ce bridge : je vais désinstaller toutes les applications Facebook, ma seule interaction sera via Matrix.
 
-Dans un premier temps, on va préparer notre base de données afin d'y stocker les données utilent au bridge. Pour le moment, celui-ci ne supporte que PostgreSQL. Ca tombe bien, on a déjà une BDD disponible via le serveur Synapse. Aussi, on va pouvoir facilement créer un user et une base.
+Dans un premier temps, on va préparer notre base de données afin d'y stocker les données utiles au bridge. Pour le moment, celui-ci ne supporte que PostgreSQL. Ca tombe bien, on a déjà une BDD disponible via le serveur Synapse. Aussi, on va pouvoir facilement créer un user et une base.
 
 [source]
 ----
@@ -68,7 +68,7 @@ La partie où on relie notre bridge à notre serveur est commentée pour le mome
 
 On va dès maintenant le configurer en éditant **en tant que root** le fichier `/var/lib/mautrix-facebook/data/config.yaml`... Enfin faite votre `nixos-rebuild switch` pour lancer le bridge.
 
-On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :
+On va changer différentes clés dans le fichier, je vais lister les clés qui ont changé :
 
 [source]
 ----
@@ -87,8 +87,8 @@ bridge:
 ----
 
 * `homeserver.address` : Votre serveur Matrix, pas besoin de passer par internet, il est disponible en local
-* `homeserver.domain` : C'est le `server_name`, vous devez maintenance savoir ce que c'est :)
-* `homeserver.verify_ssl` : Comme on est dans une boucle locale, par besoin de vérifier le SSL
+* `homeserver.domain` : C'est le `server_name`, vous devriez maintenant savoir ce que c'est :)
+* `homeserver.verify_ssl` : Comme on est dans une boucle locale, pas besoin de vérifier le SSL
 * `appservice.database` : Lien vers *votre base de données. Pensez à changer le mot de passe pour celui que vous avez utilisé au dessus.
 * `bridge.permissions` :  Ce sont les permissions. Pour ma part, j'ai mis `"*": user` pour que tous les utilisateurs puissent utiliser le bridge, et enfin `"@pseudo:server_name": admin` pour que votre utilisateur puisse l'administrer
 

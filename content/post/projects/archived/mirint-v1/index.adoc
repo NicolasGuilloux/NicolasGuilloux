@@ -28,7 +28,7 @@ Mirint regroupe différents appareils "recyclés" : ils ne servaient plus, donc 
 - Raspberry Pi 2 et son alimentation
 - Câble HDMI
 - Un coffret
-- Un film miroir sans teint
+- Un film miroir sans tain
 - Une plaque de plexiglas
 - Du fil et de quoi souder
 
@@ -38,7 +38,7 @@ Il est important de **ne pas toucher le circuit d'alimentation** quand le systè
 
 image:tele_dessus.jpg[Vue de dessus]
 
-Le Raspberry Pi est relié donc en HDMI au téléviseur. On pourrait auto-alimenter le RPi grâce au port USB du téléviseur, mais il sera tributaire de sa puissance. De plus, si le téléviseur est éteint, il y a de grandes chances que sur la plus part des téléviseur, le port USB soit désactivé. On opte donc pour une alimentation séparée.
+Le Raspberry Pi est relié donc en HDMI au téléviseur. On pourrait auto-alimenter le RPi grâce au port USB du téléviseur, mais il sera tributaire de sa puissance. De plus, si le téléviseur est éteint, il y a de grandes chances que sur la plupart des téléviseurs, le port USB soit désactivé. On opte donc pour une alimentation séparée.
 
 Le coffret a été raboté afin de pouvoir placer le téléviseur sur ses rebords et donc avoir la dalle sur le même plan horizontal que les bords du coffret. Il faudra aussi faire en sorte que ces mêmes bords ainsi que ceux du téléviseur soient noirs (peinture ou scotch noir).
 
@@ -49,14 +49,14 @@ La plaque de plexiglas a été découpée avec les dimensions extérieures du co
 Le film miroir a été collé sur la surface qui sera vers l'intérieur du coffret afin d'éviter toute dégradation et rentrée de lumière. Pour le mettre en place :
 
 1. Bien laver le plexiglas,
-2. Mettre de l'eau savoneuse sur la surface à coller,
+2. Mettre de l'eau savonneuse sur la surface à coller,
 3. Enlever le film protecteur du revêtement miroir,
 4. Placer le film progressivement sur la surface en raclant avec une carte afin de chasser les bulles d'air
-5. Une fois placé et bien seché, couper l'excédent de film
+5. Une fois placé et bien séché, couper l'excédent de film
 
 Pour ma part, j'ai percé puis fraisé le plexiglas pour le visser sur le coffret.
 
-Par ailleurs, on veut pouvoir allumer le téléviseur sans appuyer physiquement sur le bouton "Allumer" car ça contraint à démonter le miroir à chaque fois. Ainsi, on regarde la tension appliquée aux bornes de ce bouton poussoir. Généralement, il y a 4 pattes donc pour peut vérifier avec deux bornes en diagonale.
+Par ailleurs, on veut pouvoir allumer le téléviseur sans appuyer physiquement sur le bouton "Allumer" car ça contraint à démonter le miroir à chaque fois. Ainsi, on regarde la tension appliquée aux bornes de ce bouton poussoir. Généralement, il y a 4 pattes, on peut vérifier avec deux bornes en diagonale.
 
 image:btn_power.jpg[Boutons]
 
@@ -71,7 +71,7 @@ Dans un premier temps, veillez à bien configurer votre téléviseur pour s'allu
 
 De plus, vous pouvez configurer le téléviseur pour ne pas s'éteindre. Une amélioration sera à prévoir pour économiser de l'énergie.
 
-Venons au Raspberry qui sera le cerveau de notre miroir. J'ai choisi de faire l'affichage en HTML sur un serveur Web qui sera pour ma part plus facile à maintenir. Toutefois, avant parler du coeur du projet, il faut configurer notre Raspberry. Je me suis basé sur l'OS Raspbian Jessie Lite. Je pars du principe que les périphériques branchés fonctionnent correctement (comme la carte WiFi de votre RPi).
+Venons au Raspberry qui sera le cerveau de notre miroir. J'ai choisi de faire l'affichage en HTML sur un serveur Web qui sera pour ma part plus facile à maintenir. Toutefois, avant de parler du coeur du projet, il faut configurer notre Raspberry. Je me suis basé sur l'OS Raspbian Jessie Lite. Je pars du principe que les périphériques branchés fonctionnent correctement (comme la carte WiFi de votre RPi).
 
 === Connexion au Wifi
 
@@ -153,7 +153,7 @@ image:gpio.png[GPIO]
 
 Cela découle directement du soudage du bouton. Dans un premier, on installe WiringPi en suivant les instructions de ce http://wiringpi.com/download-and-install/[lien,class=link]. Cela nous permettra d'utiliser facilement les GPIO ! Pour plus d'informations, je vous laisse checker le http://blog.idleman.fr/raspberry-pi-06-utiliser-le-gpio-et-interagir-avec-le-monde-reel/[blog d'Idleman].
 
-Une fois installé, on peut commencer les festivités. On paramètre d'abord le GPIO pour être en mode "out" : `gpio mode 7 out`. Comme je l'ai dis précedemment, j'ai choisi le GPIO 7 (en suivant le schéma joint). On peut ensuite piloter le port en utilisant `gpio write 7 bit` en remplaçant "bit" par 1 pour du 3,3V ou 0 pour du 0V.
+Une fois installé, on peut commencer les festivités. On paramètre d'abord le GPIO pour être en mode "out" : `gpio mode 7 out`. Comme je l'ai dit précédemment, j'ai choisi le GPIO 7 (en suivant le schéma joint). On peut ensuite piloter le port en utilisant `gpio write 7 bit` en remplaçant "bit" par 1 pour du 3,3V ou 0 pour du 0V.
 
 On peut voir que le bouton réagit par front descendant en s'amusant à changer ces valeurs (donc pour simuler le bouton appuyé, on place le GPIO à 0).
 

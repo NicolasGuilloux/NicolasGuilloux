@@ -105,7 +105,7 @@ Disons-le, c'est la partie sécurité la plus importante. C'est ici qu'on autori
 
 === Les Objets
 
-Les règles "objets" servent à viser un réseau ou un appareil spécifique et lui donner des règles simples, prioritaires par rapports aux autres règles. Le contrôle que l'on peut avoir sur la configuration est assez limité ici, donc je ne l'utilise que pour des règles simples.
+Les règles "objets" servent à viser un réseau ou un appareil spécifique et lui donner des règles simples, prioritaires par rapport aux autres règles. Le contrôle que l'on peut avoir sur la configuration est assez limité ici, donc je ne l'utilise que pour des règles simples.
 
 - Une règle visant le réseau `Devices` qui route certains domaines sur la partie VPN.
 - L'objet réseau HomeAssistant qui a le droit de contacter tout le VLAN IoT.

@@ -1,0 +1,11 @@
+# Configure main menu and social menu
+[[main]]
+    identifier = "home"
+    name = "Accueil"
+    url = "/"
+    weight = -100
+    pre = "home"
+    
+    [main.params]
+        icon = "home"
+        newtab = false

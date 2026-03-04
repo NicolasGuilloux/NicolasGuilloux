@@ -72,7 +72,7 @@ services.nginx.virtualHosts."blog.nicolasguilloux.eu" = {
 ----
 
 Nginx était bien mais nécessitait que le service en question expose un port pour être accessible. Comme je travaille beaucoup avec des images Docker, l'utiliser était devenu de plus en plus fastidieux car je devais réfléchir à quel port j'exposais.
-Si par exemple j'avais deux sites exposés sur le port 80, je devais choisir de l'exposer l'un sur le port 8080 et l'autre sur le port 8081. +
+Si par exemple j'avais deux sites exposés sur le port 80, je devais choisir de les exposer, l'un sur le port 8080 et l'autre sur le port 8081. +
 Bref, rapidement j'ai trouvé que l'attribution arbitraire d'un port pour éviter les conflits n'était pas pérenne dans le temps.
 
 
@@ -84,7 +84,7 @@ image:caddy.png[]
 
 Regardons comment "installer" le service the nix way :
 
-* On va devoir déclarer une container qui utilisera le port 80 et 443 pour respectivement le http et https.
+* On va devoir déclarer un container qui utilisera le port 80 et 443 pour respectivement le http et https.
 * On doit donner un petit nom au network Docker. Tout container appartenant à ce network sera analysé par caddy-proxy pour trouver éventuellement des labels le concernant.
 * On l'ajoute bien entendu à ce dit network.
 * On lui donne accès à notre socket Docker, pour qu'il puisse analyser les différents containers.
@@ -155,7 +155,7 @@ Voyons quelques prérequis qui expliquent la configuration :
 
 * Traefik doit avoir accès à Docker
 * On veut son Dashboard pour pouvoir facilement débugger
-* On doit configurer au moins deux points d'entrées : un pour le http et l'autre pour le https. Le http dans cette exemple redirigera vers le https.
+* On doit configurer au moins deux points d'entrées : un pour le http et l'autre pour le https. Le http dans cet exemple redirigera vers le https.
 * On doit configurer la génération des certificats
 * On souhaite par défaut que le dashboard soit accessible via `https://traefik.local`
 
@@ -233,7 +233,7 @@ in
 
 NOTE: Si jamais vous voulez manipuler des headers, il faut passer par des middlewares.
 
-Regardons déjà la déclaration d'un container pour qu'il soit cabler sur Traefik. L'attribution des labels est plutôt évidentes.
+Regardons déjà la déclaration d'un container pour qu'il soit câblé sur Traefik. L'attribution des labels est plutôt évidentes.
 
 [source,nix]
 ----
@@ -273,4 +273,4 @@ Il y a plusieurs fonctionnalités que j'ai ou vais explorer avec Traefik :
 * link:../local-certification/[Faire de la certification en local]
 * Faire du routing TCP/UDP
 * Implémenter du monitoring
-* Implémenter + de securité (Crowdsec ?)
+* Implémenter + de sécurité (Crowdsec ?)
