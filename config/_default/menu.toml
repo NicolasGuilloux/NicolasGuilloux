@@ -9,3 +9,51 @@
     [main.params]
         icon = "home"
         newtab = false
+        
+[[social]]
+    identifier = "email"
+    name       = "Email"
+    url        = "nicolas.guilloux@protonmail.com"
+
+    [social.params]
+        icon = "email"
+        
+[[social]]
+    identifier = "github"
+    name       = "GitHub"
+    url        = "https://github.com/NicolasGuilloux"
+
+    [social.params]
+        icon = "brand-github"
+        
+[[social]]
+    identifier = "gitlab"
+    name       = "GitLab"
+    url        = "https://gitlab.com/NicolasGuilloux"
+
+    [social.params]
+        icon = "gitlab"
+        
+[[social]]
+    identifier = "malt"
+    name       = "Malt"
+    url        = "https://www.malt.fr/profile/nicolasguilloux"
+
+    [social.params]
+        icon = "malt"
+        
+[[social]]
+    identifier = "linkedin"
+    name       = "LinkedIn"
+    url        = "https://www.linkedin.com/in/nicolas-guilloux/"
+
+    [social.params]
+        icon = "linkedin"
+        
+[[social]]
+    identifier = "cv"
+    name       = "CV"
+    url        = "https://github.com/NicolasGuilloux/curriculum-vitae/releases/latest"
+
+    [social.params]
+        icon = "file"

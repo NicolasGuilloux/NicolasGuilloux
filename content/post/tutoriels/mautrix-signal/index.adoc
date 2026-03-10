@@ -3,7 +3,7 @@ title: Le Bridge Signal pour Matrix
 description: L'installation de Matrix sur NixOS avec ses Bridges
 date: 2021-04-08
 slug: mautrix-signal
-image: cover.svg
+image: cover.png
 categories:
  - Tutoriels
  - Notes

@@ -20,10 +20,7 @@ SortBy              = "default"
 [sidebar]
     # emoji    = "🍥"
     subtitle = "Développeur Backend Symfony"
-    [sidebar.avatar]
-        enabled = true
-        local   = true
-        src     = "images/avatar.jpg"
+    avatar   = "images/avatar.jpg"
 
 [article]
     headingAnchor = false
@@ -58,7 +55,6 @@ SortBy              = "default"
 
     # See all the available configurations at https://github.com/CaiJimmy/hugo-theme-stack/blob/master/config/_default/params.toml
     # Copy the configurations you need from there and paste it here.
-
 
 [social]
 email = "nicolas.guilloux@protonmail.com"

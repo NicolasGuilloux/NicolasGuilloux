@@ -3,7 +3,7 @@ title: Matrix sur NixOS
 description: L'installation de Matrix sur NixOS avec ses Bridges
 date: 2021-03-26
 slug: matrix
-image: matrix.svg
+image: matrix.png
 categories:
  - Tutoriels
  - Notes

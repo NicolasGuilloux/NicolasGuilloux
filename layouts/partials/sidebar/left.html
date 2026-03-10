@@ -1,10 +1,5 @@
-<aside class="sidebar left-sidebar sticky">
-    <button
-        class="hamburger hamburger--spin"
-        type="button"
-        id="toggle-menu"
-        aria-label="{{ T `toggleMenu` }}"
-    >
+<aside class="sidebar left-sidebar sticky {{ if .Site.Params.sidebar.compact }}compact{{ end }}">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="{{ T `toggleMenu` }}">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
@@ -12,31 +7,20 @@
 
     <header class="site-info">
         {{ with .Site.Params.sidebar.avatar }}
-        <figure class="site-avatar">
-            {{ if not .local }}
-            <img
-                src="{{ .src }}"
-                width="300"
-                height="300"
-                class="site-logo"
-                loading="lazy"
-                alt="Avatar"
-            />
-            {{ else }} {{ $avatar := resources.Get (.src) }} {{ if $avatar }} {{
-            $avatarResized := $avatar.Resize "300x" }}
-            <img
-                src="{{ $avatarResized.RelPermalink }}"
-                width="{{ $avatarResized.Width }}"
-                height="{{ $avatarResized.Height }}"
-                class="site-logo"
-                loading="lazy"
-                alt="Avatar"
-            />
-            {{ else }} {{ errorf "Failed loading avatar from %q" . }} {{ end }}
-            {{ end }} {{ with $.Site.Params.sidebar.emoji }}
-            <span class="emoji">{{ . }}</span>
-            {{ end }}
-        </figure>
+            {{- $avatar := partial "helper/image" (dict "Image" . "Resources" resources) -}}
+            <figure class="site-avatar">
+                <a href="{{ $.Site.Home.RelPermalink }}">
+                    <img src="{{ $avatar.Permalink }}"
+                        width="{{ $avatar.Width }}"
+                        height="{{ $avatar.Height }}"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                {{ with $.Site.Params.sidebar.emoji }}
+                    <span class="emoji">{{ . }}</span>
+                {{ end }}
+            </figure>
         {{ end }}
         <h1 class="site-name">
             <a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a>
@@ -49,20 +33,21 @@
             {{ partial "sidebar/social" .Site.Params.social }}
         </li>
 
-        {{ $currentPage := . }} {{ range .Site.Menus.main }} {{ $active := or
-        (eq $currentPage.Title .Name) (or ($currentPage.HasMenuCurrent "main" .)
-        ($currentPage.IsMenuCurrent "main" .)) }}
-
+        {{ $currentPage := . }}
+        {{ range .Site.Menus.main }}
+        {{ $active := or (eq $currentPage.Title .Name) (or ($currentPage.HasMenuCurrent "main" .) ($currentPage.IsMenuCurrent "main" .)) }}
         <li {{ if $active }} class="current" {{ end }}>
             <a href="{{ .URL }}">
                 {{ if .Pre }} {{ partial "helper/icon" .Pre }} {{ end }}
                 <span>{{- .Name -}}</span>
             </a>
         </li>
-        {{ end }} {{ if (default false .Site.Params.colorScheme.toggle) }}
+        {{ end }}
+
+        {{ if (default false .Site.Params.colorScheme.toggle) }}
         <li id="dark-mode-toggle">
-            {{ partial "helper/icon" "toggle-left" }} {{ partial "helper/icon"
-            "toggle-right" }}
+            {{ partial "helper/icon" "toggle-left" }}
+            {{ partial "helper/icon" "toggle-right" }}
             <span>{{ T "darkMode" }}</span>
         </li>
         {{ end }}

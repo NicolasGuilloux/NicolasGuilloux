@@ -3,7 +3,7 @@ title: Le Bridge Facebook pour Matrix
 description: L'installation de Matrix sur NixOS avec ses Bridges
 date: 2021-03-29
 slug: mautrix-facebook
-image: cover.svg
+image: cover.png
 categories:
  - Tutoriels
  - Notes
