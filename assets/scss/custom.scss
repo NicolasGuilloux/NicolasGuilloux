@@ -1,9 +1,12 @@
-#main-menu li.social {
+.menu-social li {
     svg {
+        width: 2rem;
+        height: 2rem;
         margin: auto;
     }
 
     a {
+        color: var(--body-text-color);
         margin-left: 1em;
 
         &:first-child {
