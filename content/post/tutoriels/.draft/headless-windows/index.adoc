@@ -1,7 +1,7 @@
 ---
 title: Une VM Windows sur un serveur pour le jeu
 description: Les outils et astuces pour faire tourner Windows sur un serveur pour du gaming
-date: 2023-10-26
+date: 2026-11-20
 slug: windows-vm-gaming
 draft: true
 categories:
@@ -14,20 +14,22 @@ tags:
  - nixos
 ---
 
-On a tous rêvé d'avoir un ordinateur portable capable de faire tourner les jeux les plus gourmands, sans la batterie qui fond comme neige au soleil, ou les 10kg a mettre dans son sac à dos.
+On a tous rêvé d'avoir un ordinateur portable capable de faire tourner les jeux les plus gourmands, sans la batterie qui fond comme neige au soleil, ou les 10 kg à mettre dans son sac à dos.
 
-C'est la promesse de link:https://shadow.tech/fr-FR[Shadow^], un service de location de PC à distance. J'ai été longtemps actif dans la communauté, mais je me suis écarté suites aux différents rachats, à la montée des prix. De plus, j'ai emménagé en campagne et je compte actuellement sur Starlink pour m'apporter mon précieux internet. Clairement incompatible avec le cloud gaming.
+C'est la promesse de link:https://shadow.tech/fr-FR[Shadow^], un service de location de PC à distance. J'ai été longtemps actif dans la communauté, mais je me suis écarté suite aux différents rachats et à la montée des prix. De plus, j'ai emménagé en campagne et je compte actuellement sur Starlink pour m'apporter mon précieux internet. Clairement incompatible avec le cloud gaming.
 
-Mais l'idée reste intéressante. Et pourquoi pas faire son propre "cloud gaming" local après tout ? Ca permettrait de jouer sur mon Macbook, sur ma télévision, sur mon téléphone. Un autre avantage : mon serveur n'est pas dans mon bureau, donc on évite les 30°C en été dès que je fais quelques parties avec un bruit d'hélicoptère. Et en plus, c'est plus aéré là où il est, le meilleur des mondes !
+Mais l'idée reste intéressante. Et pourquoi pas faire son propre "cloud gaming" local après tout ? Ça permettrait de jouer sur mon Macbook, sur ma télévision, sur mon téléphone. Un autre avantage : mon serveur n'est pas dans mon bureau, donc on évite les 30°C en été dès que je fais quelques parties avec un bruit d'hélicoptère. Et en plus, c'est plus aéré là où il est, le meilleur des mondes !
 
-Je vais découper cet article en plusieurs parties distinctes, vous pouvez piocher dedans de manière indépendante. 
+Je vais découper cet article en plusieurs parties distinctes, vous pouvez piocher dedans de manière indépendante.
+
+NOTE: Ce setup a tourné sur mon serveur pendant un bon moment, mais ce n'est plus celui que j'utilise aujourd'hui. Une suite arrive avec une version que je trouve encore plus intéressante !
 
 
 == Construire notre machine virtuelle
 
-IMPORTANT: Une machine virtuelle sous Windows ne pourra pas faire tourner certains jeux. Le seul que j'ai en tête, c'est Valorant avec son fameux Vanguard qui vous impose d'avoir une machine "physique". Je sais qu'à l'époque, Shadow avait essayé de dialoguer avec Riot pour trouver une solution, mais sans succès. Vous pouvez aussi trouver des "tutos" pour contourner ça, mais gardez bien à l'esprit que ça peut vous valoir un ban définitif. Personnellement, j'ai juste dis "Au revoir Valorant", car de toute manière j'en avais fait le tour.
+IMPORTANT: Une machine virtuelle sous Windows ne pourra pas faire tourner certains jeux. Le seul que j'ai en tête, c'est Valorant avec son fameux Vanguard qui vous impose d'avoir une machine "physique". Je sais qu'à l'époque, Shadow avait essayé de dialoguer avec Riot pour trouver une solution, mais sans succès. Vous pouvez aussi trouver des "tutos" pour contourner ça, mais gardez bien à l'esprit que ça peut vous valoir un ban définitif. Personnellement, j'ai juste dit "Au revoir Valorant", car de toute manière j'en avais fait le tour.
 
-En premier lieu, je me suis dis que c'est une couche de complexité supplémentaire inutile. Puis j'ai commencé à faire du Homelab, et je me suis rendu compte que je jouais 1 ou 2 soirs par semaine. Et si mon PC de Gamer servait justement de serveur sous stéroïde, mais qu'il se transformait en machine de jeu quand j'en ai besoin ?
+En premier lieu, je me suis dit que c'est une couche de complexité supplémentaire inutile. Puis j'ai commencé à faire du Homelab, et je me suis rendu compte que je jouais 1 ou 2 soirs par semaine. Et si mon PC de Gamer servait justement de serveur sous stéroïde, mais qu'il se transformait en machine de jeu quand j'en ai besoin ?
 
 Voilà l'idée : quand je ne joue pas, plein de services tournent dessus. Quand je veux jouer, la VM Windows se lance et récupère quasiment toutes les ressources, et ça de manière transparente. Pour moi, le meilleur des 2 mondes !
 
@@ -37,32 +39,333 @@ On va vraiment utiliser du jargon, mais pas de panique rien n'est compliqué qua
 
 * **Host** : C'est l'OS original, celui directement installé sur votre machine. Ce sera forcément un Linux pour ce tutoriel
 * **Guest** : C'est la machine virtuelle, ou même l'OS qui tourne dessus. Dans notre cas, ce sera Windows 11. On pourra aussi l'appeler VM, pour Virtual Machine.
-* **Groupes IOMMU** : Quand c'est supporté, la machine au niveau du hardware créer des groupes de périphériques. Pour un ordre de grandeur, j'ai une 20aine de groupes mais il y a beaucoup d'appareils ! Donc plusieurs appareils peuvent se retrouver dans le même groupe.
+* **Groupes IOMMU** : Quand c'est supporté, la machine crée au niveau matériel des groupes de périphériques. Pour un ordre de grandeur, j'ai une vingtaine de groupes mais il y a beaucoup d'appareils ! Donc plusieurs appareils peuvent se retrouver dans le même groupe.
 * **Passthrough** : On cherche à passer notre GPU à notre VM, on appelle ça Passthrough to VM (passer à travers la VM littéralement)
 
 === Pré-requis
 
-Si il est admis que votre Host est sous Linux, je détaillerais particulièrement pour NixOS.
+S'il est admis que votre Host est sous Linux, je détaillerai particulièrement pour NixOS.
 
-Il vous faut une machine qui supporte les technologies de virtualisation, et qu'il supporte les link:https://iommu.info/#:~:text=An%20IOMMU%20group%20is%20the,can%20only%20be%20passed%20together[groupes IOMMU^]. 
+Il vous faut une machine qui supporte les technologies de virtualisation, ainsi que les link:https://iommu.info/#:~:text=An%20IOMMU%20group%20is%20the,can%20only%20be%20passed%20together[groupes IOMMU^]. 
 
-Les informations sur le support de la virtualisation se trouvent généralement dans le Bios. On cherche `VT-d` pour Intel, ou `AMD-Vi` pour AMD. +
+Les informations sur le support de la virtualisation se trouvent généralement dans le BIOS. On cherche `VT-d` pour Intel, ou `AMD-Vi` pour AMD. +
 Pour les groupes IOMMU, assurez-vous que la carte graphique est seule dans son groupe. Si ce n'est pas le cas, essayez de la changer de port.
 
-NOTE: Pour passer un périphérique, il faut au préalable que tous les périphériques du groupe soient détachés du Host. On verra ça plus tard, mais il est très primordiale que la carte graphique soit seule dans son groupe ou à minima dans un groupe avec des appareils non essentiels au Host.
+NOTE: Pour passer un périphérique, il faut au préalable que tous les périphériques du groupe soient détachés du Host. On verra ça plus tard, mais il est primordial que la carte graphique soit seule dans son groupe ou à minima dans un groupe avec des appareils non essentiels au Host.
 
-Quoi qu'il arrive, suivez *scrupuleusement* les instructions de cette linkhttps://github.com/bryansteiner/gpu-passthrough-tutorial#----part-1-prerequisites[documentation^]. pour les prérequis. 
+Quoi qu'il arrive, suivez *scrupuleusement* les instructions de cette link:https://github.com/bryansteiner/gpu-passthrough-tutorial#----part-1-prerequisites[documentation^] pour les prérequis.
 
 NOTE: Sur cette documentation, il demande 2 cartes graphiques, on n'en a besoin que d'une, et d'un accès SSH pour avoir accès au Host.
 
 === Entrons dans le vif du sujet
 
-On va utiliser libvirt 
+Je vais m'appuyer sur la configuration de Mewenn, mon serveur à la maison, telle qu'elle était au moment où ce setup tournait. Tout est disponible sur link:https://gitlab.com/NicolasGuilloux/nixos-configuration/-/tree/b98ffd567613b632654c9ce3d9e10d061d1b2c0a[mon dépôt de configuration NixOS^], je vous mets les extraits importants au fil de l'eau.
+
+Pour situer : un processeur AMD avec 8 cœurs / 16 threads, une carte graphique Nvidia, et une seule. Pas de deuxième carte pour l'Host, le serveur est headless de toute manière.
+
+Le plan de bataille est le suivant :
+
+. Activer l'IOMMU et libvirt sur l'Host
+. Écrire des hooks libvirt qui libèrent la carte graphique au démarrage de la VM, et la rendent à l'Host à son extinction
+. Réserver une partie des cœurs du processeur à la VM pendant qu'elle tourne
+. Déclarer la VM elle-même, de manière reproductible
+
+==== Activer l'IOMMU et libvirt
+
+On commence par les paramètres du kernel. `iommu=pt` active le mode passthrough de l'IOMMU, et les options `kvm.*` évitent que la VM plante quand Windows essaye de lire des registres du processeur que KVM ne connaît pas.
+
+[source,nix]
+----
+{
+  boot.kernelParams = [
+    "amd_iommu=on" # ou "intel_iommu=on" pour Intel
+    "iommu=pt"
+    "kvm.ignore_msrs=1"
+    "kvm.report_ignored_msrs=0"
+  ];
+
+  boot.kernelModules = [ "vfio" "vfio_iommu_type1" "vfio_pci" ];
+}
+----
+
+Ensuite, libvirt. Windows 11 exige un TPM et le Secure Boot : on active donc `swtpm` pour émuler la puce TPM, et OVMF pour avoir un UEFI dans la VM.
+
+[source,nix]
+----
+{ config, pkgs, ... }:
+
+{
+  virtualisation.libvirtd = {
+    enable = true;
+    onBoot = "ignore"; # On ne démarre pas la VM avec le serveur
+    qemu.swtpm.enable = true;
+    qemu.ovmf.enable = true;
+  };
+
+  environment.systemPackages = with pkgs; [ virt-manager swtpm virtiofsd ];
+
+  # Les fichiers UEFI avec Secure Boot, à un chemin stable pour la VM
+  environment.etc = {
+    "ovmf/edk2-x86_64-secure-code.fd".source =
+      config.virtualisation.libvirtd.qemu.package + "/share/qemu/edk2-x86_64-secure-code.fd";
+
+    "ovmf/edk2-i386-vars.fd" = {
+      source = config.virtualisation.libvirtd.qemu.package + "/share/qemu/edk2-i386-vars.fd";
+      mode = "0644";
+      user = "libvirtd";
+    };
+  };
+}
+----
+
+Un dernier détail qui m'a coûté un peu de temps : les hooks libvirt sont exécutés par le service `libvirtd`, qui n'a quasiment rien dans son `PATH` sous NixOS. Il faut lui donner les outils dont nos scripts auront besoin.
+
+[source,nix]
+----
+{ pkgs, ... }:
+
+{
+  systemd.services.libvirtd.path = with pkgs; [ bash libvirt kmod systemd pciutils swtpm ];
+}
+----
+
+==== Le principe : prêter la carte graphique
+
+C'est là que ça devient intéressant. Quand la VM ne tourne pas, la carte graphique appartient à l'Host : les drivers Nvidia sont chargés, et des services peuvent s'en servir (de l'encodage vidéo pour Plex, de l'IA, etc.). Quand je lance la VM, il faut :
+
+. Arrêter les services qui utilisent la carte graphique
+. Décharger les modules Nvidia du kernel
+. Détacher le groupe IOMMU de la carte pour le confier à `vfio-pci`
+. Réserver des cœurs du processeur à la VM
+
+Et quand la VM s'arrête, on fait exactement l'inverse.
+
+libvirt permet justement d'exécuter des scripts à chaque étape de la vie d'une VM grâce aux link:https://libvirt.org/hooks.html[hooks^]. Le script `/var/lib/libvirt/hooks/qemu` est appelé avec le nom de la VM, l'étape (`prepare`, `start`, `stopped`, `release`...) et le moment (`begin` ou `end`). L'étape `prepare` arrive avant que la VM ne récupère ses périphériques, et `release` une fois qu'elle les a rendus : c'est exactement ce qu'il nous faut.
+
+NixOS sait déjà déclarer ces hooks via `virtualisation.libvirtd.hooks.qemu`. Par contre, chaque script reçoit les événements de toutes les VMs, et doit faire le tri lui-même. J'ai donc écrit un petit module qui génère ce tri, et qui envoie la sortie de chaque hook dans `/var/log/libvirt/qemu/hooks/` pour pouvoir déboguer.
+
+[source,nix]
+----
+{ config, pkgs, ... }:
+
+let
+  cfg = config.virtualisation.libvirtd;
+
+  getState = hook: if hook.executeAfter then "end" else "begin";
+
+  hookTemplate = hook: {
+    name = "${hook.vmName}-${hook.stage}-${getState hook}-${hook.name}";
+    value = pkgs.writeShellScript hook.name ''
+      # On ne réagit qu'à la bonne VM, à la bonne étape et au bon moment
+      [ "${hook.vmName}" != "$1" ] && exit 0
+      [ "${hook.stage}" != "$2" ] && exit 0
+      [ "${getState hook}" != "$3" ] && exit 0
+
+      folder=/var/log/libvirt/qemu/hooks/${hook.vmName}/${hook.stage}/${getState hook}
+      mkdir -p $folder
+      exec 1>$folder/${hook.name} 2>&1
+
+      ${hook.script}
+    '';
+  };
+in
+{
+  virtualisation.libvirtd.hooks.qemu = builtins.listToAttrs (map hookTemplate cfg.domainHooks);
+}
+----
+
+L'option `virtualisation.libvirtd.domainHooks` est une simple liste de `{ name, vmName, stage, executeAfter, script }`, déclarée link:https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/b98ffd567613b632654c9ce3d9e10d061d1b2c0a/modules/nixos/extra/libvirtd-hooks/config.nix[dans le module^].
+
+==== Le module de passthrough
+
+Par-dessus ces hooks, j'ai un deuxième module qui décrit ce qu'il faut faire pour chaque VM. Voilà ce que ça donne pour la VM Windows de Mewenn :
+
+[source,nix]
+----
+{ config, ... }:
+
+{
+  virtualisation.libvirtd.virtualMachines.windows-11-gpu = {
+    # Le serveur est headless, pas de console à libérer
+    unbindVTconsoles = false;
+    unbindEfiFramebuffer = false;
+
+    # Laisse le temps aux services de s'arrêter avant de décharger les modules
+    raceConditionTimeout = 5;
+
+    # Le groupe IOMMU de la carte graphique
+    detachIommuGroups = [ 16 ];
+
+    # Les drivers Nvidia, à décharger avant de passer la carte à la VM
+    kernelModules.unload = [ "nvidia_drm" "nvidia_uvm" "nvidia_modeset" "nvidia" ];
+
+    # Les services qui utilisent la carte graphique
+    services.stop = [ "docker-tdarr.service" ]
+      ++ (if config.hardware.nvidia.nvidiaPersistenced then [ "nvidia-persistenced.service" ] else [ ]);
+
+    # 8 cœurs sur 16 pour la VM
+    cpuAllocation = {
+      enable = true;
+      totalCoresCount = 16;
+      coresCount = 8;
+    };
+  };
+}
+----
+
+Le module transforme chaque VM en deux hooks : un script de démarrage sur `prepare/begin`, et un script d'arrêt sur `release/end`.
+
+[source,nix]
+----
+{ config, lib, pkgs, ... }:
+
+let
+  vmHooks = vmName: vmConfig: [
+    {
+      name = "gpu_passthrough";
+      inherit vmName;
+      stage = "prepare";
+      script = pkgs.callPackage ./assets/start.nix { inherit vmName vmConfig; };
+    }
+    {
+      name = "gpu_passthrough";
+      inherit vmName;
+      stage = "release";
+      executeAfter = true;
+      script = pkgs.callPackage ./assets/stop.nix { inherit vmName vmConfig; };
+    }
+  ];
+in
+{
+  virtualisation.libvirtd.domainHooks = lib.concatLists (
+    lib.mapAttrsToList vmHooks config.virtualisation.libvirtd.virtualMachines
+  );
+}
+----
+
+Le script de démarrage est généré à partir de la configuration. Une fois les listes vides retirées, voilà ce qu'il fait concrètement :
+
+[source,bash]
+----
+# Arrêt des services qui utilisent la carte graphique
+systemctl stop docker-tdarr.service
+
+# On laisse le temps aux processus de lâcher la carte
+sleep 5
+
+# Déchargement des drivers Nvidia, avec les modules qui en dépendent
+modprobe --remove-holders -r nvidia_drm
+modprobe --remove-holders -r nvidia_uvm
+modprobe --remove-holders -r nvidia_modeset
+modprobe --remove-holders -r nvidia
+
+# Détachement de tous les périphériques du groupe IOMMU 16
+iommu-groups detach 16
+
+# L'Host se contente des 8 premiers cœurs
+cpu-manipulation reserve 8
+----
+
+Le script d'arrêt fait l'inverse : il rend les cœurs à l'Host, rattache le groupe IOMMU, recharge les modules Nvidia et relance les services. Les deux scripts sont visibles link:https://gitlab.com/NicolasGuilloux/nixos-configuration/-/tree/b98ffd567613b632654c9ce3d9e10d061d1b2c0a/modules/nixos/virtualisation/gpu-passthrough/assets[ici^].
+
+`iommu-groups` est un petit utilitaire maison : il liste les périphériques d'un groupe IOMMU (avec link:https://gist.github.com/techhazard/1be07805081a4d7a51c527e452b87b26[ce script^]) et appelle `virsh nodedev-detach` ou `virsh nodedev-reattach` sur chacun d'eux. C'est pour ça que la carte graphique doit être seule dans son groupe : tout ce qui s'y trouve part avec elle.
+
+TIP: Pour trouver le numéro de groupe de votre carte, lancez `iommu-groups list`, ou directement le script cité plus haut. Votre carte graphique et sa partie audio HDMI doivent apparaître ensemble, et idéalement seules.
+
+==== Réserver des cœurs à la VM
+
+Pour que la VM ne se batte pas avec les services de l'Host pour le processeur, `cpu-manipulation` restreint tous les processus de l'Host aux premiers cœurs grâce aux cgroups de systemd. Pas besoin de redémarrer ni de toucher aux paramètres du kernel : tout se fait à chaud, avec `--runtime`.
+
+[source,bash]
+----
+# reserve 8 : sur 16 threads, l'Host garde les cœurs 0 à 7
+systemctl set-property --runtime -- user.slice AllowedCPUs=0-7
+systemctl set-property --runtime -- system.slice AllowedCPUs=0-7
+systemctl set-property --runtime -- init.scope AllowedCPUs=0-7
+
+# free : l'Host récupère tout à l'extinction de la VM
+systemctl set-property --runtime -- user.slice AllowedCPUs=0-15
+systemctl set-property --runtime -- system.slice AllowedCPUs=0-15
+systemctl set-property --runtime -- init.scope AllowedCPUs=0-15
+----
+
+==== Déclarer la VM avec NixVirt
+
+Créer la VM à la main dans `virt-manager` fonctionne très bien, mais je voulais qu'elle soit décrite dans ma configuration comme le reste. link:https://github.com/AshleyYakeley/NixVirt[NixVirt^] permet justement de déclarer des domaines libvirt en Nix, et propose même un modèle tout prêt pour Windows.
+
+[source,nix]
+----
+{ inputs, lib, ... }:
+
+let
+  nixvirtLib = inputs.nixvirt.lib;
+
+  baseWindowsVmConfig = nixvirtLib.domain.templates.windows {
+    name = "windows-11-gpu";
+    uuid = "cc7439ed-36af-4696-a6f2-1f0c4474d87e";
+    memory = { count = 16; unit = "GiB"; };
+    storage_vol = "/home/nover/Documents/Windows VM/windows-11.qcow2";
+    nvram_path = "/etc/ovmf/edk2-i386-vars.fd";
+    virtio_net = true;
+  };
+
+  windowsVmConfig = lib.recursiveUpdate baseWindowsVmConfig {
+    title = "Windows 11 GPU";
+    vcpu.count = 8;
+    os.smbios.mode = "host";
+    # Cache la virtualisation aux drivers Nvidia
+    features.kvm.hidden.state = true;
+    # La VM est directement sur le réseau local
+    devices.interface.source.bridge = "br0";
+    # La carte graphique, trouvée avec lspci (07:00.0)
+    devices.hostdev = [
+      {
+        mode = "subsystem";
+        type = "pci";
+        managed = true;
+        source.address = { domain = 0; bus = 7; slot = 0; function = 0; };
+      }
+    ];
+  };
+in
+{
+  virtualisation.libvirt = {
+    enable = true;
+    swtpm.enable = true;
+    connections."qemu:///session".domains = [
+      { definition = nixvirtLib.domain.writeXML windowsVmConfig; }
+    ];
+  };
+}
+----
+
+NOTE: Dans ma configuration, j'utilise une fonction de fusion maison, et je ne garde qu'une partie des périphériques du modèle. L'exemple ci-dessus est simplifié pour rester lisible, la version complète est link:https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/b98ffd567613b632654c9ce3d9e10d061d1b2c0a/systems/x86_64-linux/NoverMewenn/config/windows_vm.nix[par là^].
+
+L'option `kvm.hidden` mérite une explication. Pendant longtemps, les drivers Nvidia refusaient de fonctionner dans une VM et renvoyaient la fameuse "erreur 43". Cacher KVM à Windows (et donner un `vendor_id` Hyper-V quelconque) contourne le problème. Nvidia a officiellement autorisé le passthrough depuis, mais ça ne coûte rien de le garder.
+
+Pour le réseau, la VM est branchée sur un bridge `br0` qui contient l'interface physique du serveur. Elle obtient donc une adresse de mon routeur comme n'importe quelle machine de la maison, ce qui simplifie beaucoup la vie pour le streaming.
+
+[source,nix]
+----
+{
+  networking.bridges.br0.interfaces = [ "enp6s0" ];
+  networking.interfaces.br0.useDHCP = true;
+}
+----
+
+Et voilà : un `virsh start windows-11-gpu` et le serveur se met de côté le temps d'une partie. Un `virsh shutdown windows-11-gpu`, ou simplement éteindre Windows, et il récupère sa carte graphique et tous ses cœurs.
+
+==== Les pièges que j'ai rencontrés
+
+* **Les modules Nvidia qui refusent de se décharger** : si un processus utilise encore la carte, `modprobe -r` échoue et la VM ne démarre pas. D'où l'arrêt des services avant, le `sleep` pour leur laisser le temps de partir, et `--remove-holders` pour emporter les modules qui dépendent de `nvidia`.
+* **`nvidia-persistenced`** : ce service garde la carte éveillée, et donc occupée. Si vous l'activez, il faut l'arrêter avec les autres.
+* **Les conteneurs Docker avec accès au GPU** : pareil, ils bloquent le déchargement. Chez moi c'était Tdarr.
+* **Les logs** : sans la redirection de la sortie des hooks dans `/var/log/libvirt/qemu/hooks/`, un hook qui plante donne juste une VM qui refuse de démarrer sans plus d'explications. Gardez-la !
 
 
 == Le streaming
 
-IMPORTANT: Si votre plan est d'avoir votre machine virtuelle Windows sur le même ordinateur que vous utilisez au quotidien, je vous conseille de ne pas lire la suite et de directement jeter un coup d'oeil à link:https://looking-glass.io/[Looking Glass^] qui permet de "stream" votre VM Windows directement sur votre Host Linux. C'est très pratique, et ça permet de ne pas avoir à jongler entre 2 ordinateurs. Vous devrez avoir 2 cartes graphiques part contre.
+IMPORTANT: Si votre plan est d'avoir votre machine virtuelle Windows sur le même ordinateur que vous utilisez au quotidien, je vous conseille de ne pas lire la suite et de directement jeter un coup d'oeil à link:https://looking-glass.io/[Looking Glass^] qui permet de "stream" votre VM Windows directement sur votre Host Linux. C'est très pratique, et ça permet de ne pas avoir à jongler entre 2 ordinateurs. Vous devrez avoir 2 cartes graphiques par contre.
 
 Notre Windows tourne bien, et on souhaite pouvoir y accéder à distance en passant par notre réseau local ou même internet. Plusieurs solutions existent, on va détailler notre choix afin d'avoir la meilleure expérience possible.
 
@@ -75,9 +378,9 @@ Et on repart pour un glossaire pour être sûr des termes.
 
 === Le choix des logiciels
 
-Plusieurs logiciels existent dans la nature qui propose du streaming :
+Plusieurs logiciels existent dans la nature qui proposent du streaming :
 
-* link:https://parsec.app[Parsec^] est le logiciel le plus connu. Il est très simple d'utilisation, et propose une qualité satisfaisante. Il est disponible sur beaucoup de plateforme, et propose vraiment une expérience quasi plug'n'play. Toutefois, certaines fonctionnalités sont payantes (comme une meilleur colorimétrie ou certaines résolutions + rafraichissement), et il n'est pas OpenSource même s'il embrasse quelques idées. Certaines choses sont très bien par contre, notamment la notion de plusieurs personnes qui peuvent profiter du stream.
+* link:https://parsec.app[Parsec^] est le logiciel le plus connu. Il est très simple d'utilisation, et propose une qualité satisfaisante. Il est disponible sur beaucoup de plateformes, et propose vraiment une expérience quasi plug'n'play. Toutefois, certaines fonctionnalités sont payantes (comme une meilleure colorimétrie ou certaines résolutions + rafraichissement), et il n'est pas OpenSource même s'il embrasse quelques idées. Certaines choses sont très bien par contre, notamment la notion de plusieurs personnes qui peuvent profiter du stream.
 
 * link:https://www.nvidia.com/fr-fr/drivers/geforce-experience-gamestream/[Nvidia GameStream^] ou devrais-je dire feu GameStream. C'est le logiciel de Nvidia, et il est intégré dans Geforce Experience. Il est très simple d'utilisation, et propose une excellente qualité. Il y avait de l'idée en capturant l'image à la sortie du buffer plutôt qu'une fois affichée sur l'écran. Mais bon, c'est Nvidia, c'est très propriétaire, ça ne fonctionne que sur Nvidia avec les logiciels Nvidia optimisés pour du Nvidia. De plus, ils ont abandonné la technologie. Donc on va passer notre chemin.
 
@@ -91,11 +394,11 @@ Le grand gagnant est link:https://github.com/LizardByte/Sunshine[Sunshine^].
 
 === Installation
 
-Téléchargez et installer link:https://github.com/LizardByte/Sunshine/releases/tag/v0.21.0[sunshine-windows-installer.exe^] sur votre VM Windows.+
+Téléchargez et installez link:https://github.com/LizardByte/Sunshine/releases/latest[l'installeur Windows de Sunshine^] sur votre VM Windows. +
 Suivez l'installeur, précisez bien que vous voulez lancer Sunshine au démarrage de la machine. 
 
-J'aimerais vous dire que c'est tout, mais il reste une dernière chose à faire : il n'y a pas d'écran de branché. Et c'est un soucis, comment la carte graphique peut générer une image pour quelque chose qui n'existe pas ? On va donc devoir utiliser une astuce qui permet de faire croire à notre Windows qu'on a bel et bien un écran de branché, et qu'en plus il supporte plein de résolutions !
+J'aimerais vous dire que c'est tout, mais il reste une dernière chose à faire : il n'y a pas d'écran de branché. Et c'est un souci, comment la carte graphique peut générer une image pour quelque chose qui n'existe pas ? On va donc devoir utiliser une astuce qui permet de faire croire à notre Windows qu'on a bel et bien un écran de branché, et qu'en plus il supporte plein de résolutions !
 
-Suivez pour cela bien les instructions du link:https://github.com/itsmikethetech/Virtual-Display-Driver#installation[Virtual Display Driver^]. Au lieu de lancer le `.bat` directement, je vous conseille plutôt de le lancer à partir d'un Invite de commande ouvert en administrateur. Cela permet de voir les erreurs si il y en a, et ça ne fonctionnait pas pour ma part en direct.
+Suivez pour cela bien les instructions du link:https://github.com/VirtualDrivers/Virtual-Display-Driver[Virtual Display Driver^]. Au lieu de lancer le `.bat` directement, je vous conseille plutôt de le lancer à partir d'un Invite de commande ouvert en administrateur. Cela permet de voir les erreurs s'il y en a, et ça ne fonctionnait pas pour ma part en direct.
 
-Ca y est, vous pouvez débrancher votre écran et votre clavier/souris, et vous pouvez vous connecter à distance à votre VM Windows !
+Ça y est, vous pouvez débrancher votre écran et votre clavier/souris, et vous pouvez vous connecter à distance à votre VM Windows !
