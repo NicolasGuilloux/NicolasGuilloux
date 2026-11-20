@@ -10,10 +10,22 @@ image:https://img.shields.io/badge/-Malt-fff?style=for-the-badge&logoColor=white
 &emsp;
 image:https://img.shields.io/badge/-Blog-30CD32?style=for-the-badge[link="https://nicolasguilloux.eu",window="_blank"]
 &emsp;
+image:https://img.shields.io/badge/-Resume-E74C3C?style=for-the-badge&logo=latex&logoColor=white[link="https://github.com/NicolasGuilloux/curriculum-vitae/releases/latest",window="_blank"]
 
-I'm a backend web developer as freelance from France. I mainly work with my NixOS workstation on Symfony projects, and I love making various side projects on my own.
+I'm a *senior freelance backend developer* from France, specialised in *PHP / Symfony* since 2019 and freelancing since 2022.
+I'm the go-to person for *TDD* and *DDD* in the teams I join, and I always try to push for better code quality, architecture and team practices.
 
-== My skills and interest tier-list
+I work from my NixOS / nix-darwin setup, and I love building side projects on my own: homelab, home automation, AI agents...
+
+== 🚀 What I've been up to
+
+* 🏛️ *Now*: Senior Symfony / VueJS developer for a French government digital agency, building apps for the State's interministerial network in a fully offline, locked-down environment. Docker images and GitLab CI/CD optimisation included.
+* 🧱 *2026*: Short missions on a *Sylius* multi-channel e-commerce platform for a network of 250 retailers, and on a *.NET / Angular* API in hexagonal architecture.
+* 🛒 *2022 → 2026*: Senior Symfony developer on the backend of a major French retailer's drive & delivery website (*millions of orders per year*), microservices on *Azure / Kubernetes*. TDD/DDD referent, hexagonal architecture, Symfony 5 → 7 upgrades, API calls cut by 2 to 3× and hundreds of milliseconds saved per request, and early adopter of AI tooling in the team.
+* 🏢 *2022*: Senior Symfony developer for a real estate leader: Ibexa DXP, Elasticsearch, Docker stack cleanup, GitLab CI/CD to Kubernetes.
+* 🧪 *2019 → 2021*: Full-stack developer in a Bordeaux startup turned scaleup: TDD/DDD daily, Elm on the front, and several open-source Symfony bundles.
+
+== 🛠️ My skills and interest tier-list
 
 [cols=",4,4",frame=none,grid=rows]
 |===
@@ -24,18 +36,101 @@ I'm a backend web developer as freelance from France. I mainly work with my NixO
 ^|
 
 ^| image:https://img.shields.io/badge/A%20Tier-fdb772.svg?style=for-the-badge[]
-^| image:https://img.shields.io/badge/Docker-2496ed.svg?logo=docker&logoColor=white[] image:https://img.shields.io/badge/MariaDB-be9569.svg?logo=mariadb&logoColor=white[] image:https://img.shields.io/badge/Elm-60b5cc.svg?logo=elm&logoColor=white[]
+^| image:https://img.shields.io/badge/Docker-2496ed.svg?logo=docker&logoColor=white[] image:https://img.shields.io/badge/MariaDB-be9569.svg?logo=mariadb&logoColor=white[] image:https://img.shields.io/badge/Elm-60b5cc.svg?logo=elm&logoColor=white[] image:https://img.shields.io/badge/GitLab%20CI-FC6D26.svg?logo=gitlab&logoColor=white[] image:https://img.shields.io/badge/Claude%20Code-D97757.svg?logo=claude&logoColor=white[]
 ^| image:https://img.shields.io/badge/Rust-000.svg?logo=rust&logoColor=white[] image:https://img.shields.io/badge/WebAssembly-624ed8.svg?logo=webassembly&logoColor=white[]
 
 ^| image:https://img.shields.io/badge/B%20Tier-fcfd76.svg?style=for-the-badge[]
-^|
-^|
+^| image:https://img.shields.io/badge/Vue.js-4FC08D.svg?logo=vuedotjs&logoColor=white[] image:https://img.shields.io/badge/Kubernetes-326CE5.svg?logo=kubernetes&logoColor=white[] image:https://img.shields.io/badge/Elasticsearch-005571.svg?logo=elasticsearch&logoColor=white[] image:https://img.shields.io/badge/Sylius-1A9F83.svg?logo=sylius&logoColor=white[]
+^| image:https://img.shields.io/badge/n8n-EA4B71.svg?logo=n8n&logoColor=white[]
 
 ^| image:https://img.shields.io/badge/C%20Tier-b8ff7d.svg?style=for-the-badge[]
-^| image:https://img.shields.io/badge/Haskell-636363.svg?logo=haskell&logoColor=white[]
+^| image:https://img.shields.io/badge/Haskell-636363.svg?logo=haskell&logoColor=white[] image:https://img.shields.io/badge/.NET-512BD4.svg?logo=dotnet&logoColor=white[] image:https://img.shields.io/badge/Angular-DD0031.svg?logo=angular&logoColor=white[]
 ^| image:https://img.shields.io/badge/Kotlin-E24462.svg?logo=kotlin&logoColor=white[] image:https://img.shields.io/badge/Flutter-52bff0.svg?logo=flutter&logoColor=white[]
 
 ^| image:https://img.shields.io/badge/D%20Tier-71fffd.svg?style=for-the-badge[]
 ^|
 ^|
 |===
+
+And beyond the stack: *DDD, TDD, hexagonal architecture*, code review, static analysis, technical writing and mentoring.
+
+== 📦 Open source
+
+=== 🎮 Shadow on Linux
+
+[cols="1,3",frame=none,grid=rows]
+|===
+| https://github.com/NicolasGuilloux/blade-shadow-beta[blade-shadow-beta] ⭐ 121
+| Community documentation and tools to run the Shadow cloud gaming client on Linux. I was the Linux community representative for Shadow.
+
+| https://gitlab.com/NicolasGuilloux/shadow-live-os[Shadow Live OS] ⭐ 30
+| A small live OS that boots straight into Shadow in standalone mode.
+
+| https://github.com/NicolasGuilloux/shadow-nix[shadow-nix] ⭐ 17
+| Shadow client packaging for NixOS, plus a live ISO and a minimal environment.
+|===
+
+=== 🤖 AI agents & MCP servers
+
+[cols="1,3",frame=none,grid=rows]
+|===
+| https://github.com/NicolasGuilloux/job-research-mcp[job-research-mcp]
+| One MCP server per job board (Free-Work, Welcome to the Jungle, UGAP, Sharebound), all sharing the same contract. Written in Go.
+
+| https://github.com/NicolasGuilloux/intermarche-mcp[intermarche-mcp], https://github.com/NicolasGuilloux/lafourche-mcp[lafourche-mcp], https://github.com/NicolasGuilloux/local-bio-mcp[local-bio-mcp]
+| MCP servers and CLIs in Go to let an AI agent do my grocery shopping on French online stores.
+|===
+
+=== 🐘 Symfony & PHP
+
+[cols="1,3",frame=none,grid=rows]
+|===
+| https://github.com/rich-id/test-suite[rich-id/test-suite]
+| A test suite extending Symfony's and PHPUnit's: fewer side effects, less boilerplate, handy helpers.
+
+| https://github.com/NicolasGuilloux/wiremock-bundle[wiremock-bundle]
+| A Symfony bundle to quickly mock HTTP clients with Wiremock.
+
+| https://github.com/NicolasGuilloux/phpunit-dependency-injection-bundle[phpunit-dependency-injection-bundle]
+| Symfony's dependency injection, right inside PHPUnit test cases.
+
+| https://github.com/NicolasGuilloux/chaplean-dto-handler-bundle[DTO Handler Bundle]
+| A ParamConverter that loads the request into a DTO and validates it.
+|===
+
+=== ❄️ Nix, homelab & more
+
+[cols="1,3",frame=none,grid=rows]
+|===
+| https://gitlab.com/NicolasGuilloux/nixos-configuration[NixOS Configuration]
+| Declarative multi-machine setup for NixOS and macOS (nix-darwin): Nix Flakes, Snowfall Lib, ragenix secrets, devenv, Stylix.
+
+| https://github.com/NicolasGuilloux/elm-tailwind[elm-tailwind] ⭐ 17
+| A type-safe Elm implementation of the Tailwind framework.
+
+| https://github.com/NicolasGuilloux/KGet-Integrator[KGet-Integrator] ⭐ 42
+| A browser extension sending downloads from Chrome and Firefox to KGet.
+
+| https://github.com/NicolasGuilloux/homeassistant-dashboard[homeassistant-dashboard]
+| My Home Assistant dashboard, written in Nickel.
+
+| https://github.com/NicolasGuilloux/altstore-repository-server[altstore-repository-server]
+| A Rust web server generating an AltStore repository on the fly from IPA files.
+|===
+
+== ✍️ From my blog
+
+I write (in French) about my homelab, NixOS and side projects on https://nicolasguilloux.eu[nicolasguilloux.eu]:
+
+* https://nicolasguilloux.eu/articles/job-coach-skill/[Recherche de travail avec l'IA]: an AI skill to make job hunting less boring
+* https://nicolasguilloux.eu/articles/network-stack/[Ma stack Network]: my home network setup
+* https://nicolasguilloux.eu/articles/reverse-proxy-nixos/[Reverse Proxy sur NixOS]
+* https://nicolasguilloux.eu/articles/local-certification/[Certification locale]: local self-signed certificates for development
+* https://nicolasguilloux.eu/articles/matrix/[Matrix sur NixOS]: a Matrix server with its Facebook, Signal and Telegram bridges
+* https://nicolasguilloux.eu/articles/mirint-v2/[Mirint V2]: a smart mirror with a Raspberry Pi and a two-way mirror
+
+== 🎓 Background
+
+Electronics engineer from https://www.ensea.fr[ENSEA] (2018), with an MSc in Interactive Media from University College Cork, Ireland.
+
+When I'm not coding: climbing 🧗, badminton 🏸, drums 🥁 and guitar 🎸, board games 🎲, gaming 🎮: and being a bad gardener 🌱.
