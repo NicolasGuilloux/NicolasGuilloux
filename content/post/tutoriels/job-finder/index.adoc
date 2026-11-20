@@ -45,7 +45,7 @@ On va utiliser un skill. C'est un fichier Markdown qu'on donne à Claude pour lu
 
 Mon skill `job-coach` ressemble à ça :
 
-[source]
+[source,text]
 ----
 job-coach/
 ├── SKILL.md                         ← les instructions principales

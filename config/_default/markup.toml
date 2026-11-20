@@ -24,3 +24,9 @@
     lineNos            = true
     lineNumbersInTable = true
     tabWidth           = 4
+
+# Asciidoctor renderer configuration
+[asciidocExt]
+    [asciidocExt.attributes]
+        source-highlighter = "rouge"
+        rouge-css          = "class"

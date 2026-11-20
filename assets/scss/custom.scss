@@ -48,26 +48,8 @@
     width: 100%;
 }
 
-.disqus-container {
-    #disqus-title {
-        cursor: pointer;
-
-        .chevron {
-            transition: all 0.5s ease;
-        }
-    }
-
-    #disqus-container-dropdown {
-        display: none;
-    }
-
-    &.extended {
-        #disqus-container-dropdown {
-            display: block;
-        }
-
-        #disqus-title .chevron {
-            transform: rotateY(90deg);
-        }
-    }
+// Asciidoctor code blocks are highlighted by Rouge, which emits the same
+// Pygments-style token classes as Chroma: reuse the theme's Chroma colors.
+.rouge {
+    @extend .chroma;
 }

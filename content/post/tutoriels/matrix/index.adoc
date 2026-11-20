@@ -50,7 +50,7 @@ Tout commence d'abord par installer https://matrix.org/docs/projects/server/syna
 
 Ici, NixOS nous a bien facilité la tâche vu qu'une configuration est disponible, donc on peut aller très vite.
 
-[source]
+[source,nix]
 ----
 services.matrix-synapse = {
   enable = true;
@@ -95,7 +95,7 @@ https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matr
 
 Il faudra aussi configurer une base de données PostgreSQL pour le serveur.
 
-[source]
+[source,nix]
 ----
 # Manually configure PostgreSQL
 # ref: https://www.foxypossibilities.com/2018/02/04/running-matrix-synapse-on-nixos/
@@ -118,10 +118,10 @@ Avant d'exposer sur Internet, on va déjà créer notre utilisateur admin puis d
 
 Ici, rappelez vous la `registration_shared_secret` mis plus haut et simplement tapez la commande suivante
 
-[source]
-____
+[source,bash]
+----
 register_new_matrix_user --shared-secret "UnSecretTemporaire" http://localhost:8008
-____
+----
 
 On suit donc tout ce qu'il nous dit comme il faut en prenant soin de mettre votre utilisateur Admin.
 
@@ -132,7 +132,7 @@ https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matr
 
 On va maintenant configurer notre Reverse Proxy pour qu'il puisse être accessible du monde extérieur. C'est important aussi pour pouvoir dialoguer avec les autres serveurs.
 
-[source]
+[source,nix]
 ----
 let
   listenPort = port: ssl: {

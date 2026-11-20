@@ -79,7 +79,7 @@ Commençons par chercher le SSID de votre réseau (son petit nom en fait) en sca
 
 On va maintenant modifier les paramètres des réseaux WiFi `sudo nano /etc/wpa_supplicant/wpa_supplicant.conf` puis rentrez les informations comme suit à la fin du fichier (ou dans le champ correspondant s'il existe déjà la variable) :
 
-[source]
+[source,conf]
 ----
 network={
    ssid="votre SSID"
@@ -93,7 +93,7 @@ Ensuite, on valide nos changements en effectuant ce petit bout de code : `sudo w
 
 On aura besoin d'une interface graphique et de mettre à jour le bousin. On installe donc un serveur X et on met à jour le système (et un petit brin de ménage au cas ou) avec la ligne suivante :
 
-[source]
+[source,bash]
 ----
 sudo apt-get update
 sudo apt-get --no-install-recommends install xserver-xorg xserver-xorg-video-fbdev xinit pciutils xinput xfonts-100dpi xfonts-75dpi xfonts-scalable x11-xserver-utils unclutter
@@ -131,7 +131,7 @@ On souhaite maintenant charger juste un navigateur. Il faut donc choisir votre n
 
 Ensuite, pour lancer le navigateur en plein écran sur GitHub, il faut suivre la commande suivante :
 
-[source]
+[source,bash]
 ----
 startx /usr/bin/chromium-browser https://github.com/ --window-size=1080,1920 --start-fullscreen --kiosk --incognito  -- -nocursor
 ----
@@ -159,14 +159,14 @@ On peut voir que le bouton réagit par front descendant en s'amusant à changer 
 
 Ainsi, pour simuler l'appui du bouton, on utilise la ligne suivante :
 
-[source]
+[source,bash]
 ----
 gpio write 7 0 && sleep 1 && gpio write 7 1
 ----
 
 Pour paramétrer le GPIO en mode out et à l'état 1 (repos du bouton), il nous faut éditer le fichier /home/pi/.bashrc et rajouter les lignes suivantes :
 
-[source]
+[source,bash]
 ----
 gpio mode 7 out
 gpio write 7 1

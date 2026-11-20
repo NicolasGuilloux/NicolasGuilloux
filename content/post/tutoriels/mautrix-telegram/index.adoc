@@ -31,7 +31,7 @@ Je n'ai volontairement pas suivi la configuration proposée par NixOS car je n'a
 
 Voici la configuration que je préconise :
 
-[source]
+[source,nix]
 ----
 { config, lib, ... }:
 
@@ -64,7 +64,7 @@ Dans un premier temps, il faut faire une application sur le site de Telegram pou
 
 On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :
 
-[source]
+[source,yaml]
 ----
 homeserver:
     address: http://localhost:8008

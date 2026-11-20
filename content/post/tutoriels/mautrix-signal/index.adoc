@@ -29,7 +29,7 @@ La petite particularité sur ce bridge est que Signal ne dispose pas d'une API. 
 
 Voici la configuration que je préconise :
 
-[source]
+[source,nix]
 ----
 { config, lib, ... }:
 
@@ -75,7 +75,7 @@ On va dès maintenant configurer ce dernier en éditant **en tant que root** le 
 
 On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :
 
-[source]
+[source,yaml]
 ----
 homeserver:
     address: http://localhost:8008

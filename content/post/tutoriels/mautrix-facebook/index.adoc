@@ -28,7 +28,7 @@ C'est d'ailleurs un intérêt de ce bridge : je vais désinstaller toutes les ap
 
 Dans un premier temps, on va préparer notre base de données afin d'y stocker les données utiles au bridge. Pour le moment, celui-ci ne supporte que PostgreSQL. Ca tombe bien, on a déjà une BDD disponible via le serveur Synapse. Aussi, on va pouvoir facilement créer un user et une base.
 
-[source]
+[source,sql]
 ----
 sudo -u postgres psql
 CREATE ROLE "mautrixfacebook" WITH LOGIN PASSWORD 'VotreMotDePasseUnique';
@@ -38,7 +38,7 @@ CREATE DATABASE "mautrixfacebook" WITH OWNER "mautrixfacebook" TEMPLATE template
 
 Une fois fait, on va pouvoir préparer notre module qui va démarrer l'image docker du bridge. On va aussi câbler ce bridge à notre instance Matrix.
 
-[source]
+[source,nix]
 ----
 { config, lib, ... }:
 
@@ -70,7 +70,7 @@ On va dès maintenant le configurer en éditant **en tant que root** le fichier 
 
 On va changer différentes clés dans le fichier, je vais lister les clés qui ont changé :
 
-[source]
+[source,yaml]
 ----
 homeserver:
     address: http://localhost:8008
