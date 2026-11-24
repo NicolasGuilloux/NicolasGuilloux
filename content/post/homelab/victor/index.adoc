@@ -1,0 +1,440 @@
+---
+title: "Victor, l'IA qui fait mes courses"
+description: Comment j'ai délégué le drive à un agent IA auto-hébergé
+date: 2026-11-24
+slug: victor-courses
+draft: true
+image: cover.png
+categories:
+ - Projets
+ - Notes
+tags:
+ - ai
+ - homelab
+ - nixos
+ - mcp
+ - hermes
+---
+
+Faire les courses, c'est une tâche que je déteste cordialement. Pas le fait de manger, hein, j'aime beaucoup manger. Non, c'est tout ce qu'il y a autour : se rappeler de ce qu'il manque, ouvrir le site du drive, chercher "lait demi-écrémé" pour tomber sur 47 références, se rendre compte qu'on a oublié le PQ une fois la commande validée... Et avec un enfant en bas âge à la maison, le temps libre ne se compte plus vraiment en heures. +
+Depuis l'article sur la link:../../tutoriels/job-coach-skill/[recherche de travail avec l'IA^], j'ai attrapé le virus de l'automatisation par modèle de langage. Et une liste de courses, c'est quoi ? Du langage naturel. Vous voyez où je veux en venir.
+
+Je vous présente donc **Victor**, mon assistant IA dont le seul et unique métier est de remplir mon panier de drive. Il tourne sur mon serveur à la maison, je lui parle depuis mon téléphone, et il se débrouille avec Intermarché, Super U ou Local Bio pendant que je fais autre chose de ma vie.
+
+Comme pour le précédent article, on se fixe quelques objectifs pour ne pas partir dans tous les sens :
+
+* Lui parler depuis n'importe où, avec les messageries que j'utilise déjà
+* Qu'il lise ma liste de courses là où je la note vraiment (et pas dans un énième outil)
+* Qu'il cherche les produits et remplisse le panier chez plusieurs enseignes
+* Qu'il se souvienne de mes habitudes ("le lait, c'est toujours le bio en bouteille")
+* Qu'il ne **paye jamais** à ma place
+* Que tout soit déclaratif, versionné, et reconstructible en une commande
+
+Le dernier point, c'est mon côté NixOS qui parle. Bonne nouvelle : comme toute ma configuration vit dans link:https://gitlab.com/NicolasGuilloux/nixos-configuration[un dépôt Git^], l'historique des commits raconte toute l'évolution de Victor. On va donc suivre le fil, des débuts maladroits à la version actuelle.
+
+
+== Vue d'ensemble
+
+Avant de rentrer dans le détail, voilà à quoi ressemble Victor aujourd'hui :
+
+++++
+<pre class="mermaid" style="visibility:hidden">
+flowchart LR
+    Nover(["Moi, sur mon téléphone"])
+
+    subgraph Messageries
+        Discord
+        Matrix
+        Buzz
+    end
+
+    subgraph Taranis["Taranis, mon serveur"]
+        subgraph Conteneur["Conteneur Victor"]
+            Hermes["Hermes Agent"]
+            MCPI["MCP Intermarché"]
+            MCPU["MCP Super U"]
+            MCPB["MCP Local Bio"]
+            MCPC["MCP CalDAV"]
+            Flare["FlareSolverr"]
+        end
+        Router["9Router"]
+        Hindsight[("Hindsight, la mémoire")]
+        Radicale[("Radicale, la liste de courses")]
+    end
+
+    LLM["Claude, Codex, DeepSeek"]
+    Drives["Sites des drives"]
+
+    Nover --> Messageries --> Hermes
+    Hermes --> Router --> LLM
+    Hermes <--> Hindsight
+    Hermes --> MCPI & MCPU & MCPB & MCPC
+    MCPC --> Radicale
+    MCPU --> Flare
+    MCPI & MCPU & MCPB --> Drives
+</pre>
+++++
+
+En résumé :
+
+* **Hermes Agent** est le cerveau : c'est lui qui reçoit mes messages, discute avec le modèle de langage et appelle les outils.
+* Les **MCP** (pour Model Context Protocol) sont les mains : un petit serveur par enseigne, qui expose des outils du genre `search_products` ou `basket_add`.
+* **9Router** choisit quel modèle répond, et bascule sur un autre quand le premier fait la tête.
+* **Hindsight** est la mémoire à long terme.
+* **Radicale** héberge ma liste de courses, au format CalDAV, synchronisée avec mon téléphone.
+
+Le tout tourne dans un conteneur NixOS dédié sur Taranis, mon serveur à la maison (dont je vous ai présenté le réseau dans link:../network-stack/[ma stack Network^]).
+
+
+== Les débuts : une microVM et un modèle gratuit
+
+Mi-juin, je découvre link:https://github.com/NousResearch/hermes-agent[Hermes Agent^] de Nous Research. C'est un agent généraliste qui se branche sur à peu près toutes les messageries (Discord, Matrix, Telegram...), qui a sa propre mémoire, ses tâches planifiées, et qui parle MCP. Et surtout, il a un module NixOS. Il ne m'en fallait pas plus.
+
+Ma première idée était d'isoler chaque agent dans sa propre microVM, sur un VLAN dédié. Victor avait donc sa petite machine virtuelle à lui, avec 2 vCPU, 2 Go de RAM et une IP fixe :
+
+[source,nix]
+----
+# Configuration microVM (backend QEMU, VLAN 6)
+microvm = {
+  vcpus = 2;
+  mem = 2048; # MiB, suffisant pour un agent Hermes léger
+  hypervisor = "qemu";
+  # ...
+};
+
+# Agent Hermes, uniquement le profil Victor dans cette microVM
+services.hermes-agent = {
+  enable = true;
+  profiles = [ "victor" ];
+
+  settings.model = {
+    default = "nvidia/nemotron-3-super-120b-a12b:free";
+    provider = "openrouter";
+  };
+};
+----
+
+Oui, vous avez bien lu, un modèle **gratuit** sur OpenRouter. Je voulais voir si ça tenait la route avant d'y mettre des sous. Spoiler : non. Pour discuter, ça passe. Pour enchaîner une recherche de produit, choisir la bonne référence parmi 30 et l'ajouter au panier avec la bonne quantité, beaucoup moins.
+
+La microVM n'a pas fait long feu non plus. Quatre jours plus tard, tous les agents migraient dans des conteneurs NixOS (systemd-nspawn), beaucoup plus légers et bien plus simples à câbler avec le reste du serveur. Chaque agent a son dossier `containers/<nom>/`, et tout ce qui est commun vit dans des _partials_ partagés :
+
+[source,nix]
+----
+# containers/victor/default.nix
+{ lib, ... }:
+
+{
+  imports = [
+    ../partials/base             # le socle commun à tous les conteneurs
+    ../partials/hermes           # Hermes, la mémoire, le routeur de modèles
+    ../partials/buzz-community   # l'identité de l'agent sur Buzz
+  ]
+  ++ (lib.snowfall.fs.get-nix-files-recursive ./config);
+}
+----
+
+Le dossier `config/` de Victor ne contient alors que ce qui lui est propre : ses MCP, ses messageries, son modèle. Ajouter une enseigne, c'est ajouter un fichier.
+
+
+== Les mains : un MCP par enseigne
+
+C'est là que ça devient intéressant. Un modèle de langage, aussi malin soit-il, ne sait pas faire des courses. Il lui faut des outils. Et pour les drives, il n'en existe aucun d'officiel (étonnant, n'est-ce pas ?). Donc je les ai écrits. Enfin, "écrits"... disons que je les ai beaucoup vibecodés avec Claude, et que j'ai passé pas mal de temps à faire de la rétro-ingénierie sur les API privées des sites.
+
+Chaque MCP est un petit binaire Go, packagé en image Docker, qui fait à la fois CLI et serveur MCP. Ils exposent tous à peu près le même contrat :
+
+* `store_search` / `store_set` : choisir son magasin
+* `search_products` : chercher dans le catalogue
+* `product_detail` : la fiche produit (prix, stock, Nutri-Score...)
+* `basket_get` / `basket_add` / `basket_remove` : gérer le panier
+* `orders_list` / `order_detail` : l'historique des commandes
+
+Et c'est tout. **Aucun outil pour valider ou payer une commande.** C'est volontaire : Victor remplit le panier, moi je passe dessus et je paye. C'est le garde-fou le plus simple qui soit : l'outil n'existe pas, donc l'IA ne peut pas l'utiliser, même si elle s'enflamme.
+
+Côté Nix, chaque MCP est un conteneur Podman qui tourne _dans_ le conteneur de Victor, et qu'on déclare à Hermes :
+
+[source,nix]
+----
+# containers/victor/config/intermarche-mcp.nix
+{ hostConfig, ... }:
+
+let
+  port = 8080;
+  dataDir = "/var/lib/hermes/mcp-data/intermarche";
+in
+{
+  # Les identifiants du compte, chiffrés avec agenix
+  container.config.bindMounts."/run/agenix/intermarche-mcp" = {
+    hostPath = hostConfig.age.secrets."intermarche-mcp".path;
+    isReadOnly = true;
+  };
+
+  virtualisation.oci-containers.containers.intermarche-mcp = {
+    image = "ghcr.io/nicolasguilloux/intermarche-mcp:main";
+    pull = "always";
+    ports = [ "${toString port}:8080" ];
+    volumes = [ "${dataDir}:/data/intermarche-mcp" ]; # la session survit aux redémarrages
+    environmentFiles = [ "/run/agenix/intermarche-mcp" ];
+  };
+
+  # Et on dit à Hermes où le trouver
+  services.hermes-agent.settings.mcp_servers.intermarche = {
+    url = "http://localhost:${toString port}/mcp";
+    timeout = 180;
+  };
+}
+----
+
+Le MCP Intermarché a d'abord vécu directement sur l'hôte, avant de rejoindre le conteneur de Victor début juillet, accompagné de ses copains link:https://github.com/NicolasGuilloux/lafourche-mcp[La Fourche^] et link:https://github.com/NicolasGuilloux/local-bio-mcp[Local Bio^]. Le dernier en date, link:https://github.com/NicolasGuilloux/superu-mcp[Super U^], est arrivé tout récemment.
+
+// TODO Nover : une phrase sur pourquoi La Fourche a été retiré en septembre ?
+
+=== La guerre contre les anti-bots
+
+Vous vous doutez bien que les enseignes n'apprécient pas trop qu'un robot se balade sur leur site. Et chacune a sa protection préférée :
+
+++++
+<pre class="mermaid" style="visibility:hidden">
+flowchart TB
+    Victor["Victor"]
+
+    Victor -->|basket_add| I["MCP Intermarché"]
+    I -->|"captcha à résoudre"| C["2Captcha"]
+    C -->|"cookie DataDome"| I
+    I --> SI["intermarche.com"]
+
+    Victor -->|basket_add| U["MCP Super U"]
+    U -->|"challenge Cloudflare"| F["FlareSolverr, même conteneur"]
+    F -->|"cf_clearance, liée à l'IP"| U
+    U --> SU["coursesu.com"]
+
+    Victor -->|basket_add| B["MCP Local Bio"]
+    B -->|"API publique du site"| SB["local.bio"]
+</pre>
+++++
+
+* **Intermarché** est derrière DataDome. Chaque appel passe par 2Captcha, un service de résolution de captchas, qui débloque l'accès sans aucun navigateur. Ça marche, mais c'est lent, d'où le `timeout = 180` (passé de 60 à 180 secondes récemment, parce que 60 secondes, c'était clairement trop optimiste).
+* **Super U** est derrière Cloudflare. Là, on fait tourner link:https://github.com/FlareSolverr/FlareSolverr[FlareSolverr^] qui passe le challenge et récupère le cookie `cf_clearance`. Petite subtilité qui m'a coûté une soirée : Cloudflare lie ce cookie à l'adresse IP. FlareSolverr doit donc sortir sur Internet avec **exactement la même IP** que le MCP, d'où le fait qu'il tourne dans le même conteneur que lui.
+* **Local Bio** est plutôt sympa : il parle à l'API publique du site, comme le fait le site lui-même.
+
+[source,nix]
+----
+# containers/victor/config/superu-mcp.nix (extrait)
+{
+  # Cloudflare lie sa clearance à l'IP : FlareSolverr tourne dans le même
+  # conteneur que le MCP, pour avoir la même IP de sortie.
+  services.flaresolverr.enable = true;
+
+  virtualisation.oci-containers.containers.superu-mcp = {
+    image = "ghcr.io/nicolasguilloux/superu-mcp:latest";
+    cmd = [ "mcp" "http" ];
+    # Aucune authentification sur le serveur HTTP : loopback seulement !
+    ports = [ "127.0.0.1:8083:8080" ];
+    environment.COURSESU_FLARESOLVERR_URL = "http://host.containers.internal:8191/v1";
+  };
+}
+----
+
+Pour la connexion à Super U, il y a une case "Vérifiez que vous êtes humain" sur la page de login. Et là, je n'ai pas cherché à la contourner : c'est moi qui me connecte une fois, à la main, et le MCP renouvelle sa session tout seul ensuite. Il y a des combats qui ne valent pas la peine d'être menés.
+
+
+== La liste de courses : CalDAV, tout simplement
+
+Au début, je dictais ma liste à Victor directement. Ça marche, mais ce n'est pas comme ça que je fonctionne. Dans la vraie vie, je note "beurre" sur mon téléphone au moment où je vide le paquet, pas trois jours plus tard au moment de commander.
+
+Fin août, j'installe Radicale, un serveur CalDAV, derrière mon OpenCloud. CalDAV, c'est le protocole standard des calendriers et des listes de tâches (les fameux VTODO). Ma liste "Courses" n'est donc qu'une liste de tâches, que n'importe quel client compatible peut lire et modifier, y compris les Rappels Apple.
+
+Anecdote au passage : les clients Apple refusent une collection qui mélange événements et tâches, et la **suppriment** purement et simplement au premier sync. Ambiance. Les tâches ont donc leur propre collection :
+
+[source,nix]
+----
+# Événements et tâches dans deux collections séparées : les clients Apple
+# refusent une collection mixte VEVENT+VTODO et la suppriment au premier sync.
+storage.predefined_collections = builtins.toJSON {
+  def-calendar = {
+    "C:supported-calendar-component-set" = "VEVENT";
+    "D:displayname" = "Personal Calendar";
+    tag = "VCALENDAR";
+  };
+  def-tasks = {
+    "C:supported-calendar-component-set" = "VTODO";
+    "D:displayname" = "Personal Tasks";
+    tag = "VCALENDAR";
+  };
+};
+----
+
+Et Victor y accède avec un MCP CalDAV existant (pas besoin de réinventer la roue cette fois), authentifié par un app token OpenCloud, jamais par mon mot de passe :
+
+[source,nix]
+----
+services.hermes-agent.settings.mcp_servers.caldav = {
+  command = "${pkgs.nodejs}/bin/npx";
+  args = [ "-y" "dav-mcp@4" ];
+  # Le premier lancement télécharge le paquet : plus long que les 60 s par défaut
+  connect_timeout = 300;
+  env = {
+    CALDAV_SERVER_URL = "https://cloud.nicolasguilloux.eu/caldav/";
+    CALDAV_USERNAME = "nover";
+    CALDAV_PASSWORD = "\${CALDAV_PASSWORD}"; # injecté depuis le secret agenix
+  };
+};
+----
+
+
+== En pratique
+
+Concrètement, une session de courses ressemble à ça :
+
+++++
+<pre class="mermaid" style="visibility:hidden">
+sequenceDiagram
+    actor Moi
+    participant V as Victor
+    participant M as Hindsight
+    participant L as Liste CalDAV
+    participant D as MCP du drive
+
+    Moi->>V: Fais-moi le panier Intermarché
+    V->>M: Rappel des habitudes
+    M-->>V: Lait bio en bouteille, pas de marque distributeur pour le café...
+    V->>L: Lecture de la liste Courses
+    L-->>V: beurre, lait, café, PQ
+    loop Pour chaque article
+        V->>D: search_products
+        D-->>V: 30 références
+        V->>V: Choix selon mes habitudes
+        V->>D: basket_add
+    end
+    V->>L: Coche les articles ajoutés
+    V-->>Moi: Panier prêt, 4 articles, 2 doutes à valider
+    Moi->>Moi: Je vérifie et je paye sur le site
+</pre>
+++++
+
+J'envoie un message, je vais faire autre chose, et je reviens quelques minutes plus tard avec un panier rempli et une petite liste des articles où il a eu un doute ("il n'y a plus ton café habituel, j'ai pris celui-là, ça te va ?"). L'IA remplit, moi je décide. Comme pour la recherche de missions, finalement.
+
+
+== Le cerveau : changer de modèle comme de chemise
+
+Le choix du modèle a été la partie la plus mouvementée. Petit récapitulatif, histoire de rire un peu :
+
+++++
+<pre class="mermaid" style="visibility:hidden">
+timeline
+    title Les modèles de Victor
+    Juin : Nemotron gratuit sur OpenRouter : Claude Opus 4.8 en direct : DeepSeek V4 Flash, Claude en secours
+    Août : GPT-5.6 Terra via Codex, DeepSeek en secours
+    Septembre : Claude Opus 5 via 9Router : Combo hermes-deep
+    Novembre : hermes-deep, puis Codex, puis DeepSeek
+</pre>
+++++
+
+Au début, je passais directement par l'API Anthropic. Résultat, ça marche très bien, mais la facture aussi marche très bien. J'ai donc tenté DeepSeek, puis GPT via mon abonnement ChatGPT, avant de revenir à Claude début septembre en passant par link:https://github.com/decolua/9router[9Router^].
+
+9Router, c'est un petit routeur qui tourne sur l'hôte et qui expose une API compatible OpenAI. Derrière, il peut utiliser mes abonnements (Claude, Codex...) plutôt que des clés API facturées au token, et il sait faire des "combos" : une liste de modèles qu'il essaie dans l'ordre. Victor ne connaît que le combo `hermes-deep`, et c'est 9Router qui se débrouille derrière. Et si 9Router lui-même tombe, Hermes a sa propre liste de secours :
+
+[source,nix]
+----
+services.hermes-agent.settings = {
+  model = {
+    provider = "9router";
+    default = "hermes-deep"; # le combo défini dans 9Router
+  };
+
+  # Si 9Router ne répond pas, on essaie ceux-là, dans l'ordre
+  fallback_providers = [
+    { provider = "openai-codex"; model = "gpt-5.6-terra"; }
+    { provider = "openrouter"; model = "deepseek/deepseek-v4-flash"; }
+  ];
+};
+----
+
+Changer de modèle, c'est donc une ligne dans un fichier Nix. Ce qui explique probablement pourquoi j'en ai autant changé...
+
+
+== La mémoire : Hindsight
+
+Hermes a sa propre mémoire, mais elle reste assez basique. Fin août, j'ai ajouté link:https://github.com/vectorize-io/hindsight[Hindsight^], un serveur de mémoire qui tourne sur l'hôte. À chaque tour de conversation, l'agent se rappelle automatiquement ce qui est pertinent, et retient ce qui mérite de l'être. Chaque agent a sa propre banque de souvenirs : Victor n'a pas à savoir ce que mes autres agents racontent, et inversement.
+
+C'est ça qui fait la différence entre "un chatbot avec des outils" et un assistant. Au bout de quelques commandes, Victor sait que je prends le lait bio en bouteille, que le café c'est une marque précise, et que "des yaourts" veut dire le pack de 12 natures et pas les petits pots aux fruits.
+
+Au départ, la config Hindsight était propre à Victor. Elle a ensuite été remontée dans le _partial_ commun quand les autres agents en ont voulu aussi. Petite galère au passage : Hindsight a quitté l'arbre de Hermes pour devenir un plugin séparé, ce qui a cassé le build du jour au lendemain. Le plugin est maintenant épinglé et posé à la main, parce que `hermes plugins install` voudrait écrire dans un environnement Python scellé en lecture seule (merci Nix).
+
+[source,nix]
+----
+# Mémoire native Hindsight, banque dédiée par agent.
+settingsFile = pkgs.writeText "hindsight-config.json" (builtins.toJSON {
+  mode = "local_external";
+  api_url = "http://container-host:8888";
+  bank_id = lib.toSentenceCase containerName; # "Victor"
+  # Pas de "Hindsight a retrouvé 12 souvenirs" dans les conversations, merci
+  recall_indicator = false;
+  retain_indicator = false;
+});
+----
+
+
+== Qui a le droit de parler à Victor ?
+
+Dernier gros chantier en date : la sécurité. Un agent qui a accès à mes comptes de drive (et donc à mon adresse et à mon historique d'achats), ce n'est pas quelque chose qu'on laisse en libre-service.
+
+Victor est joignable sur Discord, Matrix et, depuis peu, Buzz. Mais il ne doit obéir qu'à moi. La règle est simple :
+
+++++
+<pre class="mermaid" style="visibility:hidden">
+flowchart TD
+    Msg["Message reçu"] --> DM{"Message privé ?"}
+    DM -->|Oui| Owner{"Expéditeur autorisé ?"}
+    Owner -->|Oui| OK["Victor répond"]
+    Owner -->|Non| Skip["Ignoré, sans réponse"]
+    DM -->|Non, dans un canal| Buzz{"Sur Buzz ?"}
+    Buzz -->|Non| Mention{"Victor est mentionné ?"}
+    Buzz -->|Oui| Mention
+    Mention -->|Oui| OK
+    Mention -->|Non| Skip
+</pre>
+++++
+
+Ce qui m'a obligé à écrire un petit plugin Hermes, embarqué directement dans la config Nix. Il s'accroche au hook `pre_gateway_dispatch`, c'est-à-dire **avant** que le message n'atteigne le modèle. Un inconnu qui écrit en privé à Victor ne reçoit rien du tout, même pas un code d'appairage :
+
+[source,nix]
+----
+let
+  # En message privé, Victor ne répond qu'à ces identités ;
+  # en canal, à quiconque le mentionne.
+  dmOwners = {
+    discord = [ "248726456551604224" ];
+    buzz = [ "7a18c5fd29a4..." ];
+    matrix = [ "@nover:matrix.nicolasguilloux.eu" ];
+  };
+in
+# ... puis le plugin Python, généré par Nix :
+#
+# def gate(event, gateway, **kwargs):
+#     if source.chat_type == "dm" and user not in DM_OWNERS[platform]:
+#         return {"action": "skip"}
+#     ...
+----
+
+Pourquoi un plugin et pas juste une option ? Parce que sur Buzz, l'adaptateur de Hermes laisse passer sans mention toute réponse à un message de l'agent. Résultat : dès que Victor répondait dans un fil, il se mettait à réagir à **tout** le fil, y compris aux messages qui ne lui étaient pas adressés. Charmant, mais épuisant. Et aucune option ne permettait de couper ça, donc on le coupe nous-mêmes.
+
+
+== Les limites
+
+Je ne vais pas vous mentir, tout n'est pas rose.
+
+* **Les MCP sont fragiles.** Ils parlent à des API privées, qui peuvent changer du jour au lendemain. Quand Intermarché change un champ, c'est cassé jusqu'à ce que je corrige. Heureusement, `pull = "always"` et une CI qui publie l'image à chaque commit rendent la correction rapide.
+* **C'est lent.** Entre les captchas et Cloudflare, ajouter 15 articles prend plusieurs minutes. Mais bon, c'est autant de minutes où je ne suis pas devant mon écran.
+* **Les choix de produits ne sont pas parfaits.** Surtout au début, avant que la mémoire ne soit bien remplie. D'où l'importance de la relecture du panier avant de payer.
+* **Ça coûte des sous.** Les captchas, les abonnements aux modèles... C'est raisonnable, mais ce n'est pas gratuit.
+
+
+== Et ensuite ?
+
+Victor fait son job, et franchement, je ne reviendrais pas en arrière. Les prochaines étapes que j'ai en tête :
+
+* Comparer les prix entre les enseignes pour un même panier
+* Proposer des menus de la semaine et en déduire la liste de courses
+* Remplir automatiquement la liste avec les produits que je rachète régulièrement
+
+Toute la configuration est disponible dans link:https://gitlab.com/NicolasGuilloux/nixos-configuration[mon dépôt NixOS^], et les MCP sur mon link:https://github.com/NicolasGuilloux[GitHub^]. Si vous avez un drive qui n'est pas couvert, vous savez ce qu'il vous reste à faire !

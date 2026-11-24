@@ -1,0 +1,8 @@
+{{- /*
+    Le thème ne charge Mermaid que si le render hook Markdown `mermaid` a tourné.
+    Les articles AsciiDoc ne passent jamais par ce hook : on repère nous-mêmes un
+    bloc `<pre class="mermaid">` (passthrough AsciiDoc) pour lever le même drapeau.
+*/ -}}
+{{- if and .IsPage (strings.Contains (string .Content) `class="mermaid"`) -}}
+    {{- .Store.Set "hasMermaid" true -}}
+{{- end -}}
