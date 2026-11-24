@@ -57,7 +57,6 @@ flowchart LR
             MCPC["MCP CalDAV"]
             Flare["FlareSolverr"]
         end
-        Router["9Router"]
         Hindsight[("Hindsight, la mémoire")]
         Radicale[("Radicale, la liste de courses")]
     end
@@ -66,7 +65,7 @@ flowchart LR
     Drives["Sites des drives"]
 
     Nover --> Messageries --> Hermes
-    Hermes --> Router --> LLM
+    Hermes --> LLM
     Hermes <--> Hindsight
     Hermes --> MCPI & MCPU & MCPB & MCPC
     MCPC --> Radicale
@@ -79,7 +78,6 @@ En résumé :
 
 * **Hermes Agent** est le cerveau : c'est lui qui reçoit mes messages, discute avec le modèle de langage et appelle les outils.
 * Les **MCP** (pour Model Context Protocol) sont les mains : un petit serveur par enseigne, qui expose des outils du genre `search_products` ou `basket_add`.
-* **9Router** choisit quel modèle répond, et bascule sur un autre quand le premier fait la tête.
 * **Hindsight** est la mémoire à long terme.
 * **Radicale** héberge ma liste de courses, au format CalDAV, synchronisée avec mon téléphone.
 
@@ -126,7 +124,7 @@ La microVM n'a pas fait long feu non plus. Quatre jours plus tard, tous les agen
 {
   imports = [
     ../partials/base             # le socle commun à tous les conteneurs
-    ../partials/hermes           # Hermes, la mémoire, le routeur de modèles
+    ../partials/hermes           # Hermes et sa mémoire
     ../partials/buzz-community   # l'identité de l'agent sur Buzz
   ]
   ++ (lib.snowfall.fs.get-nix-files-recursive ./config);
@@ -324,24 +322,19 @@ timeline
     title Les modèles de Victor
     Juin : Nemotron gratuit sur OpenRouter : Claude Opus 4.8 en direct : DeepSeek V4 Flash, Claude en secours
     Août : GPT-5.6 Terra via Codex, DeepSeek en secours
-    Septembre : Claude Opus 5 via 9Router : Combo hermes-deep
-    Novembre : hermes-deep, puis Codex, puis DeepSeek
+    Septembre : Retour à Claude Opus 5
+    Novembre : Claude, puis Codex, puis DeepSeek en secours
 </pre>
 ++++
 
-Au début, je passais directement par l'API Anthropic. Résultat, ça marche très bien, mais la facture aussi marche très bien. J'ai donc tenté DeepSeek, puis GPT via mon abonnement ChatGPT, avant de revenir à Claude début septembre en passant par link:https://github.com/decolua/9router[9Router^].
+Au début, je passais directement par l'API Anthropic. Résultat, ça marche très bien, mais la facture aussi marche très bien. J'ai donc tenté DeepSeek, puis GPT via mon abonnement ChatGPT, avant de revenir à Claude début septembre.
 
-9Router, c'est un petit routeur qui tourne sur l'hôte et qui expose une API compatible OpenAI. Derrière, il peut utiliser mes abonnements (Claude, Codex...) plutôt que des clés API facturées au token, et il sait faire des "combos" : une liste de modèles qu'il essaie dans l'ordre. Victor ne connaît que le combo `hermes-deep`, et c'est 9Router qui se débrouille derrière. Et si 9Router lui-même tombe, Hermes a sa propre liste de secours :
+Aujourd'hui, Claude est le modèle principal. Et comme aucun fournisseur n'est à l'abri d'une panne (ou d'une limite d'usage atteinte au pire moment), Hermes a sa propre liste de secours, qu'il essaie dans l'ordre :
 
 [source,nix]
 ----
 services.hermes-agent.settings = {
-  model = {
-    provider = "9router";
-    default = "hermes-deep"; # le combo défini dans 9Router
-  };
-
-  # Si 9Router ne répond pas, on essaie ceux-là, dans l'ordre
+  # Si le modèle principal ne répond pas, on essaie ceux-là, dans l'ordre
   fallback_providers = [
     { provider = "openai-codex"; model = "gpt-5.6-terra"; }
     { provider = "openrouter"; model = "deepseek/deepseek-v4-flash"; }
