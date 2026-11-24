@@ -186,7 +186,7 @@ in
 
 Le MCP Intermarché a d'abord vécu directement sur l'hôte, avant de rejoindre le conteneur de Victor début juillet, accompagné de ses copains link:https://github.com/NicolasGuilloux/lafourche-mcp[La Fourche^] et link:https://github.com/NicolasGuilloux/local-bio-mcp[Local Bio^]. Le dernier en date, link:https://github.com/NicolasGuilloux/superu-mcp[Super U^], est arrivé tout récemment.
 
-// TODO Nover : une phrase sur pourquoi La Fourche a été retiré en septembre ?
+La Fourche a depuis quitté la bande en septembre, pour une raison bien moins technique : j'ai arrêté mon abonnement. Pas d'abonnement, pas de panier, pas de MCP. Et grâce à Nix, le retirer, c'est supprimer un fichier.
 
 === La guerre contre les anti-bots
 
