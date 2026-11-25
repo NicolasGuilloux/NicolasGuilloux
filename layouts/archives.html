@@ -6,7 +6,7 @@
 {{- $posts := (where site.RegularPages "Section" "in" site.Params.mainSections).ByDate.Reverse }}
 {{- $labels := site.Params.categoryLabels | default dict }}
 {{- $first := index $posts.ByDate 0 }}
-<main class="articles" data-articles data-page-size="{{ site.Params.articlesPageSize | default 6 }}">
+<main class="articles" data-articles data-page-size="{{ site.Params.articlesPageSize | default 20 }}">
   <div class="articles__head">
     <div class="articles__title fade">
       <h1>{{ .Title }}</h1>

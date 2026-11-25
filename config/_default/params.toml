@@ -13,7 +13,7 @@ homeCategories = ["tutoriels", "notes", "projets", "wip"]
 
 # « Articles » page (layouts/archives.html): subject chips (tag slugs), page size, category display names.
 articlesSubjects = ["nixos", "matrix", "docker", "homelab", "diy", "smart-mirror", "domotique", "ai"]
-articlesPageSize = 6
+articlesPageSize = 20
 
 [footer]
     since   = 2018
