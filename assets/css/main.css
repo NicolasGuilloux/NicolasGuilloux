@@ -305,7 +305,7 @@ button { font: inherit; }
   letter-spacing: 0.12em; color: var(--muted);
 }
 .article-title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 56px; line-height: 60px; letter-spacing: -0.01em; }
-.article-subtitle { margin: 0; max-width: 40ch; font-family: var(--font-display); font-style: italic; font-size: 26px; line-height: 34px; color: var(--muted); }
+.article-subtitle { margin: 0; max-width: none; font-family: var(--font-display); font-style: italic; font-size: 26px; line-height: 34px; color: var(--muted); }
 .article-meta {
   display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
   padding-top: 8px; font-size: 15px; line-height: 22px; color: var(--muted);
@@ -884,8 +884,8 @@ button { font: inherit; }
   .site-footer__inner { max-width: 1696px; padding: 24px 48px 32px; }
 
   .article-head, .article-cover, .article-body, .related__inner { max-width: 1536px; }
-  .article-head { padding: 96px 48px 64px; display: grid; grid-template-columns: 260px minmax(0, 1fr); column-gap: 80px; }
-  .article-head__inner { grid-column: 2; gap: 20px; margin: 0; }
+  .article-head { padding: 96px 48px 64px; }
+  .article-head__inner { gap: 20px; max-width: none; }
   .article-title { font-size: 72px; line-height: 76px; letter-spacing: -0.02em; }
   .article-subtitle { max-width: none; font-size: 30px; line-height: 38px; }
   .article-meta { gap: 14px; font-size: 16px; line-height: 24px; }
