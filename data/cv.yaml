@@ -95,7 +95,6 @@ experiences:
   - id: estra
     role: "Développeur Full-Stack .NET / Angular"
     company: "Estra Consulting"
-    client: "CAPEB"
     location: "Télétravail"
     start: "2026-05-01"
     end: "2026-07-01"
@@ -126,7 +125,6 @@ experiences:
   - id: antadis
     role: "Développeur Senior Sylius"
     company: "Antadis"
-    client: "France Matériaux"
     logo: "images/cv/antadis-logo.png"
     location: "Télétravail"
     start: "2026-04-01"
@@ -150,7 +148,7 @@ experiences:
     role: "Développeur Senior Symfony"
     company: "Carrefour"
     logo: "images/cv/carrefour-logo.png"
-    location: "Massy"
+    location: "Télétravail"
     start: "2022-07-01"
     end: "2026-01-01"
     featured: true
@@ -189,7 +187,7 @@ experiences:
     role: "Développeur Senior Symfony"
     company: "Icade"
     logo: "images/cv/icade-logo.png"
-    location: "La Défense, Paris"
+    location: "Télétravail"
     start: "2022-01-01"
     end: "2022-07-01"
     context: "Leader de la promotion immobilière et du foncier tertiaire, patrimoine de plusieurs milliards d'euros."

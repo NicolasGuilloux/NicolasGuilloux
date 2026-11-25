@@ -37,7 +37,6 @@
     <div class="cv-hero__id fade">
       {{- with $avatar }}{{ with .Fill "240x240 webp" }}<img class="cv-hero__avatar" src="{{ .RelPermalink }}" alt="" width="120" height="120">{{ end }}{{ end }}
       <div class="cv-hero__text">
-        <span class="label">CURRICULUM VITAE</span>
         <h1 class="cv-hero__name">{{ site.Title }}</h1>
         <p class="cv-hero__title">{{ $p.title }}<span class="cv-hero__tagline">, {{ $p.tagline }}</span></p>
         <p class="cv-hero__status">
@@ -139,12 +138,12 @@
                 {{- with .logo }}{{ with resources.Get . }}{{ with .Fit "112x112 webp" }}<img class="xp__logo" src="{{ .RelPermalink }}" alt="" width="56" height="56" loading="lazy">{{ end }}{{ end }}{{ else }}<span class="xp__logo xp__logo--text" aria-hidden="true">{{ substr .company 0 1 }}</span>{{ end }}
                 <div class="xp__title">
                   <span class="xp__meta">
-                    {{- (time .start) | time.Format "Jan 2006" | upper }} → {{ with .end }}{{ (time .) | time.Format "Jan 2006" | upper }}{{ else }}AUJOURD'HUI{{ end }}
+                    {{- (time .start) | time.Format "January 2006" | upper }} → {{ with .end }}{{ (time .) | time.Format "January 2006" | upper }}{{ else }}AUJOURD'HUI{{ end }}
                     {{- partial "star.html" (dict "size" 8) }}<span data-cv-duration>{{ with $y }}{{ . }} AN{{ if gt . 1 }}S{{ end }}{{ end }}{{ if and $y $r }} {{ end }}{{ with $r }}{{ . }} MOIS{{ end }}</span>
                     {{- partial "star.html" (dict "size" 8) }}{{ .location | upper }}
                   </span>
                   <h3 class="xp__role">{{ .role }}</h3>
-                  <span class="xp__company">{{ .company }}{{ with .client }} <span class="xp__client">pour {{ . }}</span>{{ end }}{{ if not .end }}<span class="xp__now">En cours</span>{{ end }}</span>
+                  <span class="xp__company">{{ .company }}{{ if not .end }}<span class="xp__now">En cours</span>{{ end }}</span>
                 </div>
               </header>
               <p class="xp__context">{{ .context }}</p>
