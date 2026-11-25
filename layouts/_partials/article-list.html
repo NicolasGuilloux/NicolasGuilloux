@@ -1,0 +1,21 @@
+{{- /* Homepage-style article list with pagination. Context: page whose pages to paginate */ -}}
+{{- $pages := cond .IsHome (where site.RegularPages "Section" "in" site.Params.mainSections) .Pages -}}
+{{- $paginator := .Paginate $pages -}}
+<main class="home">
+  <h1 class="visually-hidden">{{ if .IsHome }}Articles de {{ site.Title }}{{ else }}{{ .Title }}{{ end }}</h1>
+  {{ partial "category-chips.html" . }}
+  <div class="cards">
+    {{- range $i, $p := $paginator.Pages }}
+    {{ partial "card.html" (dict "page" $p "featured" (and (eq $i 0) (eq $paginator.PageNumber 1))) }}
+    {{- end }}
+  </div>
+  {{- if gt $paginator.TotalPages 1 }}
+  <nav class="pagination" aria-label="Pagination">
+    {{- with $paginator.Prev }}<a class="pill-btn hov" href="{{ .URL }}">← Articles plus récents</a>{{ end }}
+    <span class="pagination__count">PAGE {{ $paginator.PageNumber }} / {{ $paginator.TotalPages }}</span>
+    {{- with $paginator.Next }}<a class="pill-btn hov" href="{{ .URL }}">Articles plus anciens →</a>{{ end }}
+  </nav>
+  {{- else }}
+  <div class="pagination pagination--empty"></div>
+  {{- end }}
+</main>

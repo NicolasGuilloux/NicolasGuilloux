@@ -1,0 +1,25 @@
+{{- /*
+  Resolves a page's cover image (front matter `image`).
+  Params: page, width (resize width, optional), height (crop height, optional).
+  Returns "" or dict { url, permalink }.
+*/ -}}
+{{- $result := "" -}}
+{{- with .page.Params.image -}}
+  {{- $src := . -}}
+  {{- if or (hasPrefix $src "http://") (hasPrefix $src "https://") -}}
+    {{- $result = dict "url" $src "permalink" $src -}}
+  {{- else -}}
+    {{- with $.page.Resources.GetMatch $src -}}
+      {{- $img := . -}}
+      {{- if and (eq .ResourceType "image") (ne .MediaType.SubType "svg") $.width -}}
+        {{- if and $.height (gt $img.Width $.width) -}}
+          {{- $img = .Fill (printf "%dx%d webp q82" (int $.width) (int $.height)) -}}
+        {{- else if gt $img.Width $.width -}}
+          {{- $img = .Resize (printf "%dx webp q82" (int $.width)) -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $result = dict "url" $img.RelPermalink "permalink" $img.Permalink -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $result -}}

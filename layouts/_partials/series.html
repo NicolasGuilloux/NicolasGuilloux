@@ -1,0 +1,11 @@
+{{- /* Series navigation, from the `series` taxonomy. Optional front matter `seriesLabel` gives the short chip label. */ -}}
+{{- with .GetTerms "series" }}
+{{- $term := index . 0 }}
+{{- $current := $ }}
+<nav class="series" aria-label="Dans la même série">
+  <span class="label">SÉRIE {{ $term.LinkTitle | upper }}</span>
+  {{- range $i, $p := $term.Pages.ByDate }}
+  <a class="series__item" href="{{ $p.RelPermalink }}"{{ if eq $p.Permalink $current.Permalink }} aria-current="page"{{ end }}>{{ add $i 1 }} · {{ $p.Params.seriesLabel | default $p.Title }}</a>
+  {{- end }}
+</nav>
+{{- end }}

@@ -1,0 +1,13 @@
+{{- /*
+  Privacy-friendly YouTube embed: nothing is loaded from YouTube until the reader clicks.
+  Usage: {{< youtube DSbic6T9NO8 >}} or {{< youtube id="…" title="…" >}}
+*/ -}}
+{{- $id := .Get "id" | default (.Get 0) -}}
+{{- $title := .Get "title" | default (printf "%s, la démo en vidéo" .Page.Title) -}}
+<figure class="video">
+  <button class="video__poster" type="button" data-youtube="{{ $id }}" aria-label="Lire la vidéo YouTube : {{ $title }}">
+    <span class="video__play"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" fill="currentColor"/></svg></span>
+    <span class="video__title">{{ $title }}</span>
+  </button>
+  <figcaption>YouTube chargé seulement au clic : pas de cookies tiers tant que vous ne lancez pas la vidéo. <a href="https://www.youtube.com/watch?v={{ $id }}" target="_blank" rel="noopener">Voir sur YouTube</a></figcaption>
+</figure>

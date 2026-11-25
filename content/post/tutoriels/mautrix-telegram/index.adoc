@@ -13,6 +13,9 @@ tags:
  - bridges
  - nixos
  - docker
+series:
+ - Matrix
+seriesLabel: Telegram
 ---
 
 
@@ -22,7 +25,8 @@ link:../matrix[Matrix sur NixOS]
 
 == Telegram Messenger
 
-https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/telegram.nix[image:https://img.shields.io/badge/Gitlab-Mautrix Telegram-orange[Gitlab]^]
+[.source-link]
+https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/telegram.nix[server/matrix/telegram.nix^]
 
 Le bridge de Telegram supporte quasiment toutes les fonctionnalités. La configuration est quasiment la même que pour
 link:../mautrix-facebook[Mautrix Facebook]
@@ -31,7 +35,7 @@ Je n'ai volontairement pas suivi la configuration proposée par NixOS car je n'a
 
 Voici la configuration que je préconise :
 
-[source]
+[source,nix]
 ----
 { config, lib, ... }:
 
@@ -64,7 +68,7 @@ Dans un premier temps, il faut faire une application sur le site de Telegram pou
 
 On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :
 
-[source]
+[source,yaml]
 ----
 homeserver:
     address: http://localhost:8008

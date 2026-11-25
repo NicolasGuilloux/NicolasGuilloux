@@ -13,6 +13,9 @@ tags:
  - bridges
  - nixos
  - docker
+series:
+ - Matrix
+seriesLabel: Signal
 ---
 
 
@@ -22,14 +25,15 @@ link:../matrix[Matrix sur NixOS]
 
 == Signal Messenger
 
-https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/signal.nix[image:https://img.shields.io/badge/Gitlab-Mautrix Signal-orange[Gitlab]^]
+[.source-link]
+https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/signal.nix[server/matrix/signal.nix^]
 
 Le bridge Signal supporte les conversations de groupe et les messages directs. Toutefois, toute conversation chiffrée ne sera pas supportée. +
 La petite particularité sur ce bridge est que Signal ne dispose pas d'une API. Ainsi, il va falloir utiliser une image Docker qui va simuler un accès Web à Signal.
 
 Voici la configuration que je préconise :
 
-[source]
+[source,nix]
 ----
 { config, lib, ... }:
 
@@ -75,7 +79,7 @@ On va dès maintenant configurer ce dernier en éditant **en tant que root** le 
 
 On va changer différentes clés dans le fichier, je vais lister ce les clés qui ont changé :
 
-[source]
+[source,yaml]
 ----
 homeserver:
     address: http://localhost:8008

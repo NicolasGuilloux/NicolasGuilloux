@@ -1,55 +1,67 @@
-# Configure main menu and social menu
+# Main navigation (header)
 [[main]]
     identifier = "home"
-    name = "Accueil"
-    url = "/"
-    weight = -100
-    pre = "home"
+    name       = "Accueil"
+    pageRef    = "/"
+    weight     = 10
 
+[[main]]
+    identifier = "articles"
+    name       = "Articles"
+    pageRef    = "/page/archives"
+    weight     = 20
+
+[[main]]
+    identifier = "about"
+    name       = "À propos"
+    pageRef    = "/page/about"
+    weight     = 30
+
+# "Me retrouver" links, in display order. `icon` refers to layouts/_partials/icon.html
 [[social]]
-    identifier = "email"
-    name       = "Email"
-    url        = "nicolas.guilloux@protonmail.com"
-
+    identifier = "cv"
+    name       = "CV"
+    url        = "https://github.com/NicolasGuilloux/curriculum-vitae/releases/latest"
+    weight     = 10
     [social.params]
-        icon = "email"
-
-[[social]]
-    identifier = "github"
-    name       = "GitHub"
-    url        = "https://github.com/NicolasGuilloux"
-
-    [social.params]
-        icon = "brand-github"
-
-[[social]]
-    identifier = "gitlab"
-    name       = "GitLab"
-    url        = "https://gitlab.com/NicolasGuilloux"
-
-    [social.params]
-        icon = "gitlab"
-
-[[social]]
-    identifier = "malt"
-    name       = "Malt"
-    url        = "https://www.malt.fr/profile/nicolasguilloux"
-
-    [social.params]
-        icon = "malt"
+        icon = "cv"
 
 [[social]]
     identifier = "linkedin"
     name       = "LinkedIn"
     url        = "https://www.linkedin.com/in/nicolas-guilloux/"
-
+    weight     = 20
     [social.params]
         icon = "linkedin"
 
 [[social]]
-    identifier = "cv"
-    name       = "CV"
-    url        = "https://github.com/NicolasGuilloux/curriculum-vitae/releases/latest"
-
+    identifier = "malt"
+    name       = "Malt"
+    url        = "https://www.malt.fr/profile/nicolasguilloux"
+    weight     = 30
     [social.params]
-        icon = "file"
+        icon = "malt"
+
+[[social]]
+    identifier = "github"
+    name       = "GitHub"
+    url        = "https://github.com/NicolasGuilloux"
+    weight     = 40
+    [social.params]
+        icon = "github"
+
+[[social]]
+    identifier = "gitlab"
+    name       = "GitLab"
+    url        = "https://gitlab.com/NicolasGuilloux"
+    weight     = 50
+    [social.params]
+        icon = "gitlab"
+
+[[social]]
+    identifier = "email"
+    name       = "E-mail"
+    url        = "mailto:nicolas.guilloux@protonmail.com"
+    weight     = 60
+    [social.params]
+        icon = "mail"

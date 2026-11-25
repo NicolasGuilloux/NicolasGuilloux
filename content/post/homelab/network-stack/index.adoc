@@ -122,7 +122,7 @@ Je vais maintenant trier les règles par zone source. Concrètement, c'est surto
 
 Pour le tableau suivant, on parle des privilèges qu'ont les appareils IoT sur le réseau. Comme ces appareils sont très variés et sont sur une zone volontairement restrictive, il y a beaucoup de règles précises.
 
-[cols="6*", options="header"]
+[.scroll,cols="6*",options="header"]
 |===
 | Nom                      | Zone Src | Src          | Zone Dest | Dest          | Description
 | AirPlay -> AirPlay       | IoT         | AirPlay Devices | IoT              | AirPlay Devices      | Permet aux appareils supportant AirPlay à échanger
@@ -134,7 +134,7 @@ Pour le tableau suivant, on parle des privilèges qu'ont les appareils IoT sur l
 
 Les appareils de la zone `Devices` doivent supporter le moins de friction possible malgré une zone très restrictive. En effet, on ne souhaiterait pas que quelqu'un râle car il n'arrive pas à utiliser le AirPlay alors que c'est censé marcher, et accuser à raison mes "bidouilles" qui sont inutiles selon eux. Aussi, de la même manière, on expose petit à petit des droits sélectionnés avec soin.
 
-[cols="6*", options="header"]
+[.scroll,cols="6*",options="header"]
 |===
 | Nom                        | Zone Src | Src        | Zone Dest | Dest   | Description
 | Devices -> HomeAssistant   | Devices     | *             | Servers          | HomeAssistant | Permet à tous les appareils de contacter les services de HomeAssistant

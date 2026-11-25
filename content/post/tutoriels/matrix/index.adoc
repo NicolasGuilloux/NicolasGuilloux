@@ -13,6 +13,9 @@ tags:
  - bridges
  - nixos
  - docker
+series:
+ - Matrix
+seriesLabel: Synapse
 ---
 
 Comme beaucoup de personnes, j'ai beaucoup de messageries qui ont su évoluer (ou pas) dans le temps. Et chacune de ces messageries apporte ses avantages et ses inconvénients, et la plupart des gens ne veulent pas toutes les avoir. Et j'en fais partie !
@@ -44,13 +47,14 @@ J'ai rassemblé tous mes efforts pour que tout fonctionne dans un dossier de mon
 
 === Le serveur Synapse
 
-https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/server.nix[image:https://img.shields.io/badge/Gitlab-Synapse-orange[Gitlab]^]
+[.source-link]
+https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/server.nix[server/matrix/server.nix^]
 
 Tout commence d'abord par installer https://matrix.org/docs/projects/server/synapse[Synapse] qui est un serveur Matrix. Matrix étant un standard, Synapse est une implémentation de celui-ci. Si vous êtes déjà perdu, relisez le point précédent ;)
 
 Ici, NixOS nous a bien facilité la tâche vu qu'une configuration est disponible, donc on peut aller très vite.
 
-[source]
+[source,nix]
 ----
 services.matrix-synapse = {
   enable = true;
@@ -91,11 +95,12 @@ Et enfin, pas besoin d'importer le paquet de Synapse dans ceux de système hormi
 
 === La base de données
 
-https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/database.nix[image:https://img.shields.io/badge/Gitlab-BDD-orange[Gitlab]^]
+[.source-link]
+https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/database.nix[server/matrix/database.nix^]
 
 Il faudra aussi configurer une base de données PostgreSQL pour le serveur.
 
-[source]
+[source,nix]
 ----
 # Manually configure PostgreSQL
 # ref: https://www.foxypossibilities.com/2018/02/04/running-matrix-synapse-on-nixos/
@@ -118,21 +123,22 @@ Avant d'exposer sur Internet, on va déjà créer notre utilisateur admin puis d
 
 Ici, rappelez vous la `registration_shared_secret` mis plus haut et simplement tapez la commande suivante
 
-[source]
-____
+[source,bash]
+----
 register_new_matrix_user --shared-secret "UnSecretTemporaire" http://localhost:8008
-____
+----
 
 On suit donc tout ce qu'il nous dit comme il faut en prenant soin de mettre votre utilisateur Admin.
 
 
 === Le Reverse Proxy
 
-https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/nginx.nix[image:https://img.shields.io/badge/Gitlab-Nginx-orange[Gitlab]^]
+[.source-link]
+https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/nginx.nix[server/matrix/nginx.nix^]
 
 On va maintenant configurer notre Reverse Proxy pour qu'il puisse être accessible du monde extérieur. C'est important aussi pour pouvoir dialoguer avec les autres serveurs.
 
-[source]
+[source,nix]
 ----
 let
   listenPort = port: ssl: {
@@ -180,6 +186,7 @@ On va maintenant pouvoir ajouter des bridges qui vont être les interfaces entre
 Ici, je ne vais passer en revue que les bridges que j'ai implémenté sur mon serveur. On notera que la plupart ont été conçu par la même personne et donc ont le préfix `mautrix`. On peut donc constater qu'ils se configurent quasiment de la même manière. +
 Je vais aussi essayer de trier l'ordre des bridges ci-dessous en fonction de leur difficulté à installer. Ça permettra de monter progressivement en difficulté.
 
-link:../mautrix-facebook[image:https://img.shields.io/badge/mautrix-facebook-blue[]]
-link:../mautrix-telegram[image:https://img.shields.io/badge/mautrix-telegram-blue[]]
+* link:../mautrix-facebook[Le bridge Facebook]
+* link:../mautrix-telegram[Le bridge Telegram]
+* link:../mautrix-signal[Le bridge Signal]
 

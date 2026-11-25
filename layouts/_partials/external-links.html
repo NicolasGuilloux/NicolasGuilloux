@@ -1,0 +1,13 @@
+{{- /*
+  Makes every external link of rendered content (AsciiDoc output included) open in a new tab.
+  Context: HTML string. Returns HTML.
+*/ -}}
+{{- $html := string . -}}
+{{- /* Drop the attributes Asciidoctor adds for `^` links, then add them to every absolute http(s) link */ -}}
+{{- $html = replaceRE `(<a [^>]*?href="https?://[^"]*"[^>]*?) target="_blank"` "$1" $html -}}
+{{- $html = replaceRE `(<a [^>]*?href="https?://[^"]*"[^>]*?) rel="noopener"` "$1" $html -}}
+{{- $html = replaceRE `<a ([^>]*?)href="(https?://[^"]*)"` `<a ${1}href="$2" target="_blank" rel="noopener"` $html -}}
+{{- /* Links to this very site stay in the same tab */ -}}
+{{- $host := replace (urls.Parse site.BaseURL).Host "." `\.` -}}
+{{- $html = replaceRE (printf `href="(https?://%s(?:[/?#][^"]*)?)" target="_blank" rel="noopener"` $host) `href="$1"` $html -}}
+{{- return ($html | safeHTML) -}}

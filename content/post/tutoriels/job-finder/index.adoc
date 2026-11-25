@@ -45,7 +45,8 @@ On va utiliser un skill. C'est un fichier Markdown qu'on donne à Claude pour lu
 
 Mon skill `job-coach` ressemble à ça :
 
-[source]
+[source,text]
+[.tree]
 ----
 job-coach/
 ├── SKILL.md                         ← les instructions principales
@@ -150,6 +151,7 @@ En premier lieu, comme on disait, il faut absolument donner le profil du candida
 
 Puis, on lance Claude et on lui dit :
 
+[.prompt]
 ____
 Trouve-moi des missions
 ____

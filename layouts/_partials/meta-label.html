@@ -1,0 +1,3 @@
+{{- /* "13 AVR. 2026 ✦ TUTORIELS" */ -}}
+<span class="meta-label">{{ .Date | time.Format "02 Jan 2006" | upper }}{{ with .GetTerms "categories" }}{{ partial "star.html" (dict "size" 8) }}{{ (index . 0).LinkTitle | upper }}{{ end }}</span>
+{{- /* trim */ -}}
