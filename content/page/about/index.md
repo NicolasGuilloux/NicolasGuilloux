@@ -27,7 +27,3 @@ Plus récemment, je m'amuse beaucoup avec les agents IA et Claude Code : un [ass
 Je suis ingénieur diplômé de l'[ENSEA](https://www.ensea.fr/), une école d'électronique, ce qui explique les quelques projets à base de fer à souder dans les articles. J'ai fait ma dernière année à l'University College Cork en Irlande, pour un Master of Science en médias interactifs, entièrement en anglais, avec de la 3D et de la réalité virtuelle au programme.
 
 Pour la version plus formelle de tout ça, mon CV est accessible via l'icône CV du site.
-
-____
-
-Le site est généré grâce au framework [Hugo](https://gohugo.io/), avec un thème fait maison.
