@@ -7,6 +7,8 @@ const ICONS = {
   copy: '<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
   check: '<path d="M20 6 9 17l-5-5"/>',
   arrowUpRight: '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
+  maximize: '<path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/>',
+  x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
 };
 const svg = (name, size = 16) =>
   `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -114,9 +116,64 @@ function wrapTables(prose) {
     wrap.className = 'table-wrap';
     if (table.classList.contains('scroll') || table.closest('.scroll')) wrap.classList.add('table-wrap--scroll');
     else if ((table.rows[0]?.cells.length || 0) >= 5) wrap.classList.add('table-wrap--dense');
-    table.parentNode.insertBefore(wrap, table);
+    const block = document.createElement('div');
+    block.className = 'table-block';
+    const bar = document.createElement('div');
+    bar.className = 'table-block__bar';
+    const open = document.createElement('button');
+    open.type = 'button';
+    open.className = 'table-block__open';
+    open.innerHTML = `${svg('maximize', 14)}Agrandir`;
+    open.setAttribute('aria-label', 'Ouvrir le tableau en grand');
+    open.addEventListener('click', () => openTableModal(wrap));
+    bar.appendChild(open);
+    table.parentNode.insertBefore(block, table);
+    block.appendChild(bar);
+    block.appendChild(wrap);
     wrap.appendChild(table);
   });
+}
+
+let tableModal;
+function openTableModal(wrap) {
+  if (!tableModal) {
+    tableModal = document.createElement('dialog');
+    tableModal.className = 'table-modal';
+    tableModal.setAttribute('aria-label', 'Tableau en grand');
+    tableModal.innerHTML = `<div class="table-modal__bar"><span class="label">TABLEAU</span>
+      <button type="button" class="icon-btn table-modal__close" aria-label="Fermer">${svg('x', 20)}</button></div>
+      <div class="table-modal__body prose"></div>`;
+    document.body.appendChild(tableModal);
+    $('.table-modal__close', tableModal).addEventListener('click', () => tableModal.close());
+    // Click on the backdrop closes the modal
+    tableModal.addEventListener('click', (e) => { if (e.target === tableModal) tableModal.close(); });
+    tableModal.addEventListener('close', () => { document.documentElement.classList.remove('modal-open'); });
+  }
+  const body = $('.table-modal__body', tableModal);
+  body.innerHTML = '';
+  const clone = wrap.cloneNode(true);
+  clone.classList.remove('table-wrap--dense');
+  clone.classList.add('table-wrap--scroll');
+  body.appendChild(clone);
+  document.documentElement.classList.add('modal-open');
+  tableModal.showModal();
+  $('.table-modal__close', tableModal).focus();
+}
+
+/* ---------- Full-width article ---------- */
+function initWideToggle() {
+  const btn = $('[data-wide-toggle]');
+  if (!btn) return;
+  const root = document.documentElement;
+  const sync = () => btn.setAttribute('aria-pressed', String('wide' in root.dataset));
+  btn.hidden = false;
+  btn.addEventListener('click', () => {
+    if ('wide' in root.dataset) delete root.dataset.wide; else root.dataset.wide = '';
+    try { localStorage.setItem('wide', 'wide' in root.dataset ? '1' : '0'); } catch (e) { /* private mode */ }
+    sync();
+    window.dispatchEvent(new Event('resize'));
+  });
+  sync();
 }
 
 /* ---------- Images ---------- */
@@ -288,6 +345,7 @@ initTheme();
 initMenu();
 initSearch();
 initVideos();
+initWideToggle();
 initExternalLinks();
 
 const prose = $('[data-prose]');

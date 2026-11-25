@@ -16,6 +16,10 @@
       <time datetime="{{ .Date.Format "2006-01-02" }}"><span class="date-long">{{ .Date | time.Format ":date_long" }}</span><span class="date-short">{{ .Date | time.Format ":date_medium" }}</span></time>
       {{ partial "star.html" (dict "size" 8) }}
       <span>{{ .ReadingTime }} min de lecture</span>
+      <button class="wide-toggle hov" type="button" data-wide-toggle aria-pressed="false" hidden>
+        <span class="when-narrow">{{ partial "icon.html" (dict "name" "maximize" "size" 16) }}Pleine largeur</span>
+        <span class="when-wide">{{ partial "icon.html" (dict "name" "minimize" "size" 16) }}Largeur de lecture</span>
+      </button>
     </div>
     {{- end }}
   </div>
