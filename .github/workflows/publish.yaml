@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - 'website'
+  # Manual runs, and the monthly rebuild started by .github/workflows/rebuild-website.yaml on master,
+  # so the date-based values of the CV page (/cv/) stay right in the static HTML.
+  workflow_dispatch:
 
 jobs:
   publish_website:

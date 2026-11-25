@@ -31,7 +31,7 @@
 {{- $labels := dict }}{{ range $cv.stack }}{{ range .items }}{{ $labels = merge $labels (dict .id .label) }}{{ end }}{{ end }}
 {{- $avatar := resources.Get site.Params.avatar }}
 
-<main class="cv" data-cv>
+<main class="cv" data-cv data-cv-start="{{ $p.careerStart }}">
   {{- /* ---------- Hero ---------- */}}
   <header class="cv-hero">
     <div class="cv-hero__id fade">
@@ -48,8 +48,8 @@
     </div>
 
     <ul class="cv-stats" aria-label="En bref">
-      <li class="cv-stat"><span class="cv-stat__value">{{ div $span 12 }} ans</span><span class="cv-stat__label">d'expérience PHP / Symfony</span></li>
-      <li class="cv-stat"><span class="cv-stat__value">{{ div $flM 12 }} ans</span><span class="cv-stat__label">en freelance</span></li>
+      <li class="cv-stat"><span class="cv-stat__value" data-cv-since="{{ $p.careerStart }}">{{ div $span 12 }} ans</span><span class="cv-stat__label">d'expérience PHP / Symfony</span></li>
+      <li class="cv-stat"><span class="cv-stat__value" data-cv-since="{{ $p.freelanceStart }}">{{ div $flM 12 }} ans</span><span class="cv-stat__label">en freelance</span></li>
       <li class="cv-stat"><span class="cv-stat__value">{{ len $cv.experiences }}</span><span class="cv-stat__label">missions et postes</span></li>
       {{- range $p.facts }}
       <li class="cv-stat"><span class="cv-stat__value">{{ .value }}</span><span class="cv-stat__label">{{ .label }}</span></li>
@@ -74,14 +74,14 @@
       {{- $sM := add (mul $s.Year 12) (int ($s.Format "1")) }}
       {{- $left := div (mul (sub $sM $startM) 100.0) $span }}
       {{- $w := div (mul (index $monthsOf .id) 100.0) $span }}
-      <a class="cv-frise__seg{{ if not .end }} is-current{{ end }}{{ if lt $w 5 }} is-narrow{{ end }}" href="#xp-{{ .id }}" style="left: {{ $left }}%; width: {{ $w }}%" data-cv-xp="{{ .id }}" title="{{ .company }} · {{ .role }}">
+      <a class="cv-frise__seg{{ if not .end }} is-current{{ end }}{{ if lt $w 5 }} is-narrow{{ end }}" href="#xp-{{ .id }}" style="left: {{ $left }}%; width: {{ $w }}%" data-cv-xp="{{ .id }}" data-start="{{ .start }}"{{ with .end }} data-end="{{ . }}"{{ end }} title="{{ .company }} · {{ .role }}">
         <span class="cv-frise__name">{{ .company }}</span>
       </a>
       {{- end }}
     </div>
-    <div class="cv-frise__years" aria-hidden="true">
+    <div class="cv-frise__years" aria-hidden="true" data-cv-years>
       {{- range seq $start.Year $now.Year }}
-      {{- $l := div (mul (sub (mul . 12) $startM) 100.0) $span }}
+      {{- $l := div (mul (sub (add (mul . 12) 1) $startM) 100.0) $span }}
       {{- if ge $l 0 }}<span style="left: {{ $l }}%">{{ . }}</span>{{ end }}
       {{- end }}
     </div>
@@ -112,7 +112,7 @@
               {{- $m := index $techMonths .id | default 0 }}
               <button class="tchip cv-tchip{{ if .key }} is-key{{ end }}" type="button" aria-pressed="false" data-tech="{{ .id }}">
                 {{- .label }}
-                {{- if $m }}<span class="cv-tchip__yrs" title="{{ index $techCount .id }} mission(s)">{{ if ge $m 12 }}{{ math.Round (div $m 12.0) }} an{{ if ge $m 18 }}s{{ end }}{{ else }}{{ $m }} mois{{ end }}</span>{{ end -}}
+                {{- if $m }}<span class="cv-tchip__yrs" data-cv-yrs title="{{ index $techCount .id }} mission(s)">{{ if ge $m 12 }}{{ math.Round (div $m 12.0) }} an{{ if ge $m 18 }}s{{ end }}{{ else }}{{ $m }} mois{{ end }}</span>{{ end -}}
               </button>
               {{- end }}
             </div>
@@ -132,7 +132,7 @@
           {{- range $cv.experiences }}
           {{- $m := index $monthsOf .id }}
           {{- $y := div $m 12 }}{{ $r := mod $m 12 }}
-          <li class="xp{{ if .featured }} xp--featured{{ end }}" id="xp-{{ .id }}" data-stack="{{ delimit .stack " " }}">
+          <li class="xp{{ if .featured }} xp--featured{{ end }}" id="xp-{{ .id }}" data-stack="{{ delimit .stack " " }}" data-start="{{ .start }}"{{ with .end }} data-end="{{ . }}"{{ end }}>
             <span class="xp__node" aria-hidden="true">{{ partial "star.html" (dict "size" 14) }}</span>
             <article class="xp__card">
               <header class="xp__head">
@@ -140,7 +140,7 @@
                 <div class="xp__title">
                   <span class="xp__meta">
                     {{- (time .start) | time.Format "Jan 2006" | upper }} → {{ with .end }}{{ (time .) | time.Format "Jan 2006" | upper }}{{ else }}AUJOURD'HUI{{ end }}
-                    {{- partial "star.html" (dict "size" 8) }}{{ with $y }}{{ . }} AN{{ if gt . 1 }}S{{ end }}{{ end }}{{ if and $y $r }} {{ end }}{{ with $r }}{{ . }} MOIS{{ end }}
+                    {{- partial "star.html" (dict "size" 8) }}<span data-cv-duration>{{ with $y }}{{ . }} AN{{ if gt . 1 }}S{{ end }}{{ end }}{{ if and $y $r }} {{ end }}{{ with $r }}{{ . }} MOIS{{ end }}</span>
                     {{- partial "star.html" (dict "size" 8) }}{{ .location | upper }}
                   </span>
                   <h3 class="xp__role">{{ .role }}</h3>

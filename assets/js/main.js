@@ -433,6 +433,61 @@ function initExternalLinks() {
   });
 }
 
+/* ---------- Interactive CV: live durations ---------- */
+// The site is static: Hugo computes durations at build time. This refreshes every date-based value
+// (years of experience, mission lengths, years per technology, timeline) from today's date,
+// with the same month arithmetic as layouts/cv.html.
+const cvMonth = (iso) => { const [y, m] = iso.split('-').map(Number); return y * 12 + m; };
+function refreshCvDates(root) {
+  const today = new Date();
+  const nowM = today.getFullYear() * 12 + today.getMonth() + 1;
+  const months = (el) => Math.max(1, (el.dataset.end ? cvMonth(el.dataset.end) : nowM) - cvMonth(el.dataset.start));
+
+  $$('[data-cv-since]', root).forEach((el) => {
+    el.textContent = `${Math.floor((nowM - cvMonth(el.dataset.cvSince)) / 12)} ans`;
+  });
+
+  const xps = $$('.xp[data-start]', root);
+  xps.forEach((el) => {
+    const m = months(el);
+    const y = Math.floor(m / 12);
+    const r = m % 12;
+    const out = $('[data-cv-duration]', el);
+    if (out) out.textContent = [y ? `${y} AN${y > 1 ? 'S' : ''}` : '', r ? `${r} MOIS` : ''].filter(Boolean).join(' ');
+  });
+
+  const perTech = {};
+  xps.forEach((el) => el.dataset.stack.split(' ').forEach((t) => { perTech[t] = (perTech[t] || 0) + months(el); }));
+  $$('.cv-tchip', root).forEach((chip) => {
+    const out = $('[data-cv-yrs]', chip);
+    const m = perTech[chip.dataset.tech];
+    if (!out || !m) return;
+    out.textContent = m >= 12 ? `${Math.round(m / 12)} an${m >= 18 ? 's' : ''}` : `${m} mois`;
+  });
+
+  const startM = cvMonth(root.dataset.cvStart);
+  const span = nowM - startM;
+  if (span <= 0) return;
+  $$('.cv-frise__seg[data-start]', root).forEach((seg) => {
+    const w = (months(seg) * 100) / span;
+    seg.style.left = `${((cvMonth(seg.dataset.start) - startM) * 100) / span}%`;
+    seg.style.width = `${w}%`;
+    seg.classList.toggle('is-narrow', w < 5);
+  });
+  const years = $('[data-cv-years]', root);
+  if (years) {
+    years.textContent = '';
+    for (let y = Math.floor((startM - 1) / 12); y <= today.getFullYear(); y += 1) {
+      const left = ((y * 12 + 1 - startM) * 100) / span;
+      if (left < 0) continue;
+      const tick = document.createElement('span');
+      tick.style.left = `${left}%`;
+      tick.textContent = y;
+      years.append(tick);
+    }
+  }
+}
+
 /* ---------- Interactive CV ---------- */
 // Stack filter (?stack=symfony,docker), "Essentiel / Détaillé" view (?vue=detail), shareable link.
 function initCv() {
@@ -499,6 +554,7 @@ function initCv() {
     render();
   };
 
+  refreshCvDates(root);
   root.classList.add('is-enhanced');
   panel.hidden = false;
   // The filter is a sidebar on desktop and a collapsed block on smaller screens
