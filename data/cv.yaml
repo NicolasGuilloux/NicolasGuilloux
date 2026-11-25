@@ -1,0 +1,303 @@
+# Données du CV interactif (/cv/, layouts/cv.html).
+# Source : NicolasGuilloux/curriculum-vitae, src/cv_long (CV long).
+# Les durées et le nombre d'années par techno sont calculés par le template à partir de `start` / `end`.
+# Pas de téléphone ni d'âge ici : la page est publique.
+
+profile:
+  title: "Développeur Senior Symfony"
+  tagline: "freelance PHP / Symfony, référent TDD & DDD"
+  location: "Rennes"
+  remote: "Rennes, télétravail ou hybride"
+  careerStart: "2019-08-01"
+  freelanceStart: "2022-01-01"
+  summary: >-
+    Développeur freelance senior spécialisé en PHP/Symfony. Référent **TDD/DDD**, j'ai contribué à des projets
+    à fort trafic, notamment le site drive & livraison de Carrefour avec plusieurs millions de commandes par an,
+    en architecture microservices sur Azure. Dans chaque mission, je suis moteur de propositions pour améliorer
+    la qualité technique, l'architecture et l'organisation de l'équipe.
+  # Chiffres clés affichés dans l'en-tête, en plus des années calculées.
+  facts:
+    - value: "Millions"
+      label: "de commandes par an sur le drive Carrefour"
+    - value: "÷3"
+      label: "appels aux microservices sur certaines requêtes"
+  pdf: "https://github.com/NicolasGuilloux/curriculum-vitae/releases/latest"
+  email: "nicolas.guilloux@protonmail.com"
+
+# Technologies et compétences. `key: true` = mise en avant. Les ids sont référencés par `stack` plus bas.
+stack:
+  - group: "Back-end"
+    items:
+      - { id: php, label: "PHP", key: true }
+      - { id: symfony, label: "Symfony", key: true }
+      - { id: sylius, label: "Sylius" }
+      - { id: ibexa, label: "Ibexa DXP" }
+      - { id: doctrine, label: "Doctrine" }
+      - { id: api, label: "API REST" }
+      - { id: elasticsearch, label: "ElasticSearch" }
+      - { id: phpunit, label: "PHPUnit", key: true }
+      - { id: dotnet, label: ".NET / C#" }
+      - { id: postgresql, label: "PostgreSQL" }
+  - group: "Front-end"
+    items:
+      - { id: vuejs, label: "VueJS", key: true }
+      - { id: angular, label: "Angular" }
+      - { id: elm, label: "Elm" }
+      - { id: twig, label: "Twig" }
+  - group: "DevOps & outillage"
+    items:
+      - { id: docker, label: "Docker", key: true }
+      - { id: kubernetes, label: "Kubernetes / Helm" }
+      - { id: azure, label: "Azure" }
+      - { id: gitlab-ci, label: "GitLab CI", key: true }
+      - { id: nix, label: "Nix / NixOS" }
+      - { id: ai, label: "IA (Claude, Gemini)" }
+  - group: "Méthodes"
+    items:
+      - { id: tdd, label: "TDD", key: true }
+      - { id: ddd, label: "DDD", key: true }
+      - { id: hexagonal, label: "Architecture hexagonale", key: true }
+      - { id: microservices, label: "Microservices" }
+      - { id: opensource, label: "Open source" }
+
+softSkills:
+  - "Architecture logicielle"
+  - "Revue de code"
+  - "Formation et transfert de compétences"
+  - "Rédaction de documentation technique"
+  - "Animation de réunions techniques"
+  - "Analyse statique, intégration continue"
+  - "Méthodologies agiles"
+
+experiences:
+  - id: dinum
+    role: "Développeur Senior Symfony / VueJS"
+    company: "DINUM"
+    logo: "images/cv/dinum-logo.png"
+    location: "Rennes"
+    start: "2026-07-01"
+    context: "Direction interministérielle du numérique, rattachée au Premier ministre. Pilote la transformation numérique de l'État et opère le Réseau Interministériel de l'État (RIE)."
+    highlights:
+      - "Applications de gestion d'incidents et de demandes pour le **Réseau Interministériel de l'État**"
+      - "Environnement **offline** très contrôlé : outillage, dépendances et images adaptés hors ligne"
+      - "Images **Docker** et pipelines **GitLab CI** optimisés : builds plus courts, jobs mutualisés, cache"
+    projects:
+      - name: "Applications du RIE"
+        items:
+          - "Développement d'applications au service du **Réseau Interministériel de l'État** pour de la gestion d'incidents et de demandes"
+          - "Développement backend **Symfony** et frontend **VueJS**"
+          - "Environnement **très contrôlé** et sécurisé : postes **offline**, sans accès Internet, avec très peu de permissions"
+          - "Adaptation des outils et des processus de développement à ces contraintes (dépendances, images, outillage disponibles hors ligne)"
+          - "Optimisation des images **Docker** : réduction de la taille et du temps de build, rationalisation des couches"
+          - "Optimisation de la **CI/CD GitLab** : accélération des pipelines, mutualisation des jobs et mise en cache"
+    stack: [php, symfony, vuejs, docker, gitlab-ci, phpunit]
+
+  - id: estra
+    role: "Développeur Full-Stack .NET / Angular"
+    company: "Estra Consulting"
+    client: "CAPEB"
+    location: "Télétravail"
+    start: "2026-05-01"
+    end: "2026-07-01"
+    context: "Mission pour la CAPEB (Confédération de l'artisanat et des petites entreprises du bâtiment), environ 60 000 entreprises adhérentes."
+    highlights:
+      - "**API .NET / C#** en architecture hexagonale, front **Angular**"
+      - "Sécurisation d'une API publique : rate limiting, CORS, CSRF"
+      - "Qualité contrôlée par **SonarQube** (Quality Gate bloquante), Conventional Commits, SemVer"
+    projects:
+      - name: "CAPEB Avantages"
+        items:
+          - "Site de redirection des artisans adhérents vers les offres des partenaires, et formulaire de prise de contact pour les non-adhérents"
+          - "Consommation de plusieurs **microservices** internes : référentiel adhérents et aiguillage, envoi de mails, désinscription"
+          - "**API .NET / C#** en **architecture hexagonale**, base PostgreSQL"
+          - "Front **Angular** : validation du SIRET à la saisie, configuration externalisée pour les tests croisés entre environnements"
+          - "Sécurisation d'une API publique : **rate limiting**, CORS, CSRF"
+          - "Logs métier systématiques, endpoints de version et de santé, alignement des versions front et back"
+          - "Mode *dry-run* sur le microservice d'envoi de mails pour la préproduction"
+          - "Qualité de code contrôlée par **SonarQube** (Quality Gate bloquante), Conventional Commits et SemVer"
+      - name: "BackOffice"
+        items:
+          - "Vérification et suivi des SIRET : historique des passages et des erreurs"
+          - "Suivi des mails envoyés, envoi unitaire pour le support, gestion des demandes de contact"
+          - "Configuration des partenaires et des URLs d'aiguillage"
+          - "**Statistiques** via Grafana"
+    stack: [dotnet, angular, postgresql, hexagonal, microservices, gitlab-ci]
+
+  - id: antadis
+    role: "Développeur Senior Sylius"
+    company: "Antadis"
+    client: "France Matériaux"
+    logo: "images/cv/antadis-logo.png"
+    location: "Télétravail"
+    start: "2026-04-01"
+    end: "2026-05-01"
+    context: "Agence web spécialisée dans l'e-commerce. Intervention en tant qu'expert Sylius / Symfony."
+    highlights:
+      - "Plateforme **e-commerce** pour ~250 adhérents d'un réseau de négoce de matériaux"
+      - "**Sylius multi-canaux**, plusieurs administrateurs et périmètres"
+      - "Accompagnement de l'équipe sur les bonnes pratiques Sylius / Symfony"
+    projects:
+      - name: "France Matériaux"
+        items:
+          - "Plateforme **e-commerce** fédérant les quelque 250 adhérents d'un réseau de négoce de matériaux, chacun avec ses propres pratiques"
+          - "**Sylius multi-canaux** : configuration adaptée aux besoins propres de chaque adhérent"
+          - "Gestion de **plusieurs administrateurs** et de leurs périmètres"
+          - "Recherche produit avec **ElasticSearch**, interface en **VueJS**"
+          - "Accompagnement de l'équipe sur les bonnes pratiques Sylius / Symfony"
+    stack: [php, sylius, symfony, elasticsearch, vuejs]
+
+  - id: carrefour
+    role: "Développeur Senior Symfony"
+    company: "Carrefour"
+    logo: "images/cv/carrefour-logo.png"
+    location: "Massy"
+    start: "2022-07-01"
+    end: "2026-01-01"
+    featured: true
+    context: "Leader de la grande distribution alimentaire, plus de 500 000 employés, +80 Md€ de chiffre d'affaires. Backend du site drive & livraison (panier, paiement, magasins et créneaux) : plusieurs millions de commandes par an."
+    highlights:
+      - "**Référent TDD et DDD** auprès des équipes front et back"
+      - "Appels aux microservices **divisés par 2 à 3**, plusieurs centaines de ms gagnées par appel API"
+      - "Montées de version **Symfony 5 → 7**, Helm / K8S sur **Azure**, pionnier de l'**IA** dans l'équipe"
+    projects:
+      - name: "Projet Frontone"
+        items:
+          - "**Référent TDD et DDD**. Enseignement des bonnes pratiques, pédagogie autour du TDD et mise en place au sein des équipes front et back"
+          - "**Docker**, optimisation de l'environnement dev et ajouts de services"
+          - "Rattrapage de la dette technique, mise en place d'abstractions pour faciliter les bonnes pratiques"
+          - "**Helm et K8S** sur **Microsoft Azure**, gestion des templates de configuration de déploiement"
+          - "Membre de l'équipe de test de l'**IA** chez Carrefour, utilisation de **Gemini CLI** ; définition d'agents et du fichier GEMINI.md"
+          - "**Symfony 5/6/7**, montées de version, aide au Tech lead transverse pour préparer les montées majeures"
+          - "Architecture en microservices, structuration de la souveraineté de la donnée"
+          - "Division par 2 voire 3 du nombre d'appels aux microservices selon les requêtes"
+          - "**Réduction de plusieurs centaines de millisecondes** du traitement des appels API"
+          - "**Vitesse d'implémentation** des API accrue par une librairie interne : plusieurs centaines de lignes générées par appel"
+          - "Normalisation des DTO d'entrée/sortie, **validation systématique** et meilleures erreurs de validation"
+          - "Amélioration de l'**architecture hexagonale**, mise en place de deptrac"
+          - "Bridge entre le site et une application pour l'intégration dans **OpenAI**"
+          - "Animation de réunions techniques et présentations dans le cadre de la **veille technologique**"
+          - "Création d'une CLI pour interagir avec l'environnement de Carrefour"
+      - name: "UI Library"
+        items:
+          - "**Référent DDD** dans l'équipe Front"
+          - "Architecture hexagonale dans le contexte **VueJS**, mise en place de l'injection de dépendances"
+          - "Dialogue sur les performances entre Frontone et la librairie"
+          - "Image Docker pour les devs, transmission des bonnes pratiques"
+    stack: [php, symfony, vuejs, docker, kubernetes, azure, tdd, ddd, hexagonal, microservices, gitlab-ci, phpunit, ai]
+
+  - id: icade
+    role: "Développeur Senior Symfony"
+    company: "Icade"
+    logo: "images/cv/icade-logo.png"
+    location: "La Défense, Paris"
+    start: "2022-01-01"
+    end: "2022-07-01"
+    context: "Leader de la promotion immobilière et du foncier tertiaire, patrimoine de plusieurs milliards d'euros."
+    highlights:
+      - "Reprise d'un CMS **Ibexa DXP** livré non fonctionnel par un prestataire"
+      - "Stack **Docker** nettoyée, sécurisée et optimisée, déploiement **Kubernetes** via GitLab CI"
+      - "Référentiel Client Unique en **Symfony 6 et VueJS**"
+    projects:
+      - name: "Promotion interne"
+        items:
+          - "CMS avec un BackOffice livré non fonctionnel par un prestataire"
+          - "**Ibexa DXP** (basé sur Symfony), **Elasticsearch** et MinIO"
+          - "Nettoyage, sécurisation et optimisation de la stack **Docker** et des images"
+          - "Nettoyage et optimisation du code, corrections de bugs et fonctionnalités sur le BackOffice"
+          - "Analyse statique et build des images sur une **CI GitLab**, déploiement sur Kubernetes"
+      - name: "RCU (Référentiel Client Unique)"
+        items:
+          - "Agrégateur de données clients éparpillées sur plusieurs services internes"
+          - "Visualisation des données clients unifiées"
+          - "Symfony 6 et VueJS"
+    stack: [php, symfony, ibexa, elasticsearch, vuejs, docker, kubernetes, azure, gitlab-ci, phpunit]
+
+  - id: richid
+    role: "Développeur Full-Stack"
+    company: "Rich-ID & Chaplean"
+    logo: "images/cv/richid-logo.jpg"
+    location: "Bordeaux"
+    start: "2019-08-01"
+    end: "2022-01-01"
+    context: "Startup puis scaleup. Projets : Opcalia, Fafih, Akto, HelloRSE, myCertif."
+    highlights:
+      - "**TDD** et **DDD** au quotidien, contrainte de qualité exceptionnelle"
+      - "Bundles **open source** : suite de tests PHPUnit, mapper de DTO"
+      - "Référent technique, documents de direction technique pour l'équipe"
+    projects:
+      - name: "Missions"
+        items:
+          - "Test Driven Development (**TDD**) et Domain Driven Design (**DDD**)"
+          - "Bundles **open source**, **intégration continue**, référent technique et veille technologique"
+          - "Suite de tests open source pour étendre les fonctionnalités de PHPUnit"
+          - "Mapper de DTO d'entrée et de sortie open source"
+          - "Legacy : entretien d'un projet initialement sur Zend Framework"
+          - "Bases de données à forte volumétrie"
+          - "Contrainte de qualité exceptionnelle : tests, relecture de code"
+          - "Prise en charge de fonctionnalités d'un point de vue théorique, documents de direction technique pour les autres devs"
+    stack: [php, symfony, sylius, elasticsearch, elm, twig, docker, gitlab-ci, phpunit, tdd, ddd, opensource]
+
+projects:
+  - name: "Jobs Assistant"
+    kind: "Agent IA"
+    year: "2026"
+    desc: "Agent Claude pour la veille de missions freelance : critique de CV, recherche d'annonces, lettres de motivation, préparation aux entretiens."
+    article: "/articles/job-coach-skill/"
+    stack: [ai]
+  - name: "Shop Assistant"
+    kind: "Agent IA"
+    year: "2026"
+    desc: "CLI exposée en MCP pour faire les courses sur le site d'Intermarché à partir des commandes précédentes."
+    stack: [ai]
+  - name: "MCP Chrome"
+    kind: "Open source"
+    year: "2026"
+    desc: "Chrome dans Docker exposé via CDP, avec accélération GPU NVIDIA pour éviter le bot flag et VNC pour les captchas."
+    stack: [docker, ai, opensource]
+  - name: "NixOS Configuration"
+    kind: "Open source"
+    year: "2020 → aujourd'hui"
+    url: "https://gitlab.com/NicolasGuilloux/nixos-configuration"
+    tag: "nixos"
+    desc: "Configuration déclarative multi-machines Linux et macOS : Nix Flakes, secrets chiffrés (ragenix), devenv, Stylix."
+    stack: [nix, opensource]
+  - name: "Shadow Nix Package"
+    kind: "Open source"
+    year: "2020 → 2021"
+    url: "https://github.com/NicolasGuilloux/shadow-nix"
+    desc: "Packaging du client de cloud gaming Shadow, Live ISO. Représentant de la communauté Linux auprès de Shadow."
+    stack: [nix, opensource]
+  - name: "Suite de tests Symfony"
+    kind: "Open source"
+    year: "2020 → 2021"
+    url: "https://github.com/rich-id/test-suite"
+    desc: "Étend la suite de tests de Symfony : moins d'effets de bord, moins de boilerplate."
+    stack: [symfony, phpunit, tdd, opensource]
+  - name: "DTO Handler Bundle"
+    kind: "Open source"
+    year: "2019"
+    url: "https://github.com/NicolasGuilloux/chaplean-dto-handler-bundle"
+    desc: "ParamConverter qui charge le contenu d'une requête dans un DTO et le valide."
+    stack: [symfony, opensource]
+
+education:
+  - degree: "Master of Science, Médias interactifs"
+    school: "University College Cork"
+    location: "Cork, Irlande"
+    years: "2017 → 2018"
+    desc: "Formation intégralement en anglais : 3D, réalité virtuelle, optimisation. Aide aux enseignants."
+  - degree: "Diplôme d'ingénieur en électronique"
+    school: "ENSEA"
+    location: "Cergy"
+    years: "2015 → 2018"
+    desc: "Double diplôme avec le MSc. Électronique et traitement du signal, projet humanitaire (installation solaire)."
+
+interests:
+  - label: "Veille"
+    text: "Skills IA, workflows N8N, NativePHP, React Native"
+  - label: "Événements"
+    text: "Hackathon ENSEA (2015, 2016), Google Hash Code 2018 (491/4852)"
+  - label: "Sports"
+    text: "Escalade, badminton"
+  - label: "Hobbies"
+    text: "Batterie, guitare, jeux de société, gaming, mauvais jardinier"

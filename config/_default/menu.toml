@@ -12,6 +12,12 @@
     weight     = 20
 
 [[main]]
+    identifier = "cv"
+    name       = "CV"
+    pageRef    = "/page/cv"
+    weight     = 25
+
+[[main]]
     identifier = "about"
     name       = "À propos"
     pageRef    = "/page/about"
@@ -21,7 +27,7 @@
 [[social]]
     identifier = "cv"
     name       = "CV"
-    url        = "https://github.com/NicolasGuilloux/curriculum-vitae/releases/latest"
+    url        = "/cv/"
     weight     = 10
     [social.params]
         icon = "cv"
