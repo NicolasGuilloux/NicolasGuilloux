@@ -45,6 +45,8 @@ Article helpers (AsciiDoc roles):
 - `[.tree]` on a `----` block containing `├──`: file tree block (trees are also detected automatically)
 - Front matter `series` (taxonomy) + `seriesLabel`: series navigation chips
 - `{{< youtube ID >}}`: privacy-friendly video, loaded on click
+- `[.scroll]` on an AsciiDoc table (`[.scroll,cols=...]`), or `{.scroll}` on the line after a Markdown table: wide table, cells keep their width and the table scrolls horizontally
+- External links (absolute http(s) URLs to another host) always open in a new tab: Markdown render hook `layouts/_markup/render-link.html`, AsciiDoc output post-processed by `_partials/external-links.html`, JS safety net for the rest
 
 ### CI/CD
 

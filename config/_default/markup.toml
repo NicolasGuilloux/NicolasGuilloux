@@ -2,6 +2,10 @@
 [goldmark.renderer]
     unsafe = true
 
+# Allows {.scroll} after a table (and other block attributes)
+[goldmark.parser.attribute]
+    block = true
+
 [goldmark.extensions.passthrough]
     enable = true
 

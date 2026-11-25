@@ -4,7 +4,7 @@
   </div>
   <nav class="footer-social" aria-label="Me retrouver">
     {{- range site.Menus.social }}
-    <a href="{{ .URL }}"{{ if hasPrefix .URL "http" }} rel="me noopener"{{ end }}>{{ partial "icon.html" (dict "name" .Params.icon "size" 20) }}<span>{{ .Name }}</span></a>
+    <a href="{{ .URL }}"{{ if hasPrefix .URL "http" }} target="_blank" rel="me noopener"{{ end }}>{{ partial "icon.html" (dict "name" .Params.icon "size" 20) }}<span>{{ .Name }}</span></a>
     {{- end }}
   </nav>
 </footer>

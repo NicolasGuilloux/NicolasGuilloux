@@ -112,8 +112,8 @@ function wrapTables(prose) {
     if (table.closest('.admonitionblock') || table.closest('.colist') || table.classList.contains('lntable') || table.closest('.table-wrap')) return;
     const wrap = document.createElement('div');
     wrap.className = 'table-wrap';
-    const cols = table.rows[0]?.cells.length || 0;
-    if (cols >= 5) wrap.classList.add('table-wrap--dense');
+    if (table.classList.contains('scroll') || table.closest('.scroll')) wrap.classList.add('table-wrap--scroll');
+    else if ((table.rows[0]?.cells.length || 0) >= 5) wrap.classList.add('table-wrap--dense');
     table.parentNode.insertBefore(wrap, table);
     wrap.appendChild(table);
   });
@@ -160,10 +160,6 @@ function enhanceLinks(prose) {
   });
   $$('.source-link a', prose).forEach((a) => {
     a.insertAdjacentHTML('afterbegin', '<span class="source-link__label">Source</span>');
-  });
-  // External links open in a new tab, like the `^` AsciiDoc links
-  $$('a[href^="http"]', prose).forEach((a) => {
-    if (a.host !== location.host && !a.target) { a.target = '_blank'; a.rel = 'noopener'; }
   });
 }
 
@@ -276,11 +272,23 @@ function initSearch() {
   if (initial) { input.value = initial; run(); }
 }
 
+/* ---------- External links ---------- */
+// Safety net: templates already mark external links; this catches anything else on the page.
+function initExternalLinks() {
+  $$('a[href^="http"]').forEach((a) => {
+    if (a.host !== location.host && !a.target) {
+      a.target = '_blank';
+      if (!/\bnoopener\b/.test(a.rel)) a.rel = `${a.rel} noopener`.trim();
+    }
+  });
+}
+
 /* ---------- Boot ---------- */
 initTheme();
 initMenu();
 initSearch();
 initVideos();
+initExternalLinks();
 
 const prose = $('[data-prose]');
 if (prose) {

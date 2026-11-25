@@ -17,7 +17,7 @@
     </nav>
     <nav class="social-nav" aria-label="Me retrouver">
       {{- range site.Menus.social }}
-      <a class="icon-btn hov" href="{{ .URL }}" aria-label="{{ .Name }}" title="{{ .Name }}"{{ if hasPrefix .URL "http" }} rel="me noopener"{{ end }}>{{ partial "icon.html" (dict "name" .Params.icon) }}</a>
+      <a class="icon-btn hov" href="{{ .URL }}" aria-label="{{ .Name }}" title="{{ .Name }}"{{ if hasPrefix .URL "http" }} target="_blank" rel="me noopener"{{ end }}>{{ partial "icon.html" (dict "name" .Params.icon) }}</a>
       {{- end }}
       <span class="divider" aria-hidden="true"></span>
     </nav>
@@ -46,7 +46,7 @@
     <span class="label mobile-menu__label">ME RETROUVER</span>
     <div class="mobile-menu__social">
       {{- range site.Menus.social }}
-      <a href="{{ .URL }}"{{ if hasPrefix .URL "http" }} rel="me noopener"{{ end }}>{{ partial "icon.html" (dict "name" .Params.icon "size" 18) }}{{ .Name }}</a>
+      <a href="{{ .URL }}"{{ if hasPrefix .URL "http" }} target="_blank" rel="me noopener"{{ end }}>{{ partial "icon.html" (dict "name" .Params.icon "size" 18) }}{{ .Name }}</a>
       {{- end }}
     </div>
     <div class="mobile-menu__theme">
