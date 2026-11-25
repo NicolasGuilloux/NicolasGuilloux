@@ -1,0 +1,68 @@
+{{ define "bodyClass" }}{{ if eq .Section "post" }}is-article{{ else }}is-page{{ end }}{{ end }}
+{{ define "main" }}
+{{- $isPost := eq .Section "post" -}}
+<div class="article-head">
+  <div class="article-head__inner fade">
+    {{- if $isPost }}
+    <nav class="breadcrumb" aria-label="Fil d'Ariane">
+      {{- with site.GetPage "/page/archives" }}<a href="{{ .RelPermalink }}">ARTICLES</a>{{ end }}
+      {{- with .GetTerms "categories" }}{{ partial "star.html" (dict "size" 8) }}<a href="{{ (index . 0).RelPermalink }}">{{ (index . 0).LinkTitle | upper }}</a>{{ end -}}
+    </nav>
+    {{- end }}
+    <h1 class="article-title">{{ .Title }}</h1>
+    {{- with .Description }}<p class="article-subtitle">{{ . }}</p>{{ end }}
+    {{- if $isPost }}
+    <div class="article-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}"><span class="date-long">{{ .Date | time.Format ":date_long" }}</span><span class="date-short">{{ .Date | time.Format ":date_medium" }}</span></time>
+      {{ partial "star.html" (dict "size" 8) }}
+      <span>{{ .ReadingTime }} min de lecture</span>
+    </div>
+    {{- end }}
+  </div>
+</div>
+
+{{- with partial "cover.html" (dict "page" . "width" 2000) }}
+<div class="article-cover"><img src="{{ .url }}" alt="" fetchpriority="high"></div>
+{{- end }}
+
+<div class="article-body{{ if not $isPost }} article-body--page{{ end }}">
+  {{- if $isPost }}
+  <nav class="toc toc--empty fade" aria-label="Sommaire" data-toc>
+    <h2 class="label toc__title">SOMMAIRE</h2>
+    <div class="toc__links" data-toc-links></div>
+  </nav>
+  <details class="toc-mobile fade" data-toc-mobile hidden>
+    <summary><span class="label">SOMMAIRE</span>{{ partial "icon.html" (dict "name" "chevron-down" "size" 18 "class" "chev") }}</summary>
+    <div class="toc-mobile__links" data-toc-mobile-links></div>
+  </details>
+  {{- end }}
+  <article class="prose fade" data-prose>
+    {{- partial "series.html" . }}
+    {{ .Content }}
+  </article>
+</div>
+
+{{- if $isPost }}
+{{- $related := site.RegularPages.Related . | first 3 }}
+{{- if lt (len $related) 3 }}
+  {{- $related = $related | append (where (where site.RegularPages "Section" "post") "Permalink" "ne" .Permalink) | uniq | first 3 }}
+{{- end }}
+{{- with $related }}
+<section class="related">
+  <div class="related__inner">
+    <div class="fade">
+      <h2 class="label related__title">{{ partial "star.html" (dict "size" 10 "class" "accent") }}À LIRE ENSUITE</h2>
+      <div class="related__rail">
+        {{- range . }}
+        <a class="related__item hov" href="{{ .RelPermalink }}">
+          {{- with partial "cover.html" (dict "page" . "width" 720) }}<img src="{{ .url }}" alt="" loading="lazy">{{ end }}
+          <span>{{ .Title }}</span>
+        </a>
+        {{- end }}
+      </div>
+    </div>
+  </div>
+</section>
+{{- end }}
+{{- end }}
+{{ end }}

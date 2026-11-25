@@ -1,0 +1,10 @@
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    © {{ site.Params.footer.since }} – {{ now.Year }} {{ site.Title }}{{ with site.Params.footer.license }} · {{ . }}{{ end }}{{ with site.Home.OutputFormats.Get "rss" }} · <a href="{{ .RelPermalink }}">RSS</a>{{ end }}
+  </div>
+  <nav class="footer-social" aria-label="Me retrouver">
+    {{- range site.Menus.social }}
+    <a href="{{ .URL }}"{{ if hasPrefix .URL "http" }} rel="me noopener"{{ end }}>{{ partial "icon.html" (dict "name" .Params.icon "size" 20) }}<span>{{ .Name }}</span></a>
+    {{- end }}
+  </nav>
+</footer>

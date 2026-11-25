@@ -1,0 +1,14 @@
+{{ define "main" }}
+<main class="listing">
+  <div class="listing__head fade">
+    <h1 class="listing__title">{{ .Title }}</h1>
+  </div>
+  <form class="search" role="search" action="" data-search data-index="{{ with .OutputFormats.Get "json" }}{{ .RelPermalink }}{{ end }}">
+    {{ partial "icon.html" (dict "name" "search" "size" 20) }}
+    <label class="visually-hidden" for="q">Chercher un article</label>
+    <input id="q" name="q" type="search" placeholder="Chercher un article" autocomplete="off" autofocus>
+  </form>
+  <p class="search__status" data-search-status aria-live="polite"></p>
+  <ul class="year__list" data-search-results></ul>
+</main>
+{{ end }}

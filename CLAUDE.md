@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal website/blog for Nicolas Guilloux, built with **Hugo** using the **hugo-theme-stack** theme (git submodule). All articles are written in French. Hosted on GitHub Pages at https://nicolasguilloux.eu/.
+Personal website/blog for Nicolas Guilloux, built with **Hugo** and a custom theme (Mintaka design system) living directly in the repository. All articles are written in French. Hosted on GitHub Pages at https://nicolasguilloux.eu/.
 
 ## Development Commands
 
@@ -29,13 +29,22 @@ Articles live in `content/post/<category>/<slug>/` as page bundles:
 
 Static pages (about, archives, search) are in `content/page/`.
 
-### Theme Customization
+### Theme
 
-The Stack theme is a git submodule in `themes/hugo-theme-stack/`. Local overrides:
-- `layouts/partials/` — overrides for footer, sidebar, comments (Disqus), social links
-- `assets/scss/` — custom stylesheets
-- `assets/icons/` — custom social icons (e.g., malt.svg)
-- `i18n/fr.yaml` — French translation overrides
+The theme is home-made, no Hugo module or submodule. It implements the "Refonte nicolasguilloux.eu" mockups (night/day themes, 1440 px, 1920 px and 390 px layouts).
+- `layouts/`: templates (Hugo ≥ 0.146 layout structure: `baseof.html`, `home.html`, `single.html`, `term.html`, `archives.html`, `search.html`, `_partials/`, `_shortcodes/`)
+- `assets/css/main.css`: all styles; design tokens are CSS variables switched by `html[data-theme="nuit"|"jour"]`
+- `assets/js/main.js`: progressive enhancements: theme toggle, mobile menu, table of contents, reading progress, code block toolbar (copy, language, `$` one-liners, file trees), table wrapping, image lightbox, click-to-load YouTube, search
+- `static/images/sky-*.svg`: starry backgrounds
+- Menus and social links: `config/_default/menu.toml`; homepage category chips: `homeCategories` in `params.toml`
+
+Article helpers (AsciiDoc roles):
+- `[.source-link]` before a paragraph holding one link: "Source" card, the link text should be the file path
+- `[.link-card]` before a paragraph holding one link: large link card showing the URL
+- `[.prompt]` on a `____` quote block: chat prompt bubble
+- `[.tree]` on a `----` block containing `├──`: file tree block (trees are also detected automatically)
+- Front matter `series` (taxonomy) + `seriesLabel`: series navigation chips
+- `{{< youtube ID >}}`: privacy-friendly video, loaded on click
 
 ### CI/CD
 
@@ -85,7 +94,7 @@ All content is written in **French**. When writing or editing articles, follow t
 
 ## Key Configuration
 
-- `config.yaml` — Hugo site config (base URL, theme, permalinks, widgets, social links, comments)
+- `config/_default/`: Hugo site config (base URL, permalinks, menus, params, markup, taxonomies)
 - `devenv.nix` — development environment packages and scripts
 - `devenv.ai.nix` — Claude Code agent definitions and MCP server config
-- `security.exec.allow` in config.yaml whitelists `asciidoctor` for AsciiDoc rendering
+- `security.exec.allow` in config.toml whitelists `asciidoctor` for AsciiDoc rendering

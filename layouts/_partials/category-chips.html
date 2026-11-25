@@ -1,0 +1,15 @@
+{{- /* Category filter chips + archives link. Context: current page */ -}}
+<div class="filters">
+  <nav class="chips" aria-label="Catégories">
+    <a class="chip hov" href="{{ "/" | relURL }}"{{ if .IsHome }} aria-current="page"{{ end }}>Tous</a>
+    {{- $current := . }}
+    {{- range site.Params.homeCategories }}
+    {{- with site.GetPage (printf "/categories/%s" .) }}
+    <a class="chip hov" href="{{ .RelPermalink }}"{{ if eq .RelPermalink $current.RelPermalink }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a>
+    {{- end }}
+    {{- end }}
+  </nav>
+  {{- with site.GetPage "/page/archives" }}{{ if ne .RelPermalink $.RelPermalink }}
+  <a class="filters__archives" href="{{ .RelPermalink }}">Archives →</a>
+  {{- end }}{{ end }}
+</div>

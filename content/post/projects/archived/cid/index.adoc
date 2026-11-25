@@ -17,6 +17,7 @@ Le but de ce projet était de faire du café rapidement, silencieusement avec la
 
 Le projet a été commencé par mes soins, puis poursuivi dans le cadre des projets de deuxième année de l'ENSEA avec https://www.linkedin.com/in/loirevalentin/[Valentin Loire^]. Nous poursuivons jusqu'à ce jour le développement.
 
-> https://nicolasguilloux.github.io/cid/[Voir sa page de présentation^]
+[.link-card]
+https://nicolasguilloux.github.io/cid/[Voir sa page de présentation^]
 
 {{< youtube DSbic6T9NO8 >}}

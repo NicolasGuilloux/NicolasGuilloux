@@ -4,10 +4,6 @@ aliases:
   - about-me
   - contact
 comments: false
-menu:
-    main: 
-        weight: 0
-        pre: user
 ---
 
 Je suis développeur Backend en freelance, et je développe principalement en PHP avec Symfony. J'aime beaucoup la programmation en règle générale, et apprendre de nos nouveaux principes et concepts. C'est quelque chose qui m'anime, avec l'idée de toujours faire plus de qualité.
@@ -20,4 +16,4 @@ J'ai eu la chance d'utiliser Elm au quotidien comme langage pendant un moment. J
 
 ____
 
-Le site a été généré grâce au framework [Hugo](https://gohugo.io/) avec le thème [Stack](https://github.com/CaiJimmy/hugo-theme-stack) conçu par [Jimmy](https://jimmycai.com) et édité par mes soins.
+Le site est généré grâce au framework [Hugo](https://gohugo.io/), avec un thème fait maison.

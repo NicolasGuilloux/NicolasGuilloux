@@ -1,0 +1,36 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{- $title := cond .IsHome site.Title (printf "%s · %s" .Title site.Title) }}
+<title>{{ $title }}</title>
+{{- $desc := .Description | default (cond .IsPage .Summary site.Params.description) | plainify | htmlUnescape | truncate 160 }}
+<meta name="description" content="{{ $desc }}">
+<link rel="canonical" href="{{ .Permalink }}">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0a0f24" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4efe4" media="(prefers-color-scheme: light)">
+{{- /* Apply the saved theme before first paint to avoid a flash */}}
+<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='jour'&&t!=='nuit'){t=matchMedia('(prefers-color-scheme: light)').matches?'jour':'nuit'}document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='nuit'}})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&family=Jost:ital,wght@0,400;0,500;1,400&display=swap">
+{{- $css := resources.Get "css/main.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{- with resources.Get site.Params.favicon }}
+<link rel="icon" href="{{ .RelPermalink }}">
+{{- end }}
+{{- range .AlternativeOutputFormats -}}
+{{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .Permalink site.Title | safeHTML }}
+{{- end }}
+{{- /* Open Graph */}}
+<meta property="og:title" content="{{ .Title | default site.Title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:type" content="{{ cond .IsPage "article" "website" }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:locale" content="fr_FR">
+{{- with partial "cover.html" (dict "page" . "width" 1200) }}
+<meta property="og:image" content="{{ .permalink }}">
+<meta name="twitter:card" content="summary_large_image">
+{{- end }}
+{{- if .IsPage }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+{{- end }}

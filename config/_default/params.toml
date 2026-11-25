@@ -1,64 +1,16 @@
-# Pages placed under these sections will be shown on homepage and archive page.
+# Pages placed under these sections are listed on the homepage and the archives.
 mainSections = ["post"]
-# Output page's full content in RSS.
-rssFullContent = true
-favicon        = "images/favicon.png"
 
-# Accepted values: "default", "lastmod"
-# default = see https://gohugo.io/quick-reference/glossary/#default-sort-order
-# lastmod = sort by last modified date, in descending order
-SortBy              = "default"
+# Output the full article content in the RSS feed.
+rssFullContent = true
+
+favicon     = "images/favicon.png"
+avatar      = "images/avatar.jpg"
+description = "Développeur Backend Symfony"
+
+# Category chips shown on the homepage, in order (term slugs).
+homeCategories = ["tutoriels", "notes", "projets", "wip"]
 
 [footer]
-    since      = 2018
-    customText = ""
-
-[dateFormat]
-    published   = ":date_full"
-    lastUpdated = ":date_full"
-
-[sidebar]
-    # emoji    = "🍥"
-    subtitle = "Développeur Backend Symfony"
-    avatar   = "images/avatar.jpg"
-
-[article]
-    headingAnchor = false
-    math          = false
-    readingTime   = true
-
-    [article.license]
-        enabled = true
-        default = "Licensed under CC BY-NC-SA 4.0"
-
-[widgets]
-    homepage = [
-        { type = "search" },
-        { type = "archives", params = { limit = 5 } },
-        { type = "categories", params = { limit = 10 } },
-        { type = "tag-cloud", params = { limit = 10 } },
-    ]
-    page = [{ type = "toc" }]
-
-[opengraph.twitter]
-    site = ""
-    card = "summary_large_image"
-
-[colorScheme]
-    toggle  = true
-    default = "auto"
-
-## Comments
-[comments]
-    enabled  = false
-
-    # See all the available configurations at https://github.com/CaiJimmy/hugo-theme-stack/blob/master/config/_default/params.toml
-    # Copy the configurations you need from there and paste it here.
-
-[social]
-email = "nicolas.guilloux@protonmail.com"
-github = "https://github.com/NicolasGuilloux"
-gitlab = "https://gitlab.com/NicolasGuilloux"
-malt = "https://www.malt.fr/profile/nicolasguilloux"
-linkedin = "https://www.linkedin.com/in/nicolas-guilloux/"
-cv = "https://github.com/NicolasGuilloux/curriculum-vitae/releases/latest"
+    since   = 2018
+    license = "CC BY-NC-SA 4.0"

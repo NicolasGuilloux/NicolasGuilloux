@@ -13,6 +13,9 @@ tags:
  - bridges
  - nixos
  - docker
+series:
+ - Matrix
+seriesLabel: Facebook
 ---
 
 Matrix est un protocole de messagerie instantanée. La suite de ce ticket considère que vous connaissez les bases et notamment le glossaire. Je vous conseille fortement d'aller lire le tutoriel précédent :
@@ -21,7 +24,8 @@ link:../matrix[Matrix sur NixOS]
 
 == Facebook Messenger
 
-https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/facebook.nix[image:https://img.shields.io/badge/Gitlab-Mautrix Facebook-orange[Gitlab]^]
+[.source-link]
+https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/facebook.nix[server/matrix/facebook.nix^]
 
 Bon, qu'on se le dise, j'aimerai bien partir de Facebook mais beaucoup de personnes ne veulent pas par simplicité. Même si ça m'embête pour des raisons évidentes, je dois rester dessus car j'ai vraiment des personnes que j'aime beaucoup qui refusent de passer sur d'autres plateformes. +
 C'est d'ailleurs un intérêt de ce bridge : je vais désinstaller toutes les applications Facebook, ma seule interaction sera via Matrix.

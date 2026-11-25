@@ -1,0 +1,24 @@
+{{ define "main" }}
+{{- $posts := where site.RegularPages "Section" "in" site.Params.mainSections }}
+<main class="listing">
+  <div class="listing__head fade">
+    <h1 class="listing__title">{{ .Title }}</h1>
+    <p class="listing__lead">{{ len $posts }} articles depuis {{ site.Params.footer.since }}.</p>
+  </div>
+  {{ partial "category-chips.html" . }}
+  {{- range $posts.GroupByDate "2006" }}
+  <section class="year fade">
+    <h2 class="year__title">{{ .Key }}</h2>
+    <ul class="year__list">
+      {{- range .Pages }}
+      <li><a class="year__item hov" href="{{ .RelPermalink }}">
+        <span class="year__date">{{ .Date | time.Format "02 Jan" | upper }}</span>
+        <span class="year__name">{{ .Title }}</span>
+        {{- with .GetTerms "categories" }}<span class="year__cat">{{ (index . 0).LinkTitle | upper }}</span>{{ end }}
+      </a></li>
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+</main>
+{{ end }}

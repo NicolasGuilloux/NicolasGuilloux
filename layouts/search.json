@@ -1,0 +1,6 @@
+{{- $items := slice -}}
+{{- range where site.RegularPages "Section" "in" site.Params.mainSections -}}
+  {{- $cat := "" -}}{{- with .GetTerms "categories" }}{{ $cat = (index . 0).LinkTitle }}{{ end -}}
+  {{- $items = $items | append (dict "title" .Title "description" .Description "url" .RelPermalink "date" (.Date | time.Format "02 Jan 2006" | upper) "category" (upper $cat) "content" (.Plain | htmlUnescape)) -}}
+{{- end -}}
+{{- $items | jsonify -}}

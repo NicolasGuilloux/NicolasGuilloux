@@ -1,0 +1,17 @@
+{{ define "main" }}
+<main class="listing">
+  <div class="listing__head fade">
+    <h1 class="listing__title">{{ .Title }}</h1>
+    {{- with .Description }}<p class="listing__lead">{{ . }}</p>{{ end }}
+  </div>
+  <ul class="year__list fade">
+    {{- range .Pages }}
+    <li><a class="year__item hov" href="{{ .RelPermalink }}">
+      {{- if .Date.IsZero | not }}<span class="year__date">{{ .Date | time.Format "02 Jan 2006" | upper }}</span>{{ end }}
+      <span class="year__name">{{ .LinkTitle }}</span>
+      {{- if eq .Kind "term" }}<span class="year__cat">{{ len .Pages }}</span>{{ end }}
+    </a></li>
+    {{- end }}
+  </ul>
+</main>
+{{ end }}

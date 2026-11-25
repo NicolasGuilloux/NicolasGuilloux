@@ -13,6 +13,9 @@ tags:
  - bridges
  - nixos
  - docker
+series:
+ - Matrix
+seriesLabel: Telegram
 ---
 
 
@@ -22,7 +25,8 @@ link:../matrix[Matrix sur NixOS]
 
 == Telegram Messenger
 
-https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/telegram.nix[image:https://img.shields.io/badge/Gitlab-Mautrix Telegram-orange[Gitlab]^]
+[.source-link]
+https://gitlab.com/NicolasGuilloux/nixos-configuration/-/blob/master/server/matrix/telegram.nix[server/matrix/telegram.nix^]
 
 Le bridge de Telegram supporte quasiment toutes les fonctionnalités. La configuration est quasiment la même que pour
 link:../mautrix-facebook[Mautrix Facebook]

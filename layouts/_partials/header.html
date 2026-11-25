@@ -1,0 +1,60 @@
+{{- $current := "" -}}
+{{- if or .IsHome (eq .Kind "term") (eq .Kind "taxonomy") }}{{ $current = "home" -}}
+{{- else if or (eq .Section "post") (eq .Layout "archives") }}{{ $current = "articles" -}}
+{{- else if eq .RelPermalink (site.GetPage "/page/about").RelPermalink }}{{ $current = "about" }}{{ end -}}
+{{- $avatar := resources.Get site.Params.avatar -}}
+{{- $search := site.GetPage "/page/search" -}}
+<header class="site-header">
+  <div class="site-header__bar">
+    <a class="brand" href="{{ "/" | relURL }}">
+      {{- with $avatar }}{{ with .Fill "96x96 webp" }}<img src="{{ .RelPermalink }}" alt="" width="36" height="36">{{ end }}{{ end -}}
+      <span>{{ site.Title }}</span>
+    </a>
+    <nav class="main-nav" aria-label="Navigation principale">
+      {{- range site.Menus.main }}
+      <a class="hov" href="{{ .URL }}"{{ if eq .Identifier $current }} aria-current="page"{{ end }}>{{ .Name }}</a>
+      {{- end }}
+    </nav>
+    <nav class="social-nav" aria-label="Me retrouver">
+      {{- range site.Menus.social }}
+      <a class="icon-btn hov" href="{{ .URL }}" aria-label="{{ .Name }}" title="{{ .Name }}"{{ if hasPrefix .URL "http" }} rel="me noopener"{{ end }}>{{ partial "icon.html" (dict "name" .Params.icon) }}</a>
+      {{- end }}
+      <span class="divider" aria-hidden="true"></span>
+    </nav>
+    <div class="header-tools">
+      {{- with $search }}
+      <a class="icon-btn icon-btn--muted hov" href="{{ .RelPermalink }}" aria-label="Rechercher" title="Rechercher">{{ partial "icon.html" (dict "name" "search") }}</a>
+      {{- end }}
+      <button class="icon-btn icon-btn--muted hov theme-toggle" type="button" data-theme-toggle aria-label="Changer de thème" title="Changer de thème">
+        <span class="when-nuit">{{ partial "icon.html" (dict "name" "sun") }}</span>
+        <span class="when-jour">{{ partial "icon.html" (dict "name" "moon") }}</span>
+      </button>
+      <button class="icon-btn menu-toggle" type="button" aria-controls="menu-mobile" aria-expanded="false" aria-label="Ouvrir le menu" data-menu-toggle>
+        <span class="when-closed">{{ partial "icon.html" (dict "name" "menu" "size" 22) }}</span>
+        <span class="when-open">{{ partial "icon.html" (dict "name" "x" "size" 22) }}</span>
+      </button>
+    </div>
+  </div>
+  {{- if and .IsPage (eq .Section "post") }}
+  <div class="progress" role="progressbar" aria-label="Progression de lecture" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress__bar"></div></div>
+  {{- end }}
+  <div class="menu-backdrop" data-menu-close hidden></div>
+  <nav class="mobile-menu" id="menu-mobile" aria-label="Navigation principale" hidden>
+    {{- range site.Menus.main }}
+    <a class="mobile-menu__link" href="{{ .URL }}"{{ if eq .Identifier $current }} aria-current="page"{{ end }}>{{ .Name }}</a>
+    {{- end }}
+    <span class="label mobile-menu__label">ME RETROUVER</span>
+    <div class="mobile-menu__social">
+      {{- range site.Menus.social }}
+      <a href="{{ .URL }}"{{ if hasPrefix .URL "http" }} rel="me noopener"{{ end }}>{{ partial "icon.html" (dict "name" .Params.icon "size" 18) }}{{ .Name }}</a>
+      {{- end }}
+    </div>
+    <div class="mobile-menu__theme">
+      <span class="label" id="lbl-theme">THÈME</span>
+      <div class="segmented" role="group" aria-labelledby="lbl-theme">
+        <button type="button" data-set-theme="jour">{{ partial "icon.html" (dict "name" "sun" "size" 16) }}Jour</button>
+        <button type="button" data-set-theme="nuit">{{ partial "icon.html" (dict "name" "moon" "size" 16) }}Nuit</button>
+      </div>
+    </div>
+  </nav>
+</header>

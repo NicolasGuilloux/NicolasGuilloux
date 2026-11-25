@@ -1,0 +1,22 @@
+{{- /* Article card. Params: page, featured (bool) */ -}}
+{{- $p := .page -}}
+{{- if .featured }}
+<a class="card card--featured" href="{{ $p.RelPermalink }}">
+  {{- with partial "cover.html" (dict "page" $p "width" 1120) }}<img class="card__img" src="{{ .url }}" alt="" loading="eager">{{ end }}
+  <div class="card__body">
+    {{ partial "constellation.html" . }}
+    {{ partial "meta-label.html" $p }}
+    <span class="card__title">{{ $p.Title }}</span>
+    {{- with $p.Description }}<span class="card__desc">{{ . }}</span>{{ end }}
+  </div>
+</a>
+{{- else }}
+<a class="card" href="{{ $p.RelPermalink }}">
+  {{- with partial "cover.html" (dict "page" $p "width" 960) }}<img class="card__img" src="{{ .url }}" alt="" loading="lazy">{{ end }}
+  <span class="card__body">
+    {{ partial "meta-label.html" $p }}
+    <span class="card__title">{{ $p.Title }}</span>
+    {{- with $p.Description }}<span class="card__desc">{{ . }}</span>{{ end }}
+  </span>
+</a>
+{{- end }}
