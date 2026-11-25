@@ -3,4 +3,7 @@ title: "Articles"
 date: 2019-05-28
 layout: "archives"
 slug: "archives"
+aliases:
+  - recherche
+  - search
 ---

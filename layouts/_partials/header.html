@@ -3,7 +3,6 @@
 {{- else if or (eq .Section "post") (eq .Layout "archives") }}{{ $current = "articles" -}}
 {{- else if eq .RelPermalink (site.GetPage "/page/about").RelPermalink }}{{ $current = "about" }}{{ end -}}
 {{- $avatar := resources.Get site.Params.avatar -}}
-{{- $search := site.GetPage "/page/search" -}}
 <header class="site-header">
   <div class="site-header__bar">
     <a class="brand" href="{{ "/" | relURL }}">
@@ -22,9 +21,6 @@
       <span class="divider" aria-hidden="true"></span>
     </nav>
     <div class="header-tools">
-      {{- with $search }}
-      <a class="icon-btn icon-btn--muted hov" href="{{ .RelPermalink }}" aria-label="Rechercher" title="Rechercher">{{ partial "icon.html" (dict "name" "search") }}</a>
-      {{- end }}
       <button class="icon-btn icon-btn--muted hov theme-toggle" type="button" data-theme-toggle aria-label="Changer de thème" title="Changer de thème">
         <span class="when-nuit">{{ partial "icon.html" (dict "name" "sun") }}</span>
         <span class="when-jour">{{ partial "icon.html" (dict "name" "moon") }}</span>

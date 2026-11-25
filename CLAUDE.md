@@ -27,14 +27,14 @@ Articles live in `content/post/<category>/<slug>/` as page bundles:
 - Drafts go in `.draft/` subdirectories
 - Permalinks: posts → `/articles/:slug/`, pages → `/:slug/`
 
-Static pages (about, archives, search) are in `content/page/`.
+Static pages (about, archives) are in `content/page/`. The « Articles » page (archives) holds the search; `/recherche/` and `/search/` redirect to it.
 
 ### Theme
 
 The theme is home-made, no Hugo module or submodule. It implements the "Refonte nicolasguilloux.eu" mockups (night/day themes, 1440 px, 1920 px and 390 px layouts).
-- `layouts/`: templates (Hugo ≥ 0.146 layout structure: `baseof.html`, `home.html`, `single.html`, `term.html`, `archives.html`, `search.html`, `_partials/`, `_shortcodes/`)
+- `layouts/`: templates (Hugo ≥ 0.146 layout structure: `baseof.html`, `home.html`, `single.html`, `term.html`, `archives.html`, `_partials/`, `_shortcodes/`)
 - `assets/css/main.css`: all styles; design tokens are CSS variables switched by `html[data-theme="nuit"|"jour"]`
-- `assets/js/main.js`: progressive enhancements: theme toggle, mobile menu, table of contents, reading progress, code block toolbar (copy, language, `$` one-liners, file trees), table wrapping, image lightbox, click-to-load YouTube, search
+- `assets/js/main.js`: progressive enhancements: theme toggle, mobile menu, table of contents, reading progress, code block toolbar (copy, language, `$` one-liners, file trees), table wrapping, image lightbox, click-to-load YouTube, Articles page filters
 - `static/images/sky-*.svg`: starry backgrounds
 - Menus and social links: `config/_default/menu.toml`; homepage category chips: `homeCategories` in `params.toml`
 - « Articles » page (`/archives/`, `layouts/archives.html`): every post grouped by year, with client-side search (`/` shortcut), category and subject filters, sort and pagination, state kept in the URL. Settings in `params.toml`: `articlesSubjects` (tag slugs shown as chips), `articlesPageSize`, `categoryLabels` (display name overrides, e.g. WIP → En cours)

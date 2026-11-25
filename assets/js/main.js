@@ -275,60 +275,6 @@ function initScrollSpy(prose, headings) {
   update();
 }
 
-/* ---------- Search ---------- */
-function initSearch() {
-  const form = $('[data-search]');
-  if (!form) return;
-  const input = $('input', form);
-  const status = $('[data-search-status]');
-  const results = $('[data-search-results]');
-  const normalize = (s) => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-  let index = null;
-
-  const load = async () => {
-    if (index) return index;
-    const res = await fetch(form.dataset.index);
-    index = (await res.json()).map((p) => ({ ...p, haystack: normalize(`${p.title} ${p.description} ${p.content}`) }));
-    return index;
-  };
-
-  const excerpt = (p, terms) => {
-    const plain = p.content || '';
-    const norm = normalize(plain);
-    const pos = norm.indexOf(terms[0]);
-    if (pos < 0) return escapeHtml(p.description || '');
-    const start = Math.max(0, pos - 60);
-    let out = escapeHtml((start ? '…' : '') + plain.slice(start, pos + 140).trim() + '…');
-    return out;
-  };
-
-  const run = async () => {
-    const q = input.value.trim();
-    const url = new URL(location.href);
-    if (q) url.searchParams.set('q', q); else url.searchParams.delete('q');
-    history.replaceState(null, '', url);
-    if (q.length < 2) { results.innerHTML = ''; status.textContent = ''; return; }
-    const t0 = performance.now();
-    const terms = normalize(q).split(/\s+/).filter(Boolean);
-    const found = (await load()).filter((p) => terms.every((t) => p.haystack.includes(t)));
-    const secs = ((performance.now() - t0) / 1000).toFixed(3);
-    status.textContent = found.length
-      ? `${found.length} article${found.length > 1 ? 's' : ''} (${secs} secondes)`
-      : 'Aucun article ne correspond à cette recherche.';
-    results.innerHTML = found.map((p) => `<li><a class="year__item hov" href="${p.url}">
-      <span class="year__date">${escapeHtml(p.date)}</span>
-      <span class="year__name">${escapeHtml(p.title)}</span>
-      ${p.category ? `<span class="year__cat">${escapeHtml(p.category)}</span>` : ''}
-      <span class="year__desc">${excerpt(p, terms)}</span></a></li>`).join('');
-  };
-
-  let timer;
-  input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 120); });
-  form.addEventListener('submit', (e) => { e.preventDefault(); run(); });
-  const initial = new URLSearchParams(location.search).get('q');
-  if (initial) { input.value = initial; run(); }
-}
-
 /* ---------- Articles page: search, filters, sort, pagination ---------- */
 function initArticles() {
   const root = $('[data-articles]');
@@ -490,7 +436,6 @@ function initExternalLinks() {
 /* ---------- Boot ---------- */
 initTheme();
 initMenu();
-initSearch();
 initArticles();
 initVideos();
 initWideToggle();
