@@ -1,24 +1,104 @@
 {{ define "main" }}
-{{- $posts := where site.RegularPages "Section" "in" site.Params.mainSections }}
-<main class="listing">
-  <div class="listing__head fade">
-    <h1 class="listing__title">{{ .Title }}</h1>
-    <p class="listing__lead">{{ len $posts }} articles depuis {{ site.Params.footer.since }}.</p>
+{{- /*
+  « Articles » page: every post, grouped by year. Without JavaScript the full list is shown;
+  assets/js/main.js (initArticles) adds search, filters, sort and pagination.
+*/ -}}
+{{- $posts := (where site.RegularPages "Section" "in" site.Params.mainSections).ByDate.Reverse }}
+{{- $labels := site.Params.categoryLabels | default dict }}
+{{- $first := index $posts.ByDate 0 }}
+<main class="articles" data-articles data-page-size="{{ site.Params.articlesPageSize | default 6 }}">
+  <div class="articles__head">
+    <div class="articles__title fade">
+      <h1>{{ .Title }}</h1>
+      <span class="articles__count">{{ len $posts }} ARTICLES · DEPUIS {{ $first.Date.Year }}</span>
+    </div>
   </div>
-  {{ partial "category-chips.html" . }}
-  {{- range $posts.GroupByDate "2006" }}
-  <section class="year fade">
-    <h2 class="year__title">{{ .Key }}</h2>
-    <ul class="year__list">
-      {{- range .Pages }}
-      <li><a class="year__item hov" href="{{ .RelPermalink }}">
-        <span class="year__date">{{ .Date | time.Format "02 Jan" | upper }}</span>
-        <span class="year__name">{{ .Title }}</span>
-        {{- with .GetTerms "categories" }}<span class="year__cat">{{ (index . 0).LinkTitle | upper }}</span>{{ end }}
-      </a></li>
+
+  <section class="articles__panel" aria-label="Rechercher et filtrer" data-articles-panel hidden>
+    <div class="articles__row">
+      <label class="srch">
+        {{ partial "icon.html" (dict "name" "search" "size" 20) }}
+        <span class="visually-hidden">Rechercher</span>
+        <input type="search" placeholder="Rechercher un titre, une techno, un projet…" autocomplete="off" data-articles-q>
+        <button class="srch__clear icon-btn" type="button" aria-label="Effacer la recherche" data-articles-clear hidden>{{ partial "icon.html" (dict "name" "x" "size" 16) }}</button>
+        <kbd aria-hidden="true">/</kbd>
+      </label>
+      <label class="sort">
+        <span class="articles__label">TRI</span>
+        <select data-articles-sort>
+          <option value="desc">Plus récents</option>
+          <option value="asc">Plus anciens</option>
+        </select>
+      </label>
+    </div>
+    <div class="articles__row articles__row--chips" role="group" aria-label="Catégorie">
+      <span class="articles__label articles__label--fixed" aria-hidden="true">CATÉGORIE</span>
+      <button class="fchip" type="button" aria-pressed="true" data-cat="all">Tous <span class="fchip__count"></span></button>
+      {{- range site.Params.homeCategories }}
+      {{- with site.GetPage (printf "/categories/%s" .) }}
+      <button class="fchip" type="button" aria-pressed="false" data-cat="{{ .Data.Term | urlize }}">{{ index $labels (.Data.Term | urlize) | default .LinkTitle }} <span class="fchip__count"></span></button>
       {{- end }}
-    </ul>
+      {{- end }}
+    </div>
+    {{- with site.Params.articlesSubjects }}
+    <div class="articles__row articles__row--chips" role="group" aria-label="Sujets">
+      <span class="articles__label articles__label--fixed" aria-hidden="true">SUJETS</span>
+      {{- range . }}
+      <button class="tchip" type="button" aria-pressed="false" data-tag="{{ . | urlize }}">#{{ . }}</button>
+      {{- end }}
+    </div>
+    {{- end }}
   </section>
-  {{- end }}
+
+  <div class="articles__status" data-articles-status-row hidden>
+    <p role="status" data-articles-status></p>
+    <button class="articles__reset" type="button" data-articles-reset hidden>{{ partial "icon.html" (dict "name" "x" "size" 14) }}Effacer les filtres</button>
+  </div>
+
+  <div class="articles__empty" data-articles-empty hidden>
+    {{ partial "star.html" (dict "size" 28) }}
+    <p class="articles__empty-title">Rien dans ce coin du ciel.</p>
+    <p>Aucun article ne correspond à cette recherche. Essayez un autre mot, ou retirez un filtre.</p>
+    <button class="pill-btn" type="button" data-articles-reset>Tout afficher</button>
+  </div>
+
+  <div class="articles__groups" data-articles-groups>
+    {{- range $posts.GroupByDate "2006" }}
+    <section class="ygroup">
+      <h2 class="ygroup__title"><span class="fade">{{ partial "star.html" (dict "size" 10) }}{{ .Key }}</span><span class="ygroup__rule" aria-hidden="true"></span></h2>
+      <ul class="ygroup__list">
+        {{- range .Pages }}
+        {{- $cats := slice }}{{ $catLabels := slice }}
+        {{- range .GetTerms "categories" }}
+          {{- $k := .Data.Term | urlize }}
+          {{- $cats = $cats | append $k }}
+          {{- $catLabels = $catLabels | append ((index $labels $k | default .LinkTitle) | upper) }}
+        {{- end }}
+        {{- $tags := slice }}{{ range .GetTerms "tags" }}{{ $tags = $tags | append (.Data.Term | urlize) }}{{ end }}
+        <li data-date="{{ .Date.Format "2006-01-02" }}" data-cats="{{ delimit $cats " " }}" data-tags="{{ delimit $tags " " }}">
+          <a class="aitem hov" href="{{ .RelPermalink }}">
+            {{- with partial "cover.html" (dict "page" . "width" 352) }}<img class="aitem__img" src="{{ .url }}" alt="" loading="lazy" width="176" height="110">{{ else }}<span class="aitem__img aitem__img--none"></span>{{ end }}
+            <span class="aitem__body">
+              <span class="aitem__meta">{{ .Date | time.Format "02 Jan 2006" | upper }}{{ with $catLabels }}{{ partial "star.html" (dict "size" 8) }}{{ delimit . " · " }}{{ end }}</span>
+              <span class="aitem__title">{{ .Title }}</span>
+              {{- with .Description }}<span class="aitem__desc">{{ . }}</span>{{ end }}
+              {{- with $tags }}<span class="aitem__tags">{{ range . }}<span>#{{ . }}</span>{{ end }}</span>{{ end }}
+            </span>
+          </a>
+        </li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}
+  </div>
+
+  <nav class="apager" aria-label="Pagination" data-articles-pager hidden>
+    <span class="apager__range" data-articles-range></span>
+    <div class="apager__nav">
+      <button class="apager__step" type="button" data-articles-prev aria-label="Page précédente">←<span class="apager__word"> Précédent</span></button>
+      <span class="apager__pages" data-articles-pages></span>
+      <button class="apager__step" type="button" data-articles-next aria-label="Page suivante"><span class="apager__word">Suivant </span>→</button>
+    </div>
+  </nav>
 </main>
 {{ end }}

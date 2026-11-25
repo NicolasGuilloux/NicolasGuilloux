@@ -37,6 +37,7 @@ The theme is home-made, no Hugo module or submodule. It implements the "Refonte 
 - `assets/js/main.js`: progressive enhancements: theme toggle, mobile menu, table of contents, reading progress, code block toolbar (copy, language, `$` one-liners, file trees), table wrapping, image lightbox, click-to-load YouTube, search
 - `static/images/sky-*.svg`: starry backgrounds
 - Menus and social links: `config/_default/menu.toml`; homepage category chips: `homeCategories` in `params.toml`
+- « Articles » page (`/archives/`, `layouts/archives.html`): every post grouped by year, with client-side search (`/` shortcut), category and subject filters, sort and pagination, state kept in the URL. Settings in `params.toml`: `articlesSubjects` (tag slugs shown as chips), `articlesPageSize`, `categoryLabels` (display name overrides, e.g. WIP → En cours)
 
 Article helpers (AsciiDoc roles):
 - `[.source-link]` before a paragraph holding one link: "Source" card, the link text should be the file path

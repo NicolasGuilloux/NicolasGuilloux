@@ -11,6 +11,13 @@ description = "Développeur Backend Symfony"
 # Category chips shown on the homepage, in order (term slugs).
 homeCategories = ["tutoriels", "notes", "projets", "wip"]
 
+# « Articles » page (layouts/archives.html): subject chips (tag slugs), page size, category display names.
+articlesSubjects = ["nixos", "matrix", "docker", "homelab", "diy", "smart-mirror", "domotique", "ai"]
+articlesPageSize = 6
+
 [footer]
     since   = 2018
     license = "CC BY-NC-SA 4.0"
+
+[categoryLabels]
+    wip = "En cours"

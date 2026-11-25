@@ -329,6 +329,153 @@ function initSearch() {
   if (initial) { input.value = initial; run(); }
 }
 
+/* ---------- Articles page: search, filters, sort, pagination ---------- */
+function initArticles() {
+  const root = $('[data-articles]');
+  if (!root) return;
+  const normalize = (s) => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const size = parseInt(root.dataset.pageSize, 10) || 6;
+  const groups = $('[data-articles-groups]', root);
+  const input = $('[data-articles-q]', root);
+  const clear = $('[data-articles-clear]', root);
+  const sortSel = $('[data-articles-sort]', root);
+  const status = $('[data-articles-status]', root);
+  const resetBtns = $$('[data-articles-reset]', root);
+  const empty = $('[data-articles-empty]', root);
+  const pager = $('[data-articles-pager]', root);
+  const pagesBox = $('[data-articles-pages]', root);
+  const prev = $('[data-articles-prev]', root);
+  const next = $('[data-articles-next]', root);
+  const catBtns = $$('[data-cat]', root);
+  const tagBtns = $$('[data-tag]', root);
+  const starSvg = $('.ygroup__title svg', groups)?.outerHTML || '';
+
+  const items = $$('li[data-date]', groups).map((li) => ({
+    li,
+    date: li.dataset.date,
+    year: li.dataset.date.slice(0, 4),
+    cats: li.dataset.cats.split(' ').filter(Boolean),
+    tags: li.dataset.tags.split(' ').filter(Boolean),
+    text: normalize(li.textContent),
+  }));
+
+  const params = new URLSearchParams(location.search);
+  const state = {
+    q: params.get('q') || '',
+    cat: params.get('cat') || 'all',
+    tag: params.get('tag') || null,
+    sort: params.get('sort') === 'asc' ? 'asc' : 'desc',
+    page: Math.max(1, parseInt(params.get('page'), 10) || 1),
+  };
+  if (!catBtns.some((b) => b.dataset.cat === state.cat)) state.cat = 'all';
+  input.value = state.q;
+  sortSel.value = state.sort;
+
+  const syncUrl = () => {
+    const url = new URL(location.href);
+    const set = (k, v, def) => (v && v !== def ? url.searchParams.set(k, v) : url.searchParams.delete(k));
+    set('q', state.q.trim(), '');
+    set('cat', state.cat, 'all');
+    set('tag', state.tag, null);
+    set('sort', state.sort, 'desc');
+    set('page', String(state.page), '1');
+    history.replaceState(null, '', url);
+  };
+
+  const render = (scroll) => {
+    const terms = normalize(state.q.trim()).split(/\s+/).filter(Boolean);
+    const matchQ = (a) => terms.every((t) => a.text.includes(t));
+    const matchTag = (a) => !state.tag || a.tags.includes(state.tag);
+    const matchCat = (a, c) => c === 'all' || a.cats.includes(c);
+    const base = items.filter((a) => matchQ(a) && matchTag(a));
+    const list = base.filter((a) => matchCat(a, state.cat))
+      .sort((x, y) => (state.sort === 'asc' ? x.date.localeCompare(y.date) : y.date.localeCompare(x.date)));
+
+    const total = list.length;
+    const pages = Math.max(1, Math.ceil(total / size));
+    if (state.page > pages) state.page = pages;
+    const start = (state.page - 1) * size;
+    const slice = list.slice(start, start + size);
+
+    // Chips
+    catBtns.forEach((b) => {
+      b.setAttribute('aria-pressed', String(b.dataset.cat === state.cat));
+      $('.fchip__count', b).textContent = base.filter((a) => matchCat(a, b.dataset.cat)).length;
+    });
+    tagBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tag === state.tag)));
+
+    // Year groups, rebuilt around the existing list items
+    groups.innerHTML = '';
+    let ul = null; let year = null;
+    slice.forEach((a) => {
+      if (a.year !== year) {
+        year = a.year;
+        const sec = document.createElement('section');
+        sec.className = 'ygroup';
+        sec.innerHTML = `<h2 class="ygroup__title"><span class="fade">${starSvg}${year}</span><span class="ygroup__rule" aria-hidden="true"></span></h2><ul class="ygroup__list"></ul>`;
+        groups.appendChild(sec);
+        ul = $('ul', sec);
+      }
+      ul.appendChild(a.li);
+    });
+
+    const hasFilters = !!(terms.length || state.tag || state.cat !== 'all');
+    status.textContent = total === 0
+      ? 'Aucun résultat'
+      : hasFilters
+        ? `${total} ${total > 1 ? 'articles correspondent' : 'article correspond'}`
+        : `Tous les articles, du plus ${state.sort === 'asc' ? 'ancien' : 'récent'} au plus ${state.sort === 'asc' ? 'récent' : 'ancien'}`;
+    resetBtns[0].hidden = !hasFilters;
+    empty.hidden = total !== 0;
+    clear.hidden = !state.q;
+
+    // Pagination
+    pager.hidden = pages <= 1;
+    groups.classList.toggle('is-paged', pages > 1);
+    $('[data-articles-range]', root).textContent = `ARTICLES ${start + 1}–${Math.min(start + size, total)} SUR ${total}`;
+    prev.disabled = state.page <= 1;
+    next.disabled = state.page >= pages;
+    pagesBox.innerHTML = '';
+    for (let n = 1; n <= pages; n++) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'apager__page';
+      b.textContent = n;
+      b.setAttribute('aria-label', `Page ${n}`);
+      if (n === state.page) b.setAttribute('aria-current', 'page');
+      b.addEventListener('click', () => go(n));
+      pagesBox.appendChild(b);
+    }
+
+    syncUrl();
+    if (scroll) root.querySelector('.articles__status').scrollIntoView({ block: 'start', behavior: 'smooth' });
+  };
+
+  const go = (n) => { state.page = n; render(true); };
+  const update = (patch) => { Object.assign(state, patch, { page: 1 }); render(false); };
+
+  input.addEventListener('input', () => update({ q: input.value }));
+  clear.addEventListener('click', () => { input.value = ''; update({ q: '' }); input.focus(); });
+  sortSel.addEventListener('change', () => update({ sort: sortSel.value }));
+  catBtns.forEach((b) => b.addEventListener('click', () => update({ cat: b.dataset.cat })));
+  tagBtns.forEach((b) => b.addEventListener('click', () => update({ tag: state.tag === b.dataset.tag ? null : b.dataset.tag })));
+  resetBtns.forEach((b) => b.addEventListener('click', () => { input.value = ''; update({ q: '', cat: 'all', tag: null }); }));
+  prev.addEventListener('click', () => state.page > 1 && go(state.page - 1));
+  next.addEventListener('click', () => go(state.page + 1));
+
+  // "/" focuses the search field, like the hint in the field says
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.target.closest('input, textarea, select, [contenteditable]')) return;
+    e.preventDefault();
+    input.focus();
+  });
+
+  $('[data-articles-panel]', root).hidden = false;
+  $('[data-articles-status-row]', root).hidden = false;
+  render(false);
+}
+
 /* ---------- External links ---------- */
 // Safety net: templates already mark external links; this catches anything else on the page.
 function initExternalLinks() {
@@ -344,6 +491,7 @@ function initExternalLinks() {
 initTheme();
 initMenu();
 initSearch();
+initArticles();
 initVideos();
 initWideToggle();
 initExternalLinks();
