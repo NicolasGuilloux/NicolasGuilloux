@@ -44,7 +44,7 @@
     <div class="articles__row articles__row--chips" role="group" aria-label="Sujets">
       <span class="articles__label articles__label--fixed" aria-hidden="true">SUJETS</span>
       {{- range . }}
-      <button class="tchip" type="button" aria-pressed="false" data-tag="{{ . | urlize }}">#{{ . }}</button>
+      <button class="tchip" type="button" aria-pressed="false" data-tag="{{ . | anchorize }}">#{{ . }}</button>
       {{- end }}
     </div>
     {{- end }}
@@ -74,7 +74,7 @@
           {{- $cats = $cats | append $k }}
           {{- $catLabels = $catLabels | append ((index $labels $k | default .LinkTitle) | upper) }}
         {{- end }}
-        {{- $tags := slice }}{{ range .GetTerms "tags" }}{{ $tags = $tags | append (.Data.Term | urlize) }}{{ end }}
+        {{- $tags := slice }}{{ range .GetTerms "tags" }}{{ $tags = $tags | append (.Data.Term | anchorize) }}{{ end }}
         <li data-date="{{ .Date.Format "2006-01-02" }}" data-cats="{{ delimit $cats " " }}" data-tags="{{ delimit $tags " " }}">
           <a class="aitem hov" href="{{ .RelPermalink }}">
             {{- with partial "cover.html" (dict "page" . "width" 352) }}<img class="aitem__img" src="{{ .url }}" alt="" loading="lazy" width="176" height="110">{{ else }}<span class="aitem__img aitem__img--none"></span>{{ end }}
