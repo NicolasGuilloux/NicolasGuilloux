@@ -906,6 +906,7 @@ button { font: inherit; }
   .article-meta { gap: 10px; padding-top: 4px; font-size: 14px; line-height: 22px; }
   .date-long { display: none; }
   .wide-toggle { display: none !important; }
+  .table-block__bar { display: none; }
   .table-modal { width: 100vw; height: 100vh; border-radius: 0; border: 0; }
   .table-modal__body { padding: 16px; }
   .date-short { display: inline; }

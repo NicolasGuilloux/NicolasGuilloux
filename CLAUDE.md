@@ -46,7 +46,7 @@ Article helpers (AsciiDoc roles):
 - Front matter `series` (taxonomy) + `seriesLabel`: series navigation chips
 - `{{< youtube ID >}}`: privacy-friendly video, loaded on click
 - `[.scroll]` on an AsciiDoc table (`[.scroll,cols=...]`), or `{.scroll}` on the line after a Markdown table: wide table, cells keep their width and the table scrolls horizontally
-- Every table gets an "Agrandir" button that opens it in a full-screen modal; articles have a "Pleine largeur" toggle (remembered in localStorage, hidden on mobile)
+- Every table gets an "Agrandir" button that opens it in a full-screen modal (desktop only); articles have a "Pleine largeur" toggle (remembered in localStorage, hidden on mobile)
 - External links (absolute http(s) URLs to another host) always open in a new tab: Markdown render hook `layouts/_markup/render-link.html`, AsciiDoc output post-processed by `_partials/external-links.html`, JS safety net for the rest
 
 ### CI/CD
