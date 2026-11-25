@@ -239,7 +239,7 @@ function initToc(prose) {
   const headings = $$('h2[id]', prose).filter((h) => !h.closest('.admonitionblock, .exampleblock'));
   const toc = $('[data-toc]');
   const tocMobile = $('[data-toc-mobile]');
-  if (headings.length < 2) return headings;
+  if (headings.length < 2 || !toc || !tocMobile) return headings;
   const text = (h) => h.textContent.trim();
   $('[data-toc-links]').innerHTML = headings
     .map((h) => `<a class="hov" href="#${encodeURIComponent(h.id)}">${star(10)}${escapeHtml(text(h))}</a>`).join('');
