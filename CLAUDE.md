@@ -53,11 +53,11 @@ Article helpers (AsciiDoc roles):
 ### CI/CD
 
 - **Build validation**: `.github/workflows/build.yaml` — triggers on PRs and pushes to `website` or `website_*` branches
-- **Deployment**: `.github/workflows/publish.yaml` — triggers on push to `website` branch, deploys `public/` to `gh-pages` branch
+- **Deployment**: `.github/workflows/publish.yaml` — triggers on push to `website` branch, on the 1st of each month (keeps the CV page dates right in the static HTML; needs `website` as the default branch) and manually, deploys `public/` to `gh-pages` branch
 
 ### Branching
 
-- `website` — main development/deployment branch
+- `website` — main development/deployment branch, default branch of the repository
 - `master` — base branch
 - `gh-pages` — generated site (auto-deployed)
 
