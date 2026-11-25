@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - 'website'
+  # Monthly rebuild, so the date-based values of the CV page (/cv/) stay right in the static HTML.
+  # Scheduled workflows only run from the default branch, which must be `website`.
+  schedule:
+    - cron: '0 5 1 * *'
+  workflow_dispatch:
 
 jobs:
   publish_website:

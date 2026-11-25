@@ -433,6 +433,179 @@ function initExternalLinks() {
   });
 }
 
+/* ---------- Interactive CV: live durations ---------- */
+// The site is static: Hugo computes durations at build time. This refreshes every date-based value
+// (years of experience, mission lengths, years per technology, timeline) from today's date,
+// with the same month arithmetic as layouts/cv.html.
+const cvMonth = (iso) => { const [y, m] = iso.split('-').map(Number); return y * 12 + m; };
+function refreshCvDates(root) {
+  const today = new Date();
+  const nowM = today.getFullYear() * 12 + today.getMonth() + 1;
+  const months = (el) => Math.max(1, (el.dataset.end ? cvMonth(el.dataset.end) : nowM) - cvMonth(el.dataset.start));
+
+  $$('[data-cv-since]', root).forEach((el) => {
+    el.textContent = `${Math.floor((nowM - cvMonth(el.dataset.cvSince)) / 12)} ans`;
+  });
+
+  const xps = $$('.xp[data-start]', root);
+  xps.forEach((el) => {
+    const m = months(el);
+    const y = Math.floor(m / 12);
+    const r = m % 12;
+    const out = $('[data-cv-duration]', el);
+    if (out) out.textContent = [y ? `${y} AN${y > 1 ? 'S' : ''}` : '', r ? `${r} MOIS` : ''].filter(Boolean).join(' ');
+  });
+
+  const perTech = {};
+  xps.forEach((el) => el.dataset.stack.split(' ').forEach((t) => { perTech[t] = (perTech[t] || 0) + months(el); }));
+  $$('.cv-tchip', root).forEach((chip) => {
+    const out = $('[data-cv-yrs]', chip);
+    const m = perTech[chip.dataset.tech];
+    if (!out || !m) return;
+    out.textContent = m >= 12 ? `${Math.round(m / 12)} an${m >= 18 ? 's' : ''}` : `${m} mois`;
+  });
+
+  const startM = cvMonth(root.dataset.cvStart);
+  const span = nowM - startM;
+  if (span <= 0) return;
+  $$('.cv-frise__seg[data-start]', root).forEach((seg) => {
+    const w = (months(seg) * 100) / span;
+    seg.style.left = `${((cvMonth(seg.dataset.start) - startM) * 100) / span}%`;
+    seg.style.width = `${w}%`;
+    seg.classList.toggle('is-narrow', w < 5);
+  });
+  const years = $('[data-cv-years]', root);
+  if (years) {
+    years.textContent = '';
+    for (let y = Math.floor((startM - 1) / 12); y <= today.getFullYear(); y += 1) {
+      const left = ((y * 12 + 1 - startM) * 100) / span;
+      if (left < 0) continue;
+      const tick = document.createElement('span');
+      tick.style.left = `${left}%`;
+      tick.textContent = y;
+      years.append(tick);
+    }
+  }
+}
+
+/* ---------- Interactive CV ---------- */
+// Stack filter (?stack=symfony,docker), "Essentiel / Détaillé" view (?vue=detail), shareable link.
+function initCv() {
+  const root = $('[data-cv]');
+  if (!root) return;
+  const panel = $('[data-cv-panel]', root);
+  const status = $('[data-cv-status]', root);
+  const reset = $('[data-cv-reset]', root);
+  const share = $('[data-cv-share]', root);
+  const xps = $$('.xp', root);
+  const projects = $$('.cvp', root);
+  const segs = $$('.cv-frise__seg', root);
+  const details = $$('.xp__more', root);
+  const label = (id) => ($(`.cv-tchip[data-tech="${id}"]`, root)?.firstChild.textContent || id).trim();
+
+  const params = new URLSearchParams(location.search);
+  const known = new Set($$('.cv-tchip', root).map((b) => b.dataset.tech));
+  const state = {
+    stack: new Set((params.get('stack') || '').split(',').filter((t) => known.has(t))),
+    view: params.get('vue') === 'detail' ? 'detail' : 'essentiel',
+  };
+
+  const syncUrl = () => {
+    const p = new URLSearchParams();
+    if (state.stack.size) p.set('stack', [...state.stack].join(','));
+    if (state.view === 'detail') p.set('vue', 'detail');
+    const qs = p.toString();
+    history.replaceState(null, '', `${location.pathname}${qs ? `?${qs}` : ''}${location.hash}`);
+  };
+
+  const render = () => {
+    const on = state.stack;
+    const matches = (el) => el.dataset.stack.split(' ').some((t) => on.has(t));
+    root.classList.toggle('is-filtered', on.size > 0);
+    xps.forEach((el) => el.classList.toggle('is-match', on.size > 0 && matches(el)));
+    projects.forEach((el) => el.classList.toggle('is-match', on.size > 0 && matches(el)));
+    segs.forEach((s) => s.classList.toggle('is-match', !!$(`#xp-${s.dataset.cvXp}.is-match`, root)));
+    $$('[data-tech]', root).forEach((b) => {
+      const pressed = on.has(b.dataset.tech);
+      if (b.classList.contains('cv-tchip')) b.setAttribute('aria-pressed', String(pressed));
+      else b.classList.toggle('is-on', pressed);
+    });
+    reset.hidden = on.size === 0;
+    if (on.size) {
+      const nx = xps.filter((el) => el.classList.contains('is-match')).length;
+      const np = projects.filter((el) => el.classList.contains('is-match')).length;
+      const names = [...on].map((t) => `<strong>${escapeHtml(label(t))}</strong>`).join(' ou ');
+      status.innerHTML = `${names} : ${nx} expérience${nx > 1 ? 's' : ''} sur ${xps.length} et ${np} projet${np > 1 ? 's' : ''}.`;
+    } else {
+      status.textContent = '';
+    }
+    $$('[data-cv-view]', root).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cvView === state.view)));
+    syncUrl();
+  };
+
+  const setView = (view) => {
+    state.view = view;
+    details.forEach((d) => { d.open = view === 'detail'; });
+    render();
+  };
+
+  const toggleTech = (id) => {
+    if (state.stack.has(id)) state.stack.delete(id); else state.stack.add(id);
+    render();
+  };
+
+  refreshCvDates(root);
+  root.classList.add('is-enhanced');
+  panel.hidden = false;
+  // The filter is a sidebar on desktop and a collapsed block on smaller screens
+  const filter = $('[data-cv-filter]', root);
+  const desktop = matchMedia('(min-width: 1100px)');
+  const syncFilter = () => { filter.open = desktop.matches || state.stack.size > 0; };
+  desktop.addEventListener('change', syncFilter);
+  syncFilter();
+  filter.querySelector('summary').addEventListener('click', (e) => { if (desktop.matches) e.preventDefault(); });
+  $$('.xp__tech', root).forEach((b) => b.removeAttribute('tabindex'));
+  root.addEventListener('click', (e) => {
+    const tech = e.target.closest('[data-tech]');
+    if (tech) { toggleTech(tech.dataset.tech); return; }
+    const view = e.target.closest('[data-cv-view]');
+    if (view) setView(view.dataset.cvView);
+  });
+  reset.addEventListener('click', () => { state.stack.clear(); render(); });
+
+  // Frise: flash the card the segment points to
+  segs.forEach((s) => s.addEventListener('click', () => {
+    const card = $(`#xp-${s.dataset.cvXp}`, root);
+    if (!card) return;
+    card.classList.remove('is-flash');
+    void card.offsetWidth;
+    card.classList.add('is-flash');
+    setTimeout(() => card.classList.remove('is-flash'), 1600);
+  }));
+
+  // Share the current (filtered) view
+  if (navigator.clipboard) {
+    share.hidden = false;
+    const text = $('[data-cv-share-label]', share);
+    share.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        text.textContent = state.stack.size ? 'Lien filtré copié' : 'Lien copié';
+      } catch (e) {
+        text.textContent = 'Copie impossible';
+      }
+      setTimeout(() => { text.textContent = 'Copier le lien'; }, 2000);
+    });
+  }
+
+  // Printing always shows every detail
+  let before = [];
+  window.addEventListener('beforeprint', () => { before = details.map((d) => d.open); details.forEach((d) => { d.open = true; }); });
+  window.addEventListener('afterprint', () => details.forEach((d, i) => { d.open = before[i]; }));
+
+  setView(state.view);
+}
+
 /* ---------- Boot ---------- */
 initTheme();
 initMenu();
@@ -440,6 +613,7 @@ initArticles();
 initVideos();
 initWideToggle();
 initExternalLinks();
+initCv();
 
 const prose = $('[data-prose]');
 if (prose) {

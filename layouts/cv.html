@@ -1,0 +1,221 @@
+{{ define "bodyClass" }}is-cv{{ end }}
+{{ define "main" }}
+{{- /*
+  Interactive CV (/cv/). Data: data/cv.yaml. Without JavaScript every section is readable and the
+  mission details open with <details>; assets/js/main.js (initCv) adds the stack filter, the
+  "Essentiel / Détaillé" view switch and the shareable link, state kept in the URL.
+*/ -}}
+{{- $cv := hugo.Data.cv }}
+{{- $p := $cv.profile }}
+{{- $now := now }}
+{{- $nowM := add (mul $now.Year 12) (int ($now.Format "1")) }}
+{{- $monthsOf := dict }}{{/* experience id -> months */}}
+{{- $techMonths := dict }}{{ $techCount := dict }}
+{{- range $cv.experiences }}
+  {{- $s := time .start }}
+  {{- $sM := add (mul $s.Year 12) (int ($s.Format "1")) }}
+  {{- $eM := $nowM }}{{ with .end }}{{ $e := time . }}{{ $eM = add (mul $e.Year 12) (int ($e.Format "1")) }}{{ end }}
+  {{- $m := sub $eM $sM }}{{ if lt $m 1 }}{{ $m = 1 }}{{ end }}
+  {{- $monthsOf = merge $monthsOf (dict .id $m) }}
+  {{- range .stack }}
+    {{- $techMonths = merge $techMonths (dict . (add (index $techMonths . | default 0) $m)) }}
+    {{- $techCount = merge $techCount (dict . (add (index $techCount . | default 0) 1)) }}
+  {{- end }}
+{{- end }}
+{{- $start := time $p.careerStart }}
+{{- $startM := add (mul $start.Year 12) (int ($start.Format "1")) }}
+{{- $span := sub $nowM $startM }}
+{{- $fl := time $p.freelanceStart }}
+{{- $flM := sub $nowM (add (mul $fl.Year 12) (int ($fl.Format "1"))) }}
+{{- $current := index (where $cv.experiences "end" "eq" nil) 0 }}
+{{- $labels := dict }}{{ range $cv.stack }}{{ range .items }}{{ $labels = merge $labels (dict .id .label) }}{{ end }}{{ end }}
+{{- $avatar := resources.Get site.Params.avatar }}
+
+<main class="cv" data-cv data-cv-start="{{ $p.careerStart }}">
+  {{- /* ---------- Hero ---------- */}}
+  <header class="cv-hero">
+    <div class="cv-hero__id fade">
+      {{- with $avatar }}{{ with .Fill "240x240 webp" }}<img class="cv-hero__avatar" src="{{ .RelPermalink }}" alt="" width="120" height="120">{{ end }}{{ end }}
+      <div class="cv-hero__text">
+        <h1 class="cv-hero__name">{{ site.Title }}</h1>
+        <p class="cv-hero__title">{{ $p.title }}<span class="cv-hero__tagline">, {{ $p.tagline }}</span></p>
+        <p class="cv-hero__status">
+          {{- with $current }}<span class="cv-dot" aria-hidden="true"></span>En mission chez <strong>{{ .company }}</strong> depuis {{ (time .start) | time.Format "January 2006" | lower }}{{ end }}
+          {{- partial "star.html" (dict "size" 8) }}{{ $p.remote }}
+        </p>
+      </div>
+    </div>
+
+    <ul class="cv-stats" aria-label="En bref">
+      <li class="cv-stat"><span class="cv-stat__value" data-cv-since="{{ $p.careerStart }}">{{ div $span 12 }} ans</span><span class="cv-stat__label">d'expérience PHP / Symfony</span></li>
+      <li class="cv-stat"><span class="cv-stat__value" data-cv-since="{{ $p.freelanceStart }}">{{ div $flM 12 }} ans</span><span class="cv-stat__label">en freelance</span></li>
+      <li class="cv-stat"><span class="cv-stat__value">{{ len $cv.experiences }}</span><span class="cv-stat__label">missions et postes</span></li>
+      {{- range $p.facts }}
+      <li class="cv-stat"><span class="cv-stat__value">{{ .value }}</span><span class="cv-stat__label">{{ .label }}</span></li>
+      {{- end }}
+    </ul>
+
+    <div class="cv-hero__bottom">
+      <p class="cv-hero__summary fade">{{ $p.summary | markdownify }}</p>
+      <div class="cv-hero__actions">
+        <a class="pill-btn pill-btn--solid hov" href="{{ $p.pdf }}">{{ partial "icon.html" (dict "name" "download" "size" 18) }}Télécharger le PDF</a>
+        <a class="pill-btn hov" href="mailto:{{ $p.email }}">{{ partial "icon.html" (dict "name" "mail" "size" 18) }}Me contacter</a>
+        <button class="pill-btn hov" type="button" data-cv-share hidden>{{ partial "icon.html" (dict "name" "link" "size" 18) }}<span data-cv-share-label>Copier le lien</span></button>
+      </div>
+    </div>
+  </header>
+
+  {{- /* ---------- Frise ---------- */}}
+  <nav class="cv-frise fade" aria-label="Frise chronologique">
+    <div class="cv-frise__track">
+      {{- range $cv.experiences }}
+      {{- $s := time .start }}
+      {{- $sM := add (mul $s.Year 12) (int ($s.Format "1")) }}
+      {{- $left := div (mul (sub $sM $startM) 100.0) $span }}
+      {{- $w := div (mul (index $monthsOf .id) 100.0) $span }}
+      <a class="cv-frise__seg{{ if not .end }} is-current{{ end }}{{ if lt $w 5 }} is-narrow{{ end }}" href="#xp-{{ .id }}" style="left: {{ $left }}%; width: {{ $w }}%" data-cv-xp="{{ .id }}" data-start="{{ .start }}"{{ with .end }} data-end="{{ . }}"{{ end }} title="{{ .company }} · {{ .role }}">
+        <span class="cv-frise__name">{{ .company }}</span>
+      </a>
+      {{- end }}
+    </div>
+    <div class="cv-frise__years" aria-hidden="true" data-cv-years>
+      {{- range seq $start.Year $now.Year }}
+      {{- $l := div (mul (sub (add (mul . 12) 1) $startM) 100.0) $span }}
+      {{- if ge $l 0 }}<span style="left: {{ $l }}%">{{ . }}</span>{{ end }}
+      {{- end }}
+    </div>
+  </nav>
+
+  <div class="cv-layout">
+    {{- /* ---------- Filters (JavaScript only) ---------- */}}
+    <aside class="cv-side" aria-label="Filtrer le CV" data-cv-panel hidden>
+      <div class="cv-side__inner">
+        <div class="cv-side__block">
+          <span class="label" id="lbl-view">VUE</span>
+          <div class="segmented" role="group" aria-labelledby="lbl-view">
+            <button type="button" data-cv-view="essentiel" aria-pressed="true">Essentiel</button>
+            <button type="button" data-cv-view="detail" aria-pressed="false">Détaillé</button>
+          </div>
+        </div>
+        <details class="cv-side__block cv-filter" data-cv-filter open>
+          <summary class="cv-side__head">
+            <span class="label">FILTRER PAR TECHNO</span>
+            <span class="cv-filter__chev">{{ partial "icon.html" (dict "name" "chevron-down" "size" 16 "class" "chev") }}</span>
+          </summary>
+          <button class="articles__reset cv-filter__reset" type="button" data-cv-reset hidden>{{ partial "icon.html" (dict "name" "x" "size" 14) }}Effacer le filtre</button>
+          {{- range $cv.stack }}
+          <div class="cv-techs" role="group" aria-label="{{ .group }}">
+            <span class="cv-techs__group">{{ .group }}</span>
+            <div class="cv-techs__chips">
+              {{- range .items }}
+              {{- $m := index $techMonths .id | default 0 }}
+              <button class="tchip cv-tchip{{ if .key }} is-key{{ end }}" type="button" aria-pressed="false" data-tech="{{ .id }}">
+                {{- .label }}
+                {{- if $m }}<span class="cv-tchip__yrs" data-cv-yrs title="{{ index $techCount .id }} mission(s)">{{ if ge $m 12 }}{{ math.Round (div $m 12.0) }} an{{ if ge $m 18 }}s{{ end }}{{ else }}{{ $m }} mois{{ end }}</span>{{ end -}}
+              </button>
+              {{- end }}
+            </div>
+          </div>
+          {{- end }}
+        </details>
+      </div>
+    </aside>
+
+    <div class="cv-main">
+      <p class="cv-status" role="status" data-cv-status></p>
+
+      {{- /* ---------- Expériences ---------- */}}
+      <section class="cv-section" aria-labelledby="cv-xp">
+        <h2 class="cv-section__title" id="cv-xp"><span class="fade">{{ partial "star.html" (dict "size" 10) }}Expériences</span><span class="ygroup__rule" aria-hidden="true"></span></h2>
+        <ol class="cv-xps">
+          {{- range $cv.experiences }}
+          {{- $m := index $monthsOf .id }}
+          {{- $y := div $m 12 }}{{ $r := mod $m 12 }}
+          <li class="xp{{ if .featured }} xp--featured{{ end }}" id="xp-{{ .id }}" data-stack="{{ delimit .stack " " }}" data-start="{{ .start }}"{{ with .end }} data-end="{{ . }}"{{ end }}>
+            <span class="xp__node" aria-hidden="true">{{ partial "star.html" (dict "size" 14) }}</span>
+            <article class="xp__card">
+              <header class="xp__head">
+                {{- with .logo }}{{ with resources.Get . }}{{ with .Fit "112x112 webp" }}<img class="xp__logo" src="{{ .RelPermalink }}" alt="" width="56" height="56" loading="lazy">{{ end }}{{ end }}{{ else }}<span class="xp__logo xp__logo--text" aria-hidden="true">{{ substr .company 0 1 }}</span>{{ end }}
+                <div class="xp__title">
+                  <span class="xp__meta">
+                    {{- (time .start) | time.Format "January 2006" | upper }} → {{ with .end }}{{ (time .) | time.Format "January 2006" | upper }}{{ else }}AUJOURD'HUI{{ end }}
+                    {{- partial "star.html" (dict "size" 8) }}<span data-cv-duration>{{ with $y }}{{ . }} AN{{ if gt . 1 }}S{{ end }}{{ end }}{{ if and $y $r }} {{ end }}{{ with $r }}{{ . }} MOIS{{ end }}</span>
+                    {{- partial "star.html" (dict "size" 8) }}{{ .location | upper }}
+                  </span>
+                  <h3 class="xp__role">{{ .role }}</h3>
+                  <span class="xp__company">{{ .company }}{{ if not .end }}<span class="xp__now">En cours</span>{{ end }}</span>
+                </div>
+              </header>
+              <p class="xp__context">{{ .context }}</p>
+              <ul class="xp__highlights">
+                {{- range .highlights }}<li>{{ . | markdownify }}</li>{{ end }}
+              </ul>
+              <details class="xp__more">
+                <summary><span class="when-closed">Détail de la mission</span><span class="when-open">Masquer le détail</span>{{ partial "icon.html" (dict "name" "chevron-down" "size" 16 "class" "chev") }}</summary>
+                {{- range .projects }}
+                <h4 class="xp__project">{{ .name }}</h4>
+                <ul class="xp__items">{{ range .items }}<li>{{ . | markdownify }}</li>{{ end }}</ul>
+                {{- end }}
+              </details>
+              <ul class="xp__stack" aria-label="Environnement technique">
+                {{- range .stack }}<li><button type="button" class="xp__tech" data-tech="{{ . }}" tabindex="-1">{{ index $labels . | default . }}</button></li>{{ end }}
+              </ul>
+            </article>
+          </li>
+          {{- end }}
+        </ol>
+      </section>
+
+      {{- /* ---------- Projets ---------- */}}
+      <section class="cv-section" aria-labelledby="cv-projects">
+        <h2 class="cv-section__title" id="cv-projects"><span class="fade">{{ partial "star.html" (dict "size" 10) }}Projets personnels &amp; open source</span><span class="ygroup__rule" aria-hidden="true"></span></h2>
+        <ul class="cv-projects">
+          {{- range $cv.projects }}
+          <li class="cvp" data-stack="{{ delimit .stack " " }}">
+            <span class="xp__meta">{{ .kind | upper }}{{ partial "star.html" (dict "size" 8) }}{{ .year | upper }}</span>
+            <h3 class="cvp__name">{{ with .url }}<a href="{{ . }}">{{ end }}{{ .name }}{{ with .url }}{{ partial "icon.html" (dict "name" "arrow-up-right" "size" 16) }}</a>{{ end }}</h3>
+            <p class="cvp__desc">{{ .desc }}</p>
+            <div class="cvp__foot">
+              <span class="cvp__tags">{{ range .stack }}<span>#{{ index $labels . | default . }}</span>{{ end }}</span>
+              {{- with .article }}<a class="cvp__link" href="{{ . }}">Lire l'article →</a>{{ end }}
+              {{- with .tag }}{{ $t := . }}{{ $n := len (where site.RegularPages "Params.tags" "intersect" (slice $t)) }}{{ with site.GetPage "/page/archives" }}<a class="cvp__link" href="{{ .RelPermalink }}?tag={{ $t | anchorize }}">{{ $n }} articles #{{ $t }} →</a>{{ end }}{{ end }}
+            </div>
+          </li>
+          {{- end }}
+        </ul>
+      </section>
+
+      <div class="cv-cols">
+        {{- /* ---------- Compétences ---------- */}}
+        <section class="cv-section" aria-labelledby="cv-soft">
+          <h2 class="cv-section__title" id="cv-soft"><span class="fade">{{ partial "star.html" (dict "size" 10) }}Savoir-faire</span><span class="ygroup__rule" aria-hidden="true"></span></h2>
+          <ul class="cv-list">{{ range $cv.softSkills }}<li>{{ . }}</li>{{ end }}</ul>
+        </section>
+
+        {{- /* ---------- Formation ---------- */}}
+        <section class="cv-section" aria-labelledby="cv-edu">
+          <h2 class="cv-section__title" id="cv-edu"><span class="fade">{{ partial "star.html" (dict "size" 10) }}Formation</span><span class="ygroup__rule" aria-hidden="true"></span></h2>
+          <ul class="cv-edu">
+            {{- range $cv.education }}
+            <li>
+              <span class="xp__meta">{{ .years }}{{ partial "star.html" (dict "size" 8) }}{{ .location | upper }}</span>
+              <h3 class="cvp__name">{{ .degree }}</h3>
+              <span class="xp__company">{{ .school }}</span>
+              <p class="cvp__desc">{{ .desc }}</p>
+            </li>
+            {{- end }}
+          </ul>
+        </section>
+      </div>
+
+      {{- /* ---------- Centres d'intérêt ---------- */}}
+      <section class="cv-section" aria-labelledby="cv-int">
+        <h2 class="cv-section__title" id="cv-int"><span class="fade">{{ partial "star.html" (dict "size" 10) }}En dehors du code</span><span class="ygroup__rule" aria-hidden="true"></span></h2>
+        <dl class="cv-interests">
+          {{- range $cv.interests }}<div><dt class="label">{{ .label | upper }}</dt><dd>{{ .text }}</dd></div>{{ end }}
+        </dl>
+      </section>
+    </div>
+  </div>
+</main>
+{{ end }}

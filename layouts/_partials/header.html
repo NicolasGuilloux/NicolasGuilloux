@@ -1,6 +1,7 @@
 {{- $current := "" -}}
 {{- if or .IsHome (eq .Kind "term") (eq .Kind "taxonomy") }}{{ $current = "home" -}}
 {{- else if or (eq .Section "post") (eq .Layout "archives") }}{{ $current = "articles" -}}
+{{- else if eq .Layout "cv" }}{{ $current = "cv" -}}
 {{- else if eq .RelPermalink (site.GetPage "/page/about").RelPermalink }}{{ $current = "about" }}{{ end -}}
 {{- $avatar := resources.Get site.Params.avatar -}}
 <header class="site-header">
