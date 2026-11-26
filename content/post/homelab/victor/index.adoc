@@ -16,18 +16,18 @@ tags:
  - hermes
 ---
 
-Faire les courses, c'est une tâche que je n'aime pas. D'ailleurs je ne connais personne qui m'a déjà annoncé bien aimer faire les courses. C'est une charge mentale, c'est toujours agaçant et on oublie systématiquement quelque chose. Mais qu'est-ce que fait un feignant ? Bon il fait pas les courses, achète tout au fil de l'eau et se retrouve à dépenser des fortunes en plat préparé. Mais le vrai feignant lui, il passe une 40aine d'heures à développer un système pour faire ses courses à sa place ! :)
+Faire les courses, c'est une tâche que je n'aime pas. D'ailleurs, je ne connais personne qui m'ait déjà dit aimer faire les courses. C'est une charge mentale, c'est toujours agaçant et on oublie systématiquement quelque chose. Mais qu'est-ce que fait un feignant ? Bon, il fait pas les courses, achète tout au fil de l'eau et se retrouve à dépenser des fortunes en plats préparés. Mais le vrai feignant, lui, il passe une quarantaine d'heures à développer un système pour faire ses courses à sa place ! :)
 
-Je vous présente donc **Victor**, mon assistant IA dont le seul et unique métier est de remplir mes différents paniers de mes différentes plateformes pour remplir mon garde à manger. Il tourne sur mon serveur à la maison, je lui parle depuis mon téléphone ou bien mon PC, et il se débrouille avec Intermarché, Super U ou Local Bio pendant que je fais autre chose de ma vie.
+Je vous présente donc **Victor**, mon assistant IA dont le seul et unique métier est de remplir mes paniers sur mes différentes plateformes pour garnir mon garde-manger. Il tourne sur mon serveur à la maison, je lui parle depuis mon téléphone ou bien mon PC, et il se débrouille avec Intermarché, Super U ou Local Bio pendant que je fais autre chose de ma vie.
 
-Allez, commençons mais d'abord on se fixe quelques objectifs pour ne pas partir dans tous les sens :
+Allez, commençons, mais d'abord on se fixe quelques objectifs pour ne pas partir dans tous les sens :
 
 * Lui parler depuis n'importe où, avec les messageries que j'utilise déjà
 * Qu'il lise ma liste de courses
 * Aucune friction avec le reste de la famille, ça doit se faire naturellement
 * Qu'il cherche les produits et remplisse le panier chez plusieurs enseignes
-* Qu'il se souvienne de mes habitudes (ex: Café en grain, grands mangeurs de petits suisses à la maison, etc)
-* Qu'il ne **paye jamais** à ma place. Je suis pas feignant ni fou à ce point
+* Qu'il se souvienne de mes habitudes (ex : café en grain, grands mangeurs de petits-suisses à la maison, etc.)
+* Qu'il ne **paye jamais** à ma place. Je ne suis ni feignant ni fou à ce point !
 
 
 == Vue d'ensemble
@@ -37,37 +37,11 @@ Avant de rentrer dans le détail, voilà à quoi ressemble Victor aujourd'hui :
 ++++
 <pre class="mermaid" style="visibility:hidden">
 flowchart LR
-    Nover(["Moi"])
-
-    subgraph Messageries
-        Discord
-        Matrix
-        Buzz
-    end
-
-    subgraph Taranis["Taranis, mon serveur"]
-        subgraph Conteneur["Conteneur Victor"]
-            Hermes["Hermes Agent"]
-            MCPI["MCP Intermarché"]
-            MCPU["MCP Super U"]
-            MCPB["MCP Local Bio"]
-            MCPC["MCP CalDAV"]
-            Flare["FlareSolverr"]
-        end
-        Hindsight[("Hindsight, la mémoire")]
-        Radicale[("Radicale, la liste de courses")]
-    end
-
-    LLM["LLM"]
-    Drives["Sites des drives"]
-
-    Nover --> Messageries --> Hermes
-    Hermes --> LLM
-    Hermes <--> Hindsight
-    Hermes --> MCPI & MCPU & MCPB & MCPC
-    MCPC --> Radicale
-    MCPU --> Flare
-    MCPI & MCPU & MCPB --> Drives
+    Moi(["Moi"]) -->|"Discord, Matrix, Buzz"| Victor["Victor (Hermes Agent)"]
+    Victor <--> LLM["LLM"]
+    Victor <--> Memoire[("Hindsight, la mémoire")]
+    Victor <--> Liste[("Radicale, la liste de courses")]
+    Victor -->|MCP| Drives["Intermarché, Super U, Local Bio"]
 </pre>
 ++++
 
@@ -81,14 +55,14 @@ En résumé :
 Le tout tourne dans un conteneur NixOS dédié sur Taranis, mon serveur à la maison (dont je vous ai présenté le réseau dans link:../network-stack/[ma stack Network^]).
 
 
-== Hermes et sa sandbox
+== L'agent : Hermes
 
 
 Mi-juin, je découvre link:https://github.com/NousResearch/hermes-agent[Hermes Agent^] de Nous Research. C'est un agent généraliste qui se branche sur à peu près toutes les messageries (Discord, Matrix, Telegram...), qui a sa propre mémoire, ses tâches planifiées, et qui parle MCP.
 
-On va vouloir lui donner un espace cloisonné sécurisé pour qu'il puisse faire ce qu'il veut, c'est à dire un container. Pour ça, j'utilise ce que NixOS propose avec systemd-nspawn qui a le mérite d'être léger, simple et particulièrement approprié pour ce cas de figure. On en profite pour créer un VLAN "Untrusted" qui permettra de mettre un peu ce qu'on veut dedans, et qui n'auront aucun privilège sur le réseau hormis le fait d'accéder à internet.
+On va vouloir lui donner un espace cloisonné sécurisé pour qu'il puisse faire ce qu'il veut, c'est-à-dire un conteneur. Pour ça, j'utilise ce que NixOS propose avec systemd-nspawn, qui a le mérite d'être léger, simple et particulièrement approprié pour ce cas de figure. On en profite pour créer un VLAN "Untrusted" dans lequel on pourra mettre un peu ce qu'on veut : ce qui s'y trouve n'a aucun privilège sur le réseau, hormis l'accès à Internet.
 
-Mon idée de base était de faire plusieurs agents, donc chacun a son dossier `containers/<nom>/`, et tout ce qui est commun vit dans des _partials_ partagés :
+Mon idée de base était de faire plusieurs agents : chacun a son dossier `containers/<nom>/`, et tout ce qui est commun vit dans des _partials_ partagés :
 
 [source,nix]
 ----
@@ -107,14 +81,57 @@ Mon idée de base était de faire plusieurs agents, donc chacun a son dossier `c
 
 Le dossier `config/` de Victor ne contient alors que ce qui lui est propre : ses MCP, ses messageries, son modèle. Ajouter une enseigne, c'est ajouter un fichier.
 
-# TODO: Ajouter la configuration de Hermes Victor
+La configuration propre à Hermes tient dans un seul fichier. On y coupe les demandes d'approbation (Victor travaille dans son conteneur, il n'a rien à casser ailleurs), on active sa mémoire et on lui dit comment se comporter sur chaque messagerie :
+
+[source,nix]
+----
+# containers/victor/config/hermes.nix (extrait)
+services.hermes-agent.settings = {
+  # Pas de "Je peux lancer cette commande ?" : il est dans sa sandbox
+  approvals = {
+    mode = "off";
+    mcp_reload_confirm = false;
+  };
+
+  # Une commande qui dure plus de 3 minutes est considérée comme bloquée
+  terminal = {
+    backend = "local";
+    timeout = 180;
+  };
+
+  # On ne veut que la réponse, pas le détail de chaque appel d'outil
+  display.tool_progress = "off";
+
+  # Mémoire native de Hermes et profil de l'utilisateur
+  memory = {
+    memory_enabled = true;
+    user_profile_enabled = true;
+  };
+
+  # Sur Discord, il ne répond que si on le mentionne, et dans un fil dédié
+  discord = {
+    require_mention = true;
+    auto_thread = true;
+    thread_require_mention = true;
+  };
+
+  # Sur Matrix, chiffrement de bout en bout et uniquement moi
+  matrix = {
+    encryption = true;
+    require_mention = true;
+    allowed_users = [ "@nover:matrix.nicolasguilloux.eu" ];
+  };
+};
+----
+
+Et comme Victor a accès à mes comptes, il ne doit obéir qu'à moi. En message privé, il ignore purement et simplement les inconnus, et dans un canal, il faut le mentionner pour qu'il réagisse. Hermes n'avait pas d'option pour tout ça, donc c'est un petit plugin maison, déclaré lui aussi en Nix, qui filtre les messages avant même qu'ils n'arrivent au modèle.
 
 
 == La mémoire : Hindsight
 
-Hermes a sa propre mémoire, mais elle reste assez basique. J'ai ajouté link:https://github.com/vectorize-io/hindsight[Hindsight^], un serveur de mémoire qui tourne sur le serveur. À chaque tour de conversation, l'agent se rappelle automatiquement ce qui est pertinent, et retient ce qui mérite de l'être. Chaque agent a sa propre banque de souvenirs : Victor n'a pas à savoir ce que mes autres agents racontent, et inversement.
+Hermes a sa propre mémoire, mais elle reste assez basique. J'ai ajouté link:https://github.com/vectorize-io/hindsight[Hindsight^], un serveur de mémoire qui tourne sur Taranis. À chaque tour de conversation, l'agent se rappelle automatiquement ce qui est pertinent, et retient ce qui mérite de l'être. Chaque agent a sa propre banque de souvenirs : Victor n'a pas à savoir ce que mes autres agents racontent, et inversement.
 
-C'est ça qui fait la différence entre "un chatbot avec des outils" et un assistant. Au bout de quelques commandes, Victor sait que je prends le lait bio en bouteille, que le café c'est une marque précise, et que "des yaourts" veut dire le pack de 12 natures et pas les petits pots aux fruits.
+C'est ça qui fait la différence entre "un chatbot avec des outils" et un assistant. Au bout de quelques commandes, Victor sait que je prends le café en grain, que les petits-suisses partent par packs entiers à la maison, et que "des yaourts" veut dire le pack de 12 natures et pas les petits pots aux fruits.
 
 Au départ, la config Hindsight était propre à Victor. Elle a ensuite été remontée dans le _partial_ commun quand les autres agents en ont voulu aussi.
 
@@ -134,9 +151,9 @@ settingsFile = pkgs.writeText "hindsight-config.json" (builtins.toJSON {
 
 == Les mains : un MCP par enseigne
 
-Il faut que l'agent puisse interagir avec les sites des différents commerces où je fais commande. Certains donnent juste un navigateur Web à l'agent en espérant que ça passe et que ça tienne dans le temps. Mais c'est bancal : ça consomme une tonne de token pour chaque action, ça peut très casser car c'est pas déterministe (ouais c'est le principe d'un LLM) et en plus, on risque de se faire flag très rapidement comme bot et donc de se taper un ban temporaire.
+Il faut que l'agent puisse interagir avec les sites des différents commerces où je fais commande. Certains donnent juste un navigateur Web à l'agent en espérant que ça passe et que ça tienne dans le temps. Mais c'est bancal : ça consomme une tonne de tokens pour chaque action, ça peut très vite casser car c'est pas déterministe (ouais c'est le principe d'un LLM) et en plus, on risque de se faire flag très rapidement comme bot et donc de se taper un ban temporaire.
 
-Non le mieux est plutôt de donner une IA un navigateur, et de lui demander de créer un outil pour faire ce qu'on veut sur le site. Comme ça toute la partie sensible et non déterministe est fait en amont, et l'outil en lui même est une CLI/MCP qui fait exactement ce qu'on lui demande sans passer par un IA. En soit, on peut donc faire des lignes de commandes pour chercher des produits et les ajouter sur le panier. On créé un MCP qui expose tout ça à Hermès pour qu'il puisse s'en servir !
+Non, le mieux est plutôt de donner un navigateur à une IA, et de lui demander de créer un outil pour faire ce qu'on veut sur le site. Comme ça toute la partie sensible et non déterministe est faite en amont, et l'outil en lui-même est une CLI/MCP qui fait exactement ce qu'on lui demande sans passer par une IA. En soi, on peut donc lancer des lignes de commande pour chercher des produits et les ajouter au panier. On crée un MCP qui expose tout ça à Hermes pour qu'il puisse s'en servir !
 
 Chaque MCP est un petit binaire Go, packagé en image Docker, qui fait donc à la fois CLI et serveur MCP. Ils exposent tous à peu près le même contrat :
 
@@ -191,7 +208,7 @@ J'ai mis plusieurs MCP, chacun correspondant à un commerçant :
 * link:https://github.com/NicolasGuilloux/intermarche-mcp[Intermarché^]
 * link:https://github.com/NicolasGuilloux/superu-mcp[Super U^]
 
-NOTE : La Fourche a depuis quitté la bande en septembre. J'ai arrêté mon abonnement, donc il n'y avait aucun intérêt de garder le MCP. Par contre, pour le supprimer, c'est aussi simple avec Nix que de supprimer le fichier lafourche-mcp.nix.
+NOTE: La Fourche a quitté la bande en septembre. J'ai arrêté mon abonnement, donc il n'y avait aucun intérêt à garder le MCP. Et pour le retirer, avec Nix, c'est aussi simple que de supprimer le fichier `lafourche-mcp.nix`.
 
 === La guerre contre les anti-bots
 
@@ -244,9 +261,9 @@ Pour la connexion à Super U, il y a une case "Vérifiez que vous êtes humain" 
 
 == La liste de courses : CalDAV
 
-Au début, je dictais ma liste à Victor directement. Ça marche, mais ce n'est pas comme ça que je fonctionne ni même ma famille. Dans la vraie vie, je note "beurre" sur mon téléphone au moment où je vide le paquet, pas trois jours plus tard au moment de commander.
+Au début, je dictais ma liste à Victor directement. Ça marche, mais ce n'est pas comme ça que je fonctionne, ni ma famille d'ailleurs. Dans la vraie vie, je note "beurre" sur mon téléphone au moment où je vide le paquet, pas trois jours plus tard au moment de commander.
 
-On va donc utiliser Radicale, un serveur CalDAV, derrière mon OpenCloud. J'ai choisi cette solution uniquement parce que j'avais déjà OpenCloud mais j'aurais très bien pu passer par la synchronisation des Rappels de Apple avec HomeAssistant. CalDAV, c'est le protocole standard des calendriers et des listes de tâches. Ma liste "Courses" n'est donc qu'une liste de tâches, que n'importe quel client compatible peut lire et modifier, y compris les Rappels Apple.
+On va donc utiliser Radicale, un serveur CalDAV, derrière mon OpenCloud. J'ai choisi cette solution uniquement parce que j'avais déjà OpenCloud mais j'aurais très bien pu passer par la synchronisation des Rappels d'Apple avec Home Assistant. CalDAV, c'est le protocole standard des calendriers et des listes de tâches. Ma liste "Courses" n'est donc qu'une liste de tâches, que n'importe quel client compatible peut lire et modifier, y compris les Rappels Apple.
 
 Victor y accède avec un MCP CalDAV existant (pas besoin de réinventer la roue cette fois), authentifié par un app token OpenCloud, jamais par mon mot de passe :
 
@@ -268,8 +285,7 @@ services.hermes-agent.settings.mcp_servers.caldav = {
 
 == En pratique
 
-Si on résume, Victor peut dialoguer avec moi
-Concrètement, une session de courses ressemble à ça :
+Si on résume, Victor discute avec moi depuis mes messageries, lit la liste de courses, se souvient de mes habitudes et remplit les paniers. Concrètement, une session de courses ressemble à ça :
 
 ++++
 <pre class="mermaid" style="visibility:hidden">
@@ -302,19 +318,19 @@ J'envoie un message, je vais faire autre chose, et je reviens quelques minutes p
 
 == Les limites
 
-Là on arrive sur la partie où lorsqu'on le montre à un proche, il y a forcément quelque chose qui saute.
+Là, on arrive à la partie où, quand on le montre à un proche, il y a forcément quelque chose qui saute aux yeux.
 
 * **Les MCP sont fragiles.** Ils parlent à des API privées, qui peuvent changer du jour au lendemain. Quand Intermarché change un champ, c'est cassé jusqu'à ce que je corrige. Heureusement, `pull = "always"` et une CI qui publie l'image à chaque commit rendent la correction rapide, et je peux facilement mettre à jour les projets respectifs.
-* **Le code des MCP n'est pas classe.** C'est pas du développement de haute voltige, et cette partie là tient vraiment avec 3 bouts de ficèle.
-* **Les choix de produits ne sont pas parfaits.** Il y a un petit moment d'entrainement et de retours avec l'agent afin que la mémoire se consolide de bonnes directives.
+* **Le code des MCP n'est pas classe.** C'est pas du développement de haute voltige, et cette partie-là tient vraiment avec trois bouts de ficelle.
+* **Les choix de produits ne sont pas parfaits.** Il y a un petit moment d'entraînement et de retours avec l'agent, le temps que la mémoire se remplisse de bonnes directives.
 
 
 == Et ensuite ?
 
 Victor fait son job, et franchement, j'en suis très content. Voici quelques trucs qui me facilitent la vie et me font un effet wow :
 
-* "Fais les courses" et en lisant la liste de courses, arrive du premier coup à remplir tout le panier
-* "Fais un comparatif des prix, et prends ce qui est raisonnable de prendre (+/- 30%) chez le maraicher local"
+* "Fais les courses" : il lit la liste de courses et remplit tout le panier du premier coup
+* "Fais un comparatif des prix, et prends ce qui est raisonnable de prendre (+/- 30%) chez le maraîcher local"
 * "Fais un comparatif des paniers entre Intermarché et Super U"
 * "J'ai fait un panier sur Intermarché, mais en fait je vais passer à Super U, transfère le panier"
 
