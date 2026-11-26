@@ -205,25 +205,7 @@ NOTE: La Fourche a quitté la bande en septembre. J'ai arrêté mon abonnement, 
 
 Vous vous doutez bien que les enseignes n'apprécient pas trop qu'un robot se balade sur leur site. Mon utilisation est "raisonnable" selon moi, mais contourner ces protections anti-bots demande de la ruse. Et chacune a sa protection préférée :
 
-++++
-<pre class="mermaid" style="visibility:hidden">
-flowchart TB
-    Victor["🤖 Victor"]
-
-    Victor -->|basket_add| I["🔌 MCP Intermarché"]
-    I -->|"captcha à résoudre"| C["🧩 2Captcha"]
-    C -->|"cookie DataDome"| I
-    I --> SI["🛒 intermarche.com"]
-
-    Victor -->|basket_add| U["🔌 MCP Super U"]
-    U -->|"challenge Cloudflare"| F["🛡️ FlareSolverr, même conteneur"]
-    F -->|"cf_clearance, liée à l'IP"| U
-    U --> SU["🛒 coursesu.com"]
-
-    Victor -->|basket_add| B["🔌 MCP Local Bio"]
-    B -->|"API publique du site"| SB["🛒 local.bio"]
-</pre>
-++++
+{{< excalidraw src="antibots.excalidraw" alt="Victor appelle basket_add sur chaque MCP. Intermarché est protégé par DataDome, contourné avec 2Captcha. Super U est protégé par Cloudflare, contourné avec FlareSolverr qui doit avoir la même IP que le MCP. Local Bio passe par son API publique, sans rien à contourner" >}}
 
 * **Intermarché** est derrière DataDome. Chaque appel passe par 2Captcha, un service de résolution de captchas, qui débloque l'accès sans aucun navigateur. Ça marche, mais c'est lent, d'où le `timeout = 180` (passé de 60 à 180 secondes récemment, parce que 60 secondes, c'était clairement trop optimiste). En vérité c'est un peu plus complexe que ça, mais tout est détaillé sur le repository GitHub.
 * **Super U** est derrière Cloudflare. Là, on fait tourner link:https://github.com/FlareSolverr/FlareSolverr[FlareSolverr^] qui passe le challenge et récupère le cookie `cf_clearance`. Petite subtilité qui m'a coûté une soirée : Cloudflare lie ce cookie à l'adresse IP. FlareSolverr doit donc sortir sur Internet avec **exactement la même IP** que le MCP, d'où le fait qu'il tourne dans le même conteneur que lui.
