@@ -3,7 +3,7 @@ title: "Victor, l'IA qui fait mes courses"
 description: L'art de ne plus faire les courses
 date: 2026-11-24
 slug: victor-courses
-draft: true
+draft: false
 image: cover.png
 categories:
  - Projets
