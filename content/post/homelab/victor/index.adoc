@@ -34,16 +34,7 @@ Allez, commençons, mais d'abord on se fixe quelques objectifs pour ne pas parti
 
 Avant de rentrer dans le détail, voilà à quoi ressemble Victor aujourd'hui :
 
-++++
-<pre class="mermaid" style="visibility:hidden">
-flowchart LR
-    Moi(["🙋 Moi"]) -->|"💬 Discord, Matrix, Buzz"| Victor["🤖 Victor (Hermes Agent)"]
-    Victor <--> LLM["🧠 LLM"]
-    Victor <--> Memoire[("🗃️ Hindsight, la mémoire")]
-    Victor <--> Liste[("📝 Radicale, la liste de courses")]
-    Victor -->|"🔌 MCP"| Drives["🛒 Intermarché, Super U, Local Bio"]
-</pre>
-++++
+{{< excalidraw src="victor.excalidraw" alt="Victor au centre : je lui parle par Discord, Matrix ou Buzz, il réfléchit avec un LLM, se souvient avec Hindsight, lit la liste de courses dans Radicale et remplit les paniers Intermarché, Super U et Local Bio via des MCP" >}}
 
 En résumé :
 

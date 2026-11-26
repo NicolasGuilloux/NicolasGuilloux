@@ -1368,3 +1368,7 @@ button { font: inherit; }
   font-family: inherit; text-align: center; overflow-x: auto;
 }
 .prose pre.mermaid svg { max-width: 100%; height: auto; }
+
+/* Schémas Excalidraw (layouts/_shortcodes/excalidraw.html) */
+.prose figure.excalidraw { margin: 0 0 var(--p-gap); min-height: 120px; }
+.prose figure.excalidraw svg { display: block; width: 100%; height: auto; }
