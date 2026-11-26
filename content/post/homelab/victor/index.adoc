@@ -37,11 +37,11 @@ Avant de rentrer dans le détail, voilà à quoi ressemble Victor aujourd'hui :
 ++++
 <pre class="mermaid" style="visibility:hidden">
 flowchart LR
-    Moi(["Moi"]) -->|"Discord, Matrix, Buzz"| Victor["Victor (Hermes Agent)"]
-    Victor <--> LLM["LLM"]
-    Victor <--> Memoire[("Hindsight, la mémoire")]
-    Victor <--> Liste[("Radicale, la liste de courses")]
-    Victor -->|MCP| Drives["Intermarché, Super U, Local Bio"]
+    Moi(["🙋 Moi"]) -->|"💬 Discord, Matrix, Buzz"| Victor["🤖 Victor (Hermes Agent)"]
+    Victor <--> LLM["🧠 LLM"]
+    Victor <--> Memoire[("🗃️ Hindsight, la mémoire")]
+    Victor <--> Liste[("📝 Radicale, la liste de courses")]
+    Victor -->|"🔌 MCP"| Drives["🛒 Intermarché, Super U, Local Bio"]
 </pre>
 ++++
 
@@ -217,20 +217,20 @@ Vous vous doutez bien que les enseignes n'apprécient pas trop qu'un robot se ba
 ++++
 <pre class="mermaid" style="visibility:hidden">
 flowchart TB
-    Victor["Victor"]
+    Victor["🤖 Victor"]
 
-    Victor -->|basket_add| I["MCP Intermarché"]
-    I -->|"captcha à résoudre"| C["2Captcha"]
+    Victor -->|basket_add| I["🔌 MCP Intermarché"]
+    I -->|"captcha à résoudre"| C["🧩 2Captcha"]
     C -->|"cookie DataDome"| I
-    I --> SI["intermarche.com"]
+    I --> SI["🛒 intermarche.com"]
 
-    Victor -->|basket_add| U["MCP Super U"]
-    U -->|"challenge Cloudflare"| F["FlareSolverr, même conteneur"]
+    Victor -->|basket_add| U["🔌 MCP Super U"]
+    U -->|"challenge Cloudflare"| F["🛡️ FlareSolverr, même conteneur"]
     F -->|"cf_clearance, liée à l'IP"| U
-    U --> SU["coursesu.com"]
+    U --> SU["🛒 coursesu.com"]
 
-    Victor -->|basket_add| B["MCP Local Bio"]
-    B -->|"API publique du site"| SB["local.bio"]
+    Victor -->|basket_add| B["🔌 MCP Local Bio"]
+    B -->|"API publique du site"| SB["🛒 local.bio"]
 </pre>
 ++++
 
@@ -290,11 +290,11 @@ Si on résume, Victor discute avec moi depuis mes messageries, lit la liste de c
 ++++
 <pre class="mermaid" style="visibility:hidden">
 sequenceDiagram
-    actor Moi
-    participant V as Victor
-    participant M as Hindsight
-    participant L as Liste CalDAV
-    participant D as MCP du drive
+    actor Moi as 🙋 Moi
+    participant V as 🤖 Victor
+    participant M as 🗃️ Hindsight
+    participant L as 📝 Liste CalDAV
+    participant D as 🔌 MCP du drive
 
     Moi->>V: Fais-moi le panier Intermarché
     V->>M: Rappel des habitudes
