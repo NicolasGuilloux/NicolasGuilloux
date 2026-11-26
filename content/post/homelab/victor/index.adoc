@@ -1,6 +1,6 @@
 ---
 title: "Victor, l'IA qui fait mes courses"
-description: Comment j'ai délégué le drive à un agent IA auto-hébergé
+description: L'art de ne plus faire les courses
 date: 2026-11-24
 slug: victor-courses
 draft: true
@@ -16,21 +16,18 @@ tags:
  - hermes
 ---
 
-Faire les courses, c'est une tâche que je déteste cordialement. Pas le fait de manger, hein, j'aime beaucoup manger. Non, c'est tout ce qu'il y a autour : se rappeler de ce qu'il manque, ouvrir le site du drive, chercher "lait demi-écrémé" pour tomber sur 47 références, se rendre compte qu'on a oublié le PQ une fois la commande validée... Et avec un enfant en bas âge à la maison, le temps libre ne se compte plus vraiment en heures. +
-Depuis l'article sur la link:../../tutoriels/job-coach-skill/[recherche de travail avec l'IA^], j'ai attrapé le virus de l'automatisation par modèle de langage. Et une liste de courses, c'est quoi ? Du langage naturel. Vous voyez où je veux en venir.
+Faire les courses, c'est une tâche que je n'aime pas. D'ailleurs je ne connais personne qui m'a déjà annoncé bien aimer faire les courses. C'est une charge mentale, c'est toujours agaçant et on oublie systématiquement quelque chose. Mais qu'est-ce que fait un feignant ? Bon il fait pas les courses, achète tout au fil de l'eau et se retrouve à dépenser des fortunes en plat préparé. Mais le vrai feignant lui, il passe une 40aine d'heures à développer un système pour faire ses courses à sa place ! :)
 
-Je vous présente donc **Victor**, mon assistant IA dont le seul et unique métier est de remplir mon panier de drive. Il tourne sur mon serveur à la maison, je lui parle depuis mon téléphone, et il se débrouille avec Intermarché, Super U ou Local Bio pendant que je fais autre chose de ma vie.
+Je vous présente donc **Victor**, mon assistant IA dont le seul et unique métier est de remplir mes différents paniers de mes différentes plateformes pour remplir mon garde à manger. Il tourne sur mon serveur à la maison, je lui parle depuis mon téléphone ou bien mon PC, et il se débrouille avec Intermarché, Super U ou Local Bio pendant que je fais autre chose de ma vie.
 
-Comme pour le précédent article, on se fixe quelques objectifs pour ne pas partir dans tous les sens :
+Allez, commençons mais d'abord on se fixe quelques objectifs pour ne pas partir dans tous les sens :
 
 * Lui parler depuis n'importe où, avec les messageries que j'utilise déjà
-* Qu'il lise ma liste de courses là où je la note vraiment (et pas dans un énième outil)
+* Qu'il lise ma liste de courses
+* Aucune friction avec le reste de la famille, ça doit se faire naturellement
 * Qu'il cherche les produits et remplisse le panier chez plusieurs enseignes
-* Qu'il se souvienne de mes habitudes ("le lait, c'est toujours le bio en bouteille")
-* Qu'il ne **paye jamais** à ma place
-* Que tout soit déclaratif, versionné, et reconstructible en une commande
-
-Le dernier point, c'est mon côté NixOS qui parle. Bonne nouvelle : comme toute ma configuration vit dans link:https://gitlab.com/NicolasGuilloux/nixos-configuration[un dépôt Git^], l'historique des commits raconte toute l'évolution de Victor. On va donc suivre le fil, des débuts maladroits à la version actuelle.
+* Qu'il se souvienne de mes habitudes (ex: Café en grain, grands mangeurs de petits suisses à la maison, etc)
+* Qu'il ne **paye jamais** à ma place. Je suis pas feignant ni fou à ce point
 
 
 == Vue d'ensemble
@@ -40,7 +37,7 @@ Avant de rentrer dans le détail, voilà à quoi ressemble Victor aujourd'hui :
 ++++
 <pre class="mermaid" style="visibility:hidden">
 flowchart LR
-    Nover(["Moi, sur mon téléphone"])
+    Nover(["Moi"])
 
     subgraph Messageries
         Discord
@@ -61,7 +58,7 @@ flowchart LR
         Radicale[("Radicale, la liste de courses")]
     end
 
-    LLM["Claude, Codex, DeepSeek"]
+    LLM["LLM"]
     Drives["Sites des drives"]
 
     Nover --> Messageries --> Hermes
