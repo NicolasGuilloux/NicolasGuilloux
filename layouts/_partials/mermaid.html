@@ -1,0 +1,57 @@
+{{- /*
+    Diagrammes Mermaid : chargés seulement sur les pages qui en contiennent.
+    En AsciiDoc, un diagramme s'écrit en passthrough :
+      ++++
+      <pre class="mermaid">
+      flowchart LR
+          A --> B
+      </pre>
+      ++++
+    Le rendu suit le thème du site (jour/nuit) et se refait au changement.
+*/ -}}
+{{- if and .IsPage (strings.Contains (string .Content) `class="mermaid"`) }}
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+const root = document.documentElement;
+const nodes = [...document.querySelectorAll('pre.mermaid')];
+// Source d'origine, avant que Mermaid ne la remplace par le SVG
+const sources = nodes.map((n) => n.textContent);
+
+async function render() {
+  const css = getComputedStyle(root);
+  const v = (name) => css.getPropertyValue(name).trim();
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: 'strict',
+    theme: 'base',
+    themeVariables: {
+      darkMode: root.dataset.theme === 'nuit',
+      background: 'transparent',
+      fontFamily: v('--font-sans') || 'sans-serif',
+      primaryColor: v('--raised'),
+      primaryTextColor: v('--ink'),
+      primaryBorderColor: v('--line-strong'),
+      lineColor: v('--muted'),
+      secondaryColor: v('--chip'),
+      tertiaryColor: v('--surface'),
+      clusterBkg: v('--hover'),
+      clusterBorder: v('--line'),
+      noteBkgColor: v('--important-bg'),
+      noteTextColor: v('--ink'),
+      textColor: v('--ink'),
+      edgeLabelBackground: v('--surface'),
+    },
+  });
+  nodes.forEach((n, i) => {
+    n.removeAttribute('data-processed');
+    n.textContent = sources[i];
+  });
+  await mermaid.run({ nodes });
+  nodes.forEach((n) => { n.style.visibility = ''; });
+}
+
+render();
+new MutationObserver(render).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+</script>
+{{- end }}

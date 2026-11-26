@@ -46,6 +46,8 @@ Article helpers (AsciiDoc roles):
 - `[.tree]` on a `----` block containing `├──`: file tree block (trees are also detected automatically)
 - Front matter `series` (taxonomy) + `seriesLabel`: series navigation chips
 - `{{< youtube ID >}}`: privacy-friendly video, loaded on click
+- `{{< excalidraw "file.excalidraw" >}}` (or `src=`, `alt=`): Excalidraw scene stored in the page bundle, converted to SVG in the browser by Excalidraw's own export (Hugo cannot run JavaScript). Draw it for the nuit theme; the jour theme uses Excalidraw's dark-mode inversion. Edit the file on excalidraw.com and save it back in place
+- Mermaid: `<pre class="mermaid">` in an AsciiDoc passthrough block (`++++`), loaded only on pages that have one, coloured from the theme tokens (`_partials/mermaid.html`)
 - `[.scroll]` on an AsciiDoc table (`[.scroll,cols=...]`), or `{.scroll}` on the line after a Markdown table: wide table, cells keep their width and the table scrolls horizontally
 - Every table gets an "Agrandir" button that opens it in a full-screen modal (desktop only); articles have a "Pleine largeur" toggle (remembered in localStorage, hidden on mobile)
 - External links (absolute http(s) URLs to another host) always open in a new tab: Markdown render hook `layouts/_markup/render-link.html`, AsciiDoc output post-processed by `_partials/external-links.html`, JS safety net for the rest

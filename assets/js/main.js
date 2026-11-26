@@ -57,7 +57,7 @@ const COMMAND_LANGS = ['bash', 'sh', 'shell', 'console', 'zsh', 'fish', 'shell-s
 
 function enhanceCodeBlocks(prose) {
   $$('pre', prose).forEach((pre) => {
-    if (pre.closest('.codeblock') || pre.closest('.literalblock') || pre.closest('table.lntable')) return;
+    if (pre.classList.contains('mermaid') || pre.closest('.codeblock') || pre.closest('.literalblock') || pre.closest('table.lntable')) return;
     const listing = pre.closest('.listingblock');
     const chroma = pre.parentElement?.classList.contains('highlight') && !pre.classList.contains('highlight') ? pre.parentElement : null;
     const container = listing || chroma || pre;

@@ -1,0 +1,44 @@
+{{- /*
+  Schéma Excalidraw : on dépose le fichier .excalidraw dans le bundle de l'article
+  et la page le convertit en SVG au chargement, avec la fonction d'export
+  d'Excalidraw (Hugo n'exécute pas de JavaScript, il se contente de publier le fichier).
+  Usage : {{< excalidraw "victor.excalidraw" >}} ou {{< excalidraw src="…" alt="…" >}}
+  Le schéma est dessiné pour le thème nuit ; en thème jour, on utilise le mode
+  sombre de l'export d'Excalidraw (inversion des couleurs, images préservées).
+*/ -}}
+{{- $src := .Get "src" | default (.Get 0) -}}
+{{- $alt := .Get "alt" | default "" -}}
+{{- with .Page.Resources.Get $src -}}
+<figure class="excalidraw" data-excalidraw="{{ .RelPermalink }}" role="img"{{ with $alt }} aria-label="{{ . }}"{{ end }}>
+  <noscript><a href="{{ .RelPermalink }}">Télécharger le schéma Excalidraw</a></noscript>
+</figure>
+{{- else -}}
+{{- errorf "excalidraw : fichier %q introuvable dans le bundle de %s" $src $.Page.File.Path -}}
+{{- end -}}
+{{- if not (.Page.Store.Get "excalidraw") }}
+{{- .Page.Store.Set "excalidraw" true }}
+<script type="module">
+window.EXCALIDRAW_ASSET_PATH = 'https://esm.sh/@excalidraw/excalidraw@0.18.1/dist/prod/';
+const { exportToSvg } = await import('https://esm.sh/@excalidraw/excalidraw@0.18.1?deps=react@19.0.0,react-dom@19.0.0');
+const root = document.documentElement;
+const figures = [...document.querySelectorAll('figure[data-excalidraw]')];
+const scenes = await Promise.all(figures.map((f) => fetch(f.dataset.excalidraw).then((r) => r.json())));
+
+async function render() {
+  const jour = root.dataset.theme === 'jour';
+  await Promise.all(figures.map(async (f, i) => {
+    const { elements, appState, files } = scenes[i];
+    const svg = await exportToSvg({
+      elements, files,
+      appState: { ...appState, exportBackground: false, exportWithDarkMode: jour },
+      exportPadding: 16,
+    });
+    svg.removeAttribute('width'); svg.removeAttribute('height');
+    f.replaceChildren(svg);
+  }));
+}
+
+render();
+new MutationObserver(render).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+</script>
+{{- end }}

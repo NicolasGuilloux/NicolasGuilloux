@@ -1360,3 +1360,15 @@ button { font: inherit; }
   .site-header, .site-footer, .toc, .toc-mobile, .related, .codeblock__copy { display: none !important; }
   .fade::before { content: none; }
 }
+
+/* Diagrammes Mermaid (layouts/_partials/mermaid.html) : pas d'habillage de bloc de code */
+.prose pre.mermaid {
+  margin: 0 0 var(--p-gap); padding: 0;
+  background: transparent; color: var(--ink);
+  font-family: inherit; text-align: center; overflow-x: auto;
+}
+.prose pre.mermaid svg { max-width: 100%; height: auto; }
+
+/* Schémas Excalidraw (layouts/_shortcodes/excalidraw.html) */
+.prose figure.excalidraw { margin: 0 0 var(--p-gap); min-height: 120px; }
+.prose figure.excalidraw svg { display: block; width: 100%; height: auto; }
